@@ -24,13 +24,8 @@ let%expect_test "rdtsc" =
 ;;
 
 let%expect_test "rdpmc" =
-  let c = 0l in
-  let before = I.rdpmc c in
+  ignore (I.rdpmc 0l : int64);
   work ();
-  let after = I.rdpmc c in
-  let pass =
-    (not (Int64.equal before after)) || (Int64.equal before 0L && Int64.equal after 0L)
-  in
-  printf "%B" pass;
-  [%expect {| true |}]
+  ignore (I.rdpmc 0l : int64);
+  [%expect {||}]
 ;;

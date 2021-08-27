@@ -14,18 +14,16 @@
 #define int32_ctz __builtin_ctz
 #define int32_popcnt __builtin_popcount
 #endif /* ARCH_INT32_TYPE == long */
-
 #define int64_clz __builtin_clzll
 #define int64_ctz __builtin_ctzll
 #define int64_popcnt __builtin_popcountll
-
 #else /* defined(__GNUC__) */
 #ifdef _MSC_VER
 #error "Functionality on Windows has not been tested"
 #include <intrin.h>
 #pragma intrinsic(_BitScanReverse)
 
-int naive_int64_clz(uint64_t v)
+intnat naive_int64_clz(uint64_t v)
 {
   unsigned long n;
 #ifdef ARCH_SIXTYFOUR
@@ -46,7 +44,7 @@ int naive_int64_clz(uint64_t v)
 #endif
 }
 
-int naive_int32_clz(uint32_t v)
+intnat naive_int32_clz(uint32_t v)
 {
   unsigned long n;
   if (_BitScanReverse(&n, v))
@@ -60,7 +58,7 @@ int naive_int32_clz(uint32_t v)
 
 #pragma intrinsic(_BitScanForward)
 
-int naive_int64_ctz(uint64_t v)
+intnat naive_int64_ctz(uint64_t v)
 {
   unsigned long n;
 #ifdef ARCH_SIXTYFOUR
@@ -81,7 +79,7 @@ int naive_int64_ctz(uint64_t v)
 #endif
 }
 
-int naive_int32_ctz(uint32_t v)
+intnat naive_int32_ctz(uint32_t v)
 {
   unsigned long n;
   if (_BitScanForward(&n, v)) return n
@@ -91,7 +89,7 @@ int naive_int32_ctz(uint32_t v)
 /* _MSVC_ intrinsic for popcnt is not supported on all targets.
    Use naive version of clz and popcnt from Hacker's Delight. */
 
-int naive_int64_popcnt (uint64_t x)
+intnat naive_int64_popcnt (uint64_t x)
 {
    int n = 0;
    while (x != 0) {
@@ -101,7 +99,7 @@ int naive_int64_popcnt (uint64_t x)
    return n;
 }
 
-int naive_int32_popcnt (uint32_t x)
+intnat naive_int32_popcnt (uint32_t x)
 {
    int n = 0;
    while (x != 0) {
@@ -120,19 +118,21 @@ int naive_int32_popcnt (uint32_t x)
 #endif /* _MSC_VER */
 #endif /* defined(__GNUC__) */
 
+
+#ifdef ARCH_SIXTYFOUR
+static inline intnat int32_clz_for_64bit(uint32_t v)
+{
+  return int32_clz(v) - 32;
+}
+#undef int32_clz
+#define int32_clz int32_clz_for_64bit
+#endif
+
 intnat int32_clz_check_for_zero_arg(uint32_t x)
 {
-  int res;
   /* builtin_clz on input 0 is undefined */
-  if (x == 0) res = 32;
-  else
-    {
-      res = int32_clz(x);
-#ifdef ARCH_SIXTYFOUR
-      res -= 32;
-#endif
-    }
-  return res;
+  if (x == 0) return 32;
+  return int32_clz(x);
 }
 
 intnat int64_clz_check_for_zero_arg(uint64_t x)
@@ -264,6 +264,16 @@ intnat caml_int32_ctz_unboxed_to_untagged(int32_t v)
   return int32_ctz_check_for_zero_arg((uint32_t) v);
 }
 
+intnat caml_int32_clz_nonzero_unboxed_to_untagged(int32_t v)
+{
+  return int32_clz((uint32_t) v);
+}
+
+intnat caml_int32_ctz_nonzero_unboxed_to_untagged(int32_t v)
+{
+  return int32_ctz((uint32_t) v);
+}
+
 intnat caml_int32_popcnt_unboxed_to_untagged(int32_t v)
 {
   return int32_popcnt((uint32_t) v);
@@ -292,6 +302,16 @@ intnat caml_int64_clz_unboxed_to_untagged(int64_t v)
 intnat caml_int64_ctz_unboxed_to_untagged(int64_t v)
 {
   return int64_ctz_check_for_zero_arg((uint64_t) v);
+}
+
+intnat caml_int64_clz_nonzero_unboxed_to_untagged(int64_t v)
+{
+  return int64_clz((uint64_t) v);
+}
+
+intnat caml_int64_ctz_nonzero_unboxed_to_untagged(int64_t v)
+{
+  return int64_ctz((uint64_t) v);
 }
 
 intnat caml_int64_popcnt_unboxed_to_untagged(int64_t v)
@@ -329,6 +349,24 @@ intnat caml_nativeint_ctz_unboxed_to_untagged(intnat v)
   return int64_ctz_check_for_zero_arg((uint64_t) v);
 #else
   return int32_ctz_check_for_zero_arg((uint32_t) v);
+#endif
+}
+
+int caml_nativeint_clz_nonzero_unboxed_to_untagged(intnat v)
+{
+#ifdef ARCH_SIXTYFOUR
+  return int64_clz((uint64_t) v);
+#else
+  return int32_clz((uint32_t) v);
+#endif
+}
+
+intnat caml_nativeint_ctz_nonzero_unboxed_to_untagged(intnat v)
+{
+#ifdef ARCH_SIXTYFOUR
+  return int64_ctz((uint64_t) v);
+#else
+  return int32_ctz((uint32_t) v);
 #endif
 }
 

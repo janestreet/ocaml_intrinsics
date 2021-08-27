@@ -20,6 +20,8 @@ module type Test = sig
   val count_set_bits : t -> int
   val count_leading_zeros : t -> int
   val count_trailing_zeros : t -> int
+  val count_leading_zeros_nonzero_arg : t -> int
+  val count_trailing_zeros_nonzero_arg : t -> int
 end
 
 module Make (V : Value) (T : Test with type t = V.t) = struct
@@ -57,6 +59,17 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
         [%test_result: Base.Int.t] ~expect actual)
   ;;
 
+  let%test_unit "count_leading_zeros_nonzero_arg" =
+    Base_quickcheck.Test.run_exn
+      (module V)
+      ~f:(fun v ->
+        if not (V.zero = v)
+        then (
+          let expect = count_leading_zeros_naive v in
+          let actual = T.count_leading_zeros_nonzero_arg v in
+          [%test_result: Base.Int.t] ~expect actual))
+  ;;
+
   let count_trailing_zeros_naive (v : V.t) : int =
     let open V in
     let rec loop n count =
@@ -76,6 +89,17 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
         let actual = T.count_trailing_zeros v in
         [%test_result: Base.Int.t] ~expect actual)
   ;;
+
+  let%test_unit "count_trailing_zeros_nonzero_arg" =
+    Base_quickcheck.Test.run_exn
+      (module V)
+      ~f:(fun v ->
+        if not (V.zero = v)
+        then (
+          let expect = count_trailing_zeros_naive v in
+          let actual = T.count_trailing_zeros_nonzero_arg v in
+          [%test_result: Base.Int.t] ~expect actual))
+  ;;
 end
 
 module BI = struct
@@ -86,6 +110,9 @@ end
 
 module I = struct
   include Ocaml_intrinsics.Int
+
+  let count_trailing_zeros_nonzero_arg = count_trailing_zeros
+  let count_leading_zeros_nonzero_arg = count_leading_zeros
 
   type t = int
 end
@@ -143,6 +170,8 @@ include
 
       let count_trailing_zeros x = Base.Int64.(if x = 0L then num_bits else ctz x)
       let count_leading_zeros x = Base.Int64.(if x = 0L then num_bits else clz x)
+      let count_trailing_zeros_nonzero_arg = count_trailing_zeros
+      let count_leading_zeros_nonzero_arg = count_leading_zeros
       let count_set_bits = Base.Int64.popcount
     end)
 
@@ -173,6 +202,8 @@ include
 
       let count_trailing_zeros x = Base.Int32.(if x = 0l then num_bits else ctz x)
       let count_leading_zeros x = Base.Int32.(if x = 0l then num_bits else clz x)
+      let count_trailing_zeros_nonzero_arg = count_trailing_zeros
+      let count_leading_zeros_nonzero_arg = count_leading_zeros
       let count_set_bits = Base.Int32.popcount
     end)
 
@@ -205,4 +236,6 @@ include
       let count_leading_zeros x = Base.Nativeint.(if x = 0n then num_bits else clz x)
       let count_set_bits = Base.Nativeint.popcount
       let count_trailing_zeros x = Base.Nativeint.(if x = 0n then num_bits else ctz x)
+      let count_trailing_zeros_nonzero_arg = count_trailing_zeros
+      let count_leading_zeros_nonzero_arg = count_leading_zeros
     end)
