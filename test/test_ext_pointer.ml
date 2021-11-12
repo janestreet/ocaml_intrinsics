@@ -83,7 +83,7 @@ module BI = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_immediate = struct
+module _ = struct
   external alloc : int -> int = "external_immediate_ref"
 
   let create_immediate n = P.create (alloc n)
@@ -111,7 +111,7 @@ module Q_immediate = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_Int = struct
+module _ = struct
   let%test_unit "ext_pointer int quickcheck" =
     Base_quickcheck.Test.run_exn
       (module BI)
@@ -124,7 +124,7 @@ module Q_Int = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_Float = struct
+module _ = struct
   module BF = struct
     include Base.Float
 
@@ -143,7 +143,7 @@ module Q_Float = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_int64 = struct
+module _ = struct
   external alloc : int64 -> int = "external_unboxed_int64_ref"
 
   let create_unboxed_int64 n = P.create (alloc n)
@@ -177,7 +177,7 @@ module Q_int64 = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_int32 = struct
+module _ = struct
   external alloc : int32 -> int = "external_unboxed_int32_ref"
 
   let create_unboxed_int32 n = P.create (alloc n)
@@ -211,7 +211,7 @@ module Q_int32 = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_nativeint = struct
+module _ = struct
   external alloc : nativeint -> int = "external_unboxed_nativeint_ref"
 
   let create_unboxed_nativeint n = P.create (alloc n)

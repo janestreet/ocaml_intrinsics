@@ -2,15 +2,30 @@
 #include "caml/mlvalues.h"
 
 #if defined(__GNUC__)
+#ifdef  __ARM_FEATURE_CRC32
+#include <arm_acle.h>
+#endif
 #ifdef ARCH_SIXTYFOUR
 static inline uint64_t crc64(uint64_t initial, uint64_t data)
 {
-   return __builtin_ia32_crc32di(initial, data);
+#ifdef  __ARM_FEATURE_CRC32
+  return __crc32cd(initial, data);
+#elif defined(__SSE4_2__)
+  return __builtin_ia32_crc32di(initial, data);
+#else
+#error "Target not supported"
+#endif
 }
 #else // not ARCH_SIXTYFOUR
 static inline uint32_t crc32(uint32_t initial, uint32_t data)
 {
+#ifdef  __ARM_FEATURE_CRC32
+  return __crc32cw(initial, data);
+#elif defined(__SSE4_2__)
    return __builtin_ia32_crc32si(initial, data);
+#else
+#error "Target not supported"
+#endif
 }
 #endif // ARCH_SIXTYFOUR
 #elif defined(_MSC_VER)

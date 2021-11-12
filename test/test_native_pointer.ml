@@ -102,7 +102,7 @@ module BF = struct
   type t = float [@@deriving quickcheck]
 end
 
-module QI = struct
+module _ = struct
   let%test_unit "native_pointer int quickcheck" =
     Base_quickcheck.Test.run_exn
       (module BI)
@@ -115,7 +115,7 @@ module QI = struct
   type t = int [@@deriving quickcheck]
 end
 
-module QF = struct
+module _ = struct
   let%test_unit "native_pointer float quickcheck" =
     Base_quickcheck.Test.run_exn
       (module BF)
@@ -128,7 +128,7 @@ module QF = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_immediate = struct
+module _ = struct
   external create_immediate : int -> NP.t = "external_immediate_ref_as_native_pointer"
 
   let direct_test_immediate n =
@@ -154,7 +154,7 @@ module Q_immediate = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_untagged_int = struct
+module _ = struct
   external create_untagged_int
     :  int
     -> NP.t
@@ -183,7 +183,7 @@ module Q_untagged_int = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_float = struct
+module _ = struct
   external create_unboxed_float
     :  float
     -> NP.t
@@ -212,7 +212,7 @@ module Q_float = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_int64 = struct
+module _ = struct
   external create_unboxed_int64
     :  int64
     -> NP.t
@@ -247,7 +247,7 @@ module Q_int64 = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_int32 = struct
+module _ = struct
   external create_unboxed_int32
     :  int32
     -> NP.t
@@ -282,7 +282,7 @@ module Q_int32 = struct
   type t = int [@@deriving quickcheck]
 end
 
-module Q_nativeint = struct
+module _ = struct
   external create_unboxed_nativeint
     :  nativeint
     -> NP.t
