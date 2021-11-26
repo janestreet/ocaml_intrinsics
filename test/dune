@@ -1,5 +1,5 @@
 (library (name ocaml_intrinsics_test) (preprocessor_deps config.h)
- (libraries ocaml_intrinsics core_kernel.core expect_test_helpers_core)
+ (libraries ocaml_intrinsics core expect_test_helpers_core)
  (c_names test_stubs) (preprocess (pps ppx_jane)))
 
 (rule (targets config.h) (deps)
