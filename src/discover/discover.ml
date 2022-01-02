@@ -89,6 +89,18 @@ int main(int argc, char ** argv)
 |}
 ;;
 
+let prog_arm_crc32 =
+  {|
+#include <arm_acle.h>
+
+int main(int argc, char ** argv)
+{
+  return __crc32cw(argc, argc);
+  return __crc32cd(argc, argc);
+}
+|}
+;;
+
 let () =
   let output = ref "" in
   main
@@ -110,6 +122,7 @@ let () =
            ; "-msse4.1", prog_sse41
            ; "-mprfchw", prog_prefetchw
            ; "-mprefetchwt1", prog_prefetchwt1
+           ; "-march=armv8-a+crc", prog_arm_crc32
            ]
          |> List.sort_uniq String.compare
        in
