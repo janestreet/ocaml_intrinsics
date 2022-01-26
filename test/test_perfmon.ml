@@ -2,7 +2,7 @@ open Base
 open Stdio
 module I = Ocaml_intrinsics.Perfmon
 
-let[@inline never] work () =
+let[@cold] work () =
   let min = 0 in
   let max = 100 in
   let e = ref 0 in

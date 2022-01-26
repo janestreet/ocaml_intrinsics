@@ -221,3 +221,5 @@ let bigstring bigstring ~pos ~operation ~temporal_locality =
   | Read, Moderate -> prefetch_read_moderate_bigstring bigstring pos
   | Read, High -> prefetch_read_high_bigstring bigstring pos
 ;;
+
+external pause : unit -> unit = "caml_pause_hint" [@@noalloc] [@@builtin]

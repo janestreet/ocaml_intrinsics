@@ -139,3 +139,8 @@ let%expect_test "prefetch" =
     Write Moderate
     Write High |}]
 ;;
+
+let%expect_test "pause" =
+  P.pause ();
+  [%expect {||}]
+;;

@@ -45,3 +45,7 @@ val bigstring
   -> operation:operation
   -> temporal_locality:temporal_locality
   -> unit
+
+(** Processor hint that improves performance of spin-wait loops.  *)
+external pause : unit -> unit = "caml_pause_hint"
+[@@noalloc] [@@builtin]
