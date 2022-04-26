@@ -9,7 +9,7 @@ int main(int argc, char ** argv)
 |}
 ;;
 
-let prog_lzcnt =
+let _prog_lzcnt =
   {|
 int main(int argc, char ** argv)
 {
@@ -18,7 +18,7 @@ int main(int argc, char ** argv)
 |}
 ;;
 
-let prog_tzcnt =
+let _prog_tzcnt =
   {|
 int main(int argc, char ** argv)
 {
@@ -102,8 +102,8 @@ let () =
               | true -> Some flag
               | false -> None)
            [ "-mpopcnt", prog_popcnt
-           ; "-mlzcnt", prog_lzcnt
-           ; "-mbmi", prog_tzcnt
+      (*     ; "-mlzcnt", prog_lzcnt
+           ; "-mbmi", prog_tzcnt *)
            ; "-mcrc32", prog_crc32
            ; "-mcrc32", prog_crc32_on_32bit_target
            ; "-msse4.2", prog_sse42
