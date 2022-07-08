@@ -144,3 +144,22 @@ let%expect_test "pause" =
   P.pause ();
   [%expect {||}]
 ;;
+
+let%expect_test "pause in a for loop" =
+  for _ = 0 to Sys.opaque_identity 5 do
+    P.pause ()
+  done;
+  [%expect {||}]
+;;
+
+let%expect_test "prefetch value" =
+  List.iter all_of_operation ~f:(fun operation ->
+    List.iter all_of_temporal_locality ~f:(fun temporal_locality ->
+      let value = P.value ~operation ~temporal_locality in
+      value positions;
+      value bigstring;
+      value len (* len is int, don't do it in user programs *);
+      value floats;
+      value (List.hd floats)));
+  [%expect {||}]
+;;

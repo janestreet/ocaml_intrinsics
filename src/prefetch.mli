@@ -24,6 +24,11 @@ type operation =
   | Read
   | Write
 
+(** [value a] prefetches the OCaml value [a].
+    It should not be used when [a] is an immediate:
+    it is safe, but will attempt to prefetch an arbitrary memory address. *)
+val value : 'a -> operation:operation -> temporal_locality:temporal_locality -> unit
+
 val native_pointer
   :  Native_pointer.t
   -> operation:operation

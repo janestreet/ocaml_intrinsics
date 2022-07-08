@@ -57,8 +57,7 @@ let%expect_test "popcnt int" =
     ; 7
     ; max_value (* Int.num_bits - 1 *)
     ; min_value (* 1 *)
-    ; -1
-      (* Int.num_bits *)
+    ; -1 (* Int.num_bits *)
     ]
   in
   let f =
@@ -126,8 +125,7 @@ let%expect_test "popcnt int" =
     ; 7
     ; max_value (* Int.num_bits - 1 *)
     ; min_value (* 1 *)
-    ; -1
-      (* Int.num_bits *)
+    ; -1 (* Int.num_bits *)
     ]
   in
   let f =

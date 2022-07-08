@@ -22,6 +22,58 @@ type operation =
    Otherwise, the compiler can eliminate them, because they have no result.
 *)
 
+(* Prefetch any ocaml value *)
+(* The same native C stubs can be used for value and unboxed native pointer
+   inputs: the C type of the formal argument is value and
+   intnat, respectively, and value is defined as intnat. *)
+external prefetch_write_high
+  :  'a
+  -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_write_high_native_pointer_unboxed"
+[@@noalloc] [@@builtin]
+
+external prefetch_write_moderate
+  :  'a
+  -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_write_moderate_native_pointer_unboxed"
+[@@noalloc] [@@builtin]
+
+external prefetch_write_low
+  :  'a
+  -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_write_low_native_pointer_unboxed"
+[@@noalloc] [@@builtin]
+
+external prefetch_write_none
+  :  'a
+  -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_write_none_native_pointer_unboxed"
+[@@noalloc] [@@builtin]
+
+external prefetch_read_none
+  :  'a
+  -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_read_none_native_pointer_unboxed"
+[@@noalloc] [@@builtin]
+
+external prefetch_read_low
+  :  'a
+  -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_read_low_native_pointer_unboxed"
+[@@noalloc] [@@builtin]
+
+external prefetch_read_moderate
+  :  'a
+  -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_read_moderate_native_pointer_unboxed"
+[@@noalloc] [@@builtin]
+
+external prefetch_read_high
+  :  'a
+  -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_read_high_native_pointer_unboxed"
+[@@noalloc] [@@builtin]
+
 (* Native_pointer *)
 
 external prefetch_write_high_native_pointer
@@ -185,6 +237,18 @@ external prefetch_read_high_bigstring
   -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_read_high_bigstring_untagged"
 [@@noalloc] [@@builtin]
+
+let value p ~operation ~temporal_locality =
+  match operation, temporal_locality with
+  | Write, High -> prefetch_write_high p
+  | Write, Moderate -> prefetch_write_moderate p
+  | Write, Low -> prefetch_write_low p
+  | Write, None -> prefetch_write_none p
+  | Read, None -> prefetch_read_none p
+  | Read, Low -> prefetch_read_low p
+  | Read, Moderate -> prefetch_read_moderate p
+  | Read, High -> prefetch_read_high p
+;;
 
 let native_pointer p ~operation ~temporal_locality =
   match operation, temporal_locality with

@@ -23,9 +23,6 @@ let%expect_test "rdtsc" =
   [%expect {| true |}]
 ;;
 
-let%expect_test "rdpmc" =
-  ignore (I.rdpmc 0l : int64);
-  work ();
-  ignore (I.rdpmc 0l : int64);
-  [%expect {||}]
-;;
+(* Compilation test only, do not run it because input values are not
+   valid on all targets and invalid inputs can cause a segfault. *)
+let _test_rdpmc () = I.rdpmc 0l

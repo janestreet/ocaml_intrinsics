@@ -9,7 +9,7 @@ int main(int argc, char ** argv)
 |}
 ;;
 
-let prog_lzcnt =
+let _prog_lzcnt =
   {|
 int main(int argc, char ** argv)
 {
@@ -18,7 +18,7 @@ int main(int argc, char ** argv)
 |}
 ;;
 
-let prog_tzcnt =
+let _prog_tzcnt =
   {|
 int main(int argc, char ** argv)
 {
@@ -89,6 +89,18 @@ int main(int argc, char ** argv)
 |}
 ;;
 
+let prog_arm_crc32 =
+  {|
+#include <arm_acle.h>
+
+int main(int argc, char ** argv)
+{
+  return __crc32cw(argc, argc);
+  return __crc32cd(argc, argc);
+}
+|}
+;;
+
 let () =
   let output = ref "" in
   main
@@ -101,15 +113,15 @@ let () =
               match c_test c ~c_flags:[ flag ] prog with
               | true -> Some flag
               | false -> None)
-           [ "-mpopcnt", prog_popcnt
-           ; "-mlzcnt", prog_lzcnt
-           ; "-mbmi", prog_tzcnt
+           [ "-mpopcnt", prog_popcnt (* ; "-mlzcnt", prog_lzcnt
+                                      * ; "-mbmi", prog_tzcnt *)
            ; "-mcrc32", prog_crc32
            ; "-mcrc32", prog_crc32_on_32bit_target
            ; "-msse4.2", prog_sse42
            ; "-msse4.1", prog_sse41
            ; "-mprfchw", prog_prefetchw
            ; "-mprefetchwt1", prog_prefetchwt1
+           ; "-march=armv8-a+crc", prog_arm_crc32
            ]
          |> List.sort_uniq String.compare
        in
