@@ -5,6 +5,14 @@ intnat caml_ext_pointer_as_native_pointer (value n)
   return (intnat) caml_ext_pointer_decode(n);
 }
 
+intnat caml_native_pointer_of_value (value v) {
+  return (intnat) v;
+}
+
+value caml_native_pointer_to_value (intnat p) {
+  return (value) p;
+}
+
 value caml_native_pointer_load_immediate (intnat p)
 {
   return *((value *)p);
@@ -26,7 +34,6 @@ value caml_native_pointer_store_unboxed_float (intnat p, double d)
   *((double *)p) = d;
   return Val_unit;
 }
-
 
 int64_t caml_native_pointer_load_unboxed_int64 (intnat p)
 {
@@ -64,6 +71,16 @@ value caml_native_pointer_store_unboxed_nativeint (intnat p, intnat d)
 CAMLprim value caml_ext_pointer_as_native_pointer_bytecode (value n)
 {
   return caml_copy_nativeint(caml_ext_pointer_as_native_pointer(n));
+}
+
+CAMLprim value caml_native_pointer_of_value_bytecode (value v)
+{
+  return caml_copy_nativeint(caml_native_pointer_of_value(v));
+}
+
+CAMLprim value caml_native_pointer_to_value_bytecode (value p)
+{
+  return caml_native_pointer_to_value(Nativeint_val(p));
 }
 
 CAMLprim value caml_native_pointer_load_immediate_bytecode (value p)
@@ -125,6 +142,3 @@ CAMLprim value caml_native_pointer_store_untagged_int_bytecode (value p, value v
 {
   return caml_native_pointer_store_unboxed_nativeint(Nativeint_val(p), Long_val(v));
 }
-
-
-

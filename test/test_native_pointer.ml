@@ -88,6 +88,74 @@ let%expect_test "native_pointer float" =
     |}]
 ;;
 
+let test_immediate_int n =
+  let open NP in
+  let raw = Expert.to_nativeint (unsafe_of_value n) in
+  let n' : int = unsafe_to_value (Expert.of_nativeint raw) in
+  printf "read %nd from %d (=%d)\n" raw n n';
+  let k = Nativeint.( + ) raw 2n in
+  let k' : int = unsafe_to_value (Expert.of_nativeint k) in
+  printf "incr %nd (=%d)\n" k k';
+  n', k'
+;;
+
+let%expect_test "native_pointer immediate int" =
+  let numbers = [ 17 ] in
+  List.iter ~f:(fun n -> ignore (test_immediate_int n : int * int)) numbers;
+  [%expect {|
+    read 35 from 17 (=17)
+    incr 37 (=18) |}]
+;;
+
+let%expect_test "native pointer none matches" =
+  let open NP in
+  let v = Sys.opaque_identity None in
+  let pv = unsafe_of_value v in
+  let pn = unsafe_of_value None in
+  printf "%nu = %nu" (Expert.to_nativeint pv) (Expert.to_nativeint pn);
+  Expect_test_helpers_base.require [%here] (pv = pn);
+  [%expect {| 1 = 1 |}]
+;;
+
+let%expect_test "native pointer values match" =
+  let open NP in
+  let v = [ 3 ] in
+  let v0 = v in
+  let v1 = v in
+  let pv0 = unsafe_of_value v0 in
+  let pv1 = unsafe_of_value v1 in
+  Expect_test_helpers_base.require [%here] (pv0 = pv1);
+  [%expect {||}]
+;;
+
+let%expect_test "native pointer values differ" =
+  let open NP in
+  let v0 = [ 3 ] in
+  let v1 = [ 4 ] in
+  let pv0 = unsafe_of_value v0 in
+  let pv1 = unsafe_of_value v1 in
+  Expect_test_helpers_base.require [%here] (pv0 <> pv1);
+  [%expect {||}]
+;;
+
+let%expect_test "native pointer comparisons" =
+  let open NP in
+  let p0 = Expert.of_nativeint 0n in
+  let p1 = advance p0 ~bytes:17n in
+  Expect_test_helpers_base.require [%here] (p0 = p0);
+  Expect_test_helpers_base.require [%here] (p0 <= p0);
+  Expect_test_helpers_base.require [%here] (p0 >= p0);
+  Expect_test_helpers_base.require [%here] (p0 <> p1);
+  Expect_test_helpers_base.require [%here] (p0 < p1);
+  Expect_test_helpers_base.require [%here] (p1 > p0);
+  Expect_test_helpers_base.require_equal
+    [%here]
+    (module Nativeint)
+    (difference_in_bytes p0 p1)
+    17n;
+  [%expect {||}]
+;;
+
 include Base_quickcheck.Export
 
 module BI = struct
@@ -109,6 +177,19 @@ module _ = struct
       ~f:(fun n ->
         let expect = n, n + 1 in
         let actual = test_int n in
+        [%test_result: Int.t * Int.t] ~expect actual)
+  ;;
+
+  type t = int [@@deriving quickcheck]
+end
+
+module _ = struct
+  let%test_unit "native_pointer immediate int quickcheck" =
+    Base_quickcheck.Test.run_exn
+      (module BI)
+      ~f:(fun n ->
+        let expect = n, n + 1 in
+        let actual = test_immediate_int n in
         [%test_result: Int.t * Int.t] ~expect actual)
   ;;
 

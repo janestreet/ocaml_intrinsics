@@ -19,7 +19,7 @@ static uint64_t rdtsc()
   return ((uint64_t)lo) | (((uint64_t)hi)<<32);
 }
 #elif defined(_MSC_VER)
-#error "Functionality on Windows has not been tested"
+#warning "Functionality on Windows has not been tested"
 #include <intrin.h>
 #pragma intrinsic(__rdtsc)
 

@@ -258,14 +258,17 @@ CAMLprim value caml_prefetch_ignore2 (__attribute__ ((unused)) value v_bstr,
   return Val_unit;
 }
 
+#if defined(_MSC_VER)
+#warning "Functionality on Windows has not been tested"
+#include <intrin.h>
+#pragma intrinsic(_mm_pause)
+#endif
+
 CAMLprim value caml_pause_hint (__attribute__ ((unused)) value unit)
 {
 #if ((defined(__i386__) || defined(__x86_64__)) && defined(__GNUC__))
   __builtin_ia32_pause();
 #elif ((defined(__i386__) || defined(__x86_64__)) && defined(_MSC_VER))
-#warning "Functionality on Windows has not been tested"
-#include <intrin.h>
-#pragma intrinsic(_mm_pause)
   _mm_pause();
 #else
 #warning "This target does not support PAUSE hints, emit NOP instead."

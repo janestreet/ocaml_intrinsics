@@ -29,14 +29,16 @@ static inline uint32_t crc32(uint32_t initial, uint32_t data)
 }
 #endif // ARCH_SIXTYFOUR
 #elif defined(_MSC_VER)
-#error "Functionality on Windows has not been tested"
+#warning "Functionality on Windows has not been tested"
 #include <intrin.h>
 #ifdef ARCH_SIXTYFOUR
+#pragma intrinsic(_mm_crc32_u64)
 static inline uint64_t crc64(uint64_t initial, uint64_t data)
 {
    return _mm_crc32_u64(initial, data);
 }
 #else // not ARCH_SIXTYFOUR
+#pragma intrinsic(_mm_crc32_u32)
 static inline uint32_t crc32(uint32_t initial, uint32_t data)
 {
    return _mm_crc32_u32(initial, data);
