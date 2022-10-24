@@ -156,6 +156,23 @@ let%expect_test "native pointer comparisons" =
   [%expect {||}]
 ;;
 
+let[@inline never] throw_away x = (Sys.opaque_identity x : _) |> ignore
+
+let test_frametable (x : nativeint) =
+  x
+  |> NP.Expert.of_nativeint
+  |> NP.unsafe_to_value
+  |> fun x ->
+  throw_away x;
+  x
+;;
+
+let%expect_test "native_pointer frametable" =
+  let numbers = [ 17n ] in
+  List.iter ~f:(fun n -> printf "%d\n" (test_frametable n : int)) numbers;
+  [%expect {| 8 |}]
+;;
+
 include Base_quickcheck.Export
 
 module BI = struct
