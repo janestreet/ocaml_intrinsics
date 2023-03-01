@@ -4,11 +4,17 @@ ocaml_intrinsics - a library of intrinsics for OCaml
 The ocaml_intrinsics library provides an OCaml interface to operations
 that have dedicated hardware instructions on some micro-architectures.
 Currently, it provides the following operations:
+
 * count leading zeros of an integer
+
 * count trailing zeros of an integer
+
 * count set bits of an integer
+
 * performance monitoring
+
 * cyclic redundancy check
+
 * memory fences
 
 Some operations require more than one instruction to implement.

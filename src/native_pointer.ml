@@ -10,13 +10,13 @@ external unsafe_of_value
   :  'a
   -> (t[@unboxed])
   = "caml_native_pointer_of_value_bytecode" "caml_native_pointer_of_value"
-[@@noalloc] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
 external unsafe_to_value
   :  (t[@unboxed])
   -> 'a
   = "caml_native_pointer_to_value_bytecode" "caml_native_pointer_to_value"
-[@@noalloc] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
 external load_untagged_int
   :  (t[@unboxed])

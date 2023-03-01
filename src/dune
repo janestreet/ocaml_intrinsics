@@ -1,6 +1,7 @@
 (library (name ocaml_intrinsics) (public_name ocaml_intrinsics) (libraries)
- (c_names int_stubs float_stubs perfmon_stubs crc_stubs conditional_stubs
-  ext_pointer_stubs native_pointer_stubs fences_stubs prefetch_stubs)
+ (c_names atomic_stubs int_stubs float_stubs perfmon_stubs crc_stubs
+  conditional_stubs ext_pointer_stubs native_pointer_stubs fences_stubs
+  prefetch_stubs)
  (c_flags :standard (:include builtin_flags.sexp))
  (preprocess no_preprocessing))
 

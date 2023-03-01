@@ -90,53 +90,111 @@ static inline void prefetch_read_low(__attribute__ ((unused)) void *ptr) {}
 static inline void prefetch_read_none(__attribute__ ((unused)) void *ptr) {}
 #endif
 
-/* Native_pointer */
+/* Used for both raw Ocaml values and unboxed native pointers */
 
-value caml_prefetch_write_high_native_pointer_unboxed(intnat ptr)
+value caml_prefetch_write_high(intnat ptr)
 {
   prefetch_write_high((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_write_moderate_native_pointer_unboxed(intnat ptr)
+value caml_prefetch_write_moderate(intnat ptr)
 {
   prefetch_write_moderate((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_write_low_native_pointer_unboxed(intnat ptr)
+value caml_prefetch_write_low(intnat ptr)
 {
   prefetch_write_low((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_write_none_native_pointer_unboxed(intnat ptr)
+value caml_prefetch_write_none(intnat ptr)
 {
   prefetch_write_none((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_read_high_native_pointer_unboxed(intnat ptr)
+value caml_prefetch_read_high(intnat ptr)
 {
   prefetch_read_high((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_read_moderate_native_pointer_unboxed(value ptr)
+value caml_prefetch_read_moderate(intnat ptr)
 {
   prefetch_read_moderate((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_read_low_native_pointer_unboxed(value ptr)
+value caml_prefetch_read_low(intnat ptr)
 {
   prefetch_read_low((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_read_none_native_pointer_unboxed(value ptr)
+value caml_prefetch_read_none(intnat ptr)
 {
   prefetch_read_none((void *)ptr);
+  return Val_unit;
+}
+
+/* Byte offset from OCaml value */
+
+value caml_prefetch_write_high_val_offset_untagged(value ptr,
+                                                   intnat byte_offset)
+{
+  prefetch_write_high((char *)ptr + byte_offset);
+  return Val_unit;
+}
+
+value caml_prefetch_write_moderate_val_offset_untagged(value ptr,
+                                                       intnat byte_offset)
+{
+  prefetch_write_moderate((char *)ptr + byte_offset);
+  return Val_unit;
+}
+
+value caml_prefetch_write_low_val_offset_untagged(value ptr,
+                                                  intnat byte_offset)
+{
+  prefetch_write_low((char *)ptr + byte_offset);
+  return Val_unit;
+}
+
+value caml_prefetch_write_none_val_offset_untagged(value ptr,
+                                                   intnat byte_offset)
+{
+  prefetch_write_none((char *)ptr + byte_offset);
+  return Val_unit;
+}
+
+value caml_prefetch_read_high_val_offset_untagged(value ptr,
+                                                  intnat byte_offset)
+{
+  prefetch_read_high((char *)ptr + byte_offset);
+  return Val_unit;
+}
+
+value caml_prefetch_read_moderate_val_offset_untagged(value ptr,
+                                                      intnat byte_offset)
+{
+  prefetch_read_moderate((char *)ptr + byte_offset);
+  return Val_unit;
+}
+
+value caml_prefetch_read_low_val_offset_untagged(value ptr,
+                                                 intnat byte_offset)
+{
+  prefetch_read_low((char *)ptr + byte_offset);
+  return Val_unit;
+}
+
+value caml_prefetch_read_none_val_offset_untagged(value ptr,
+                                                  intnat byte_offset)
+{
+  prefetch_read_none((char *)ptr + byte_offset);
   return Val_unit;
 }
 

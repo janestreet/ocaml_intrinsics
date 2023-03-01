@@ -19,4 +19,4 @@ description: "
 Provides functions to invoke amd64 instructions (such as clz,popcnt,rdtsc,rdpmc)
      when available, or compatible software implementation on other targets.
 "
-available: (arch = "x86_32" | arch = "x86_64" | arch = "arm64") & os != "win32"
+available: (arch = "x86_64" | arch = "arm64") & os != "win32"

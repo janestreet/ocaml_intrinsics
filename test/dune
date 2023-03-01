@@ -1,6 +1,6 @@
 (library (name ocaml_intrinsics_test) (preprocessor_deps config.h)
  (libraries ocaml_intrinsics core expect_test_helpers_core)
- (c_names test_stubs) (preprocess (pps ppx_jane)))
+ (c_names test_stubs) (preprocess (pps ppx_jane ppx_optcomp)))
 
 (rule (targets config.h) (deps)
  (action (bash "cp %{lib:jst-config:config.h} .")))

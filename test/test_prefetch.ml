@@ -152,14 +152,73 @@ let%expect_test "pause in a for loop" =
   [%expect {||}]
 ;;
 
+type t =
+  { f0 : bool
+  ; f1 : int
+  ; f2 : float
+  ; f3 : string
+  ; f4 : float array
+  ; f5 : int64
+  ; f6 : int32
+  ; f7 : int option
+  }
+
+let t =
+  { f0 = false
+  ; f1 = 42
+  ; f2 = 3.14
+  ; f3 = "foo and bar longer than a word"
+  ; f4 = [| 1.05; Float.infinity |]
+  ; f5 = 10L
+  ; f6 = 15l
+  ; f7 = Some 17
+  }
+;;
+
+let pair = 4, "bar"
+
 let%expect_test "prefetch value" =
   List.iter all_of_operation ~f:(fun operation ->
     List.iter all_of_temporal_locality ~f:(fun temporal_locality ->
       let value = P.value ~operation ~temporal_locality in
+      let value_pos = P.value_pos ~operation ~temporal_locality in
       value positions;
+      value_pos positions ~pos:11;
+      value_pos positions ~pos:120;
+      (* out of bounds, no check, don't do it in user
+         programs, it is safe but expensive. *)
+      for pos = 0 to 8 do
+        value_pos t ~pos
+      done;
+      value_pos t.f3 ~pos:1;
+      value_pos t.f3 ~pos:2;
+      value_pos t.f4 ~pos:0;
+      value_pos t.f4 ~pos:1;
+      value_pos pair ~pos:0;
+      value_pos pair ~pos:1;
+      value_pos pair ~pos:(-1);
+      (* out of bounds *)
       value bigstring;
       value len (* len is int, don't do it in user programs *);
       value floats;
+      value_pos floats ~pos:0;
+      value_pos floats ~pos:7;
       value (List.hd floats)));
+  [%expect {||}]
+;;
+
+let%expect_test "prefetch value with offset" =
+  List.iter all_of_operation ~f:(fun operation ->
+    List.iter all_of_temporal_locality ~f:(fun temporal_locality ->
+      List.iter positions ~f:(fun offset ->
+        let value_offset v o =
+          P.value_byte_offset v ~byte_offset:o ~operation ~temporal_locality
+        in
+        (* the larger offsets will be out of bounds *)
+        value_offset positions offset;
+        value_offset bigstring offset;
+        (* len is int, don't do it in user programs *)
+        value_offset len offset;
+        value_offset (List.hd floats) offset)));
   [%expect {||}]
 ;;
