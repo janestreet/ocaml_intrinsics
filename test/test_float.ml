@@ -135,9 +135,7 @@ let%expect_test "round" =
     let base_res = Base.Float.round_nearest_half_to_even x in
     let res = I.round_half_to_even x in
     printf "round even  %.19g = %.19g" x res;
-    if same_bits res base_res
-    then printf "\n"
-    else printf " != %.19g in base\n" base_res);
+    if same_bits res base_res then printf "\n" else printf " != %.19g in base\n" base_res);
   [%expect
     {|
     round even  inf = inf

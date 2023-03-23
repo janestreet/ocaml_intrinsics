@@ -64,7 +64,8 @@ external store_untagged_int
 external load_unboxed_nativeint
   :  t
   -> (nativeint[@unboxed])
-  = "caml_ext_pointer_load_unboxed_nativeint_bytecode" "caml_ext_pointer_load_unboxed_nativeint"
+  = "caml_ext_pointer_load_unboxed_nativeint_bytecode"
+      "caml_ext_pointer_load_unboxed_nativeint"
 [@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_nativeint t d] stores the unboxed nativeint to the memory pointed to by
@@ -73,7 +74,8 @@ external store_unboxed_nativeint
   :  t
   -> (nativeint[@unboxed])
   -> unit
-  = "caml_ext_pointer_store_unboxed_nativeint_bytecode" "caml_ext_pointer_store_unboxed_nativeint"
+  = "caml_ext_pointer_store_unboxed_nativeint_bytecode"
+      "caml_ext_pointer_store_unboxed_nativeint"
 [@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** [load_unboxed_int64 t] reads unboxed int64 pointed to by [t] and returns

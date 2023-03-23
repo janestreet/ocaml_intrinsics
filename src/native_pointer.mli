@@ -46,7 +46,8 @@ external unsafe_to_value
 external load_untagged_int
   :  (t[@unboxed])
   -> (int[@untagged])
-  = "caml_native_pointer_load_untagged_int_bytecode" "caml_native_pointer_load_unboxed_nativeint"
+  = "caml_native_pointer_load_untagged_int_bytecode"
+      "caml_native_pointer_load_unboxed_nativeint"
 [@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_untagged_int t d] untags [d] and stores the result to the memory pointed to by
@@ -55,7 +56,8 @@ external store_untagged_int
   :  (t[@unboxed])
   -> (int[@untagged])
   -> unit
-  = "caml_native_pointer_store_untagged_int_bytecode" "caml_native_pointer_store_unboxed_nativeint"
+  = "caml_native_pointer_store_untagged_int_bytecode"
+      "caml_native_pointer_store_unboxed_nativeint"
 [@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** [load_unboxed_nativeint t] reads unboxed nativeint pointed to by [t] and returns
@@ -63,7 +65,8 @@ external store_untagged_int
 external load_unboxed_nativeint
   :  t
   -> nativeint
-  = "caml_native_pointer_load_unboxed_nativeint_bytecode" "caml_native_pointer_load_unboxed_nativeint"
+  = "caml_native_pointer_load_unboxed_nativeint_bytecode"
+      "caml_native_pointer_load_unboxed_nativeint"
 [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_nativeint t d] stores the unboxed nativeint to the memory pointed to by
@@ -72,7 +75,8 @@ external store_unboxed_nativeint
   :  (t[@unboxed])
   -> (nativeint[@unboxed])
   -> unit
-  = "caml_native_pointer_store_unboxed_nativeint_bytecode" "caml_native_pointer_store_unboxed_nativeint"
+  = "caml_native_pointer_store_unboxed_nativeint_bytecode"
+      "caml_native_pointer_store_unboxed_nativeint"
 [@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** [load_unboxed_int64 t] reads unboxed int64 pointed to by [t] and returns
@@ -80,7 +84,8 @@ external store_unboxed_nativeint
 external load_unboxed_int64
   :  t
   -> int64
-  = "caml_native_pointer_load_unboxed_int64_bytecode" "caml_native_pointer_load_unboxed_int64"
+  = "caml_native_pointer_load_unboxed_int64_bytecode"
+      "caml_native_pointer_load_unboxed_int64"
 [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_int64 t d] stores the unboxed int64 to the memory pointed to by [t]. *)
@@ -88,7 +93,8 @@ external store_unboxed_int64
   :  (t[@unboxed])
   -> (int64[@unboxed])
   -> unit
-  = "caml_native_pointer_store_unboxed_int64_bytecode" "caml_native_pointer_store_unboxed_int64"
+  = "caml_native_pointer_store_unboxed_int64_bytecode"
+      "caml_native_pointer_store_unboxed_int64"
 [@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** [load_unboxed_int32 t] reads unboxed int32 pointed to by [t] and returns
@@ -96,7 +102,8 @@ external store_unboxed_int64
 external load_unboxed_int32
   :  t
   -> int32
-  = "caml_native_pointer_load_unboxed_int32_bytecode" "caml_native_pointer_load_unboxed_int32"
+  = "caml_native_pointer_load_unboxed_int32_bytecode"
+      "caml_native_pointer_load_unboxed_int32"
 [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_int32 t d] stores the unboxed int32 to the memory pointed to by [t]. *)
@@ -104,7 +111,8 @@ external store_unboxed_int32
   :  (t[@unboxed])
   -> (int32[@unboxed])
   -> unit
-  = "caml_native_pointer_store_unboxed_int32_bytecode" "caml_native_pointer_store_unboxed_int32"
+  = "caml_native_pointer_store_unboxed_int32_bytecode"
+      "caml_native_pointer_store_unboxed_int32"
 [@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** For float operations, the pointer must be aligned at least to the native integer
@@ -117,7 +125,8 @@ external store_unboxed_int32
 external load_unboxed_float
   :  t
   -> float
-  = "caml_native_pointer_load_unboxed_float_bytecode" "caml_native_pointer_load_unboxed_float"
+  = "caml_native_pointer_load_unboxed_float_bytecode"
+      "caml_native_pointer_load_unboxed_float"
 [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_float t d] stores the unboxed float to the memory pointed to by [t]. *)
@@ -125,7 +134,8 @@ external store_unboxed_float
   :  (t[@unboxed])
   -> (float[@unboxed])
   -> unit
-  = "caml_native_pointer_store_unboxed_float_bytecode" "caml_native_pointer_store_unboxed_float"
+  = "caml_native_pointer_store_unboxed_float_bytecode"
+      "caml_native_pointer_store_unboxed_float"
 [@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** Pointer arithmetic and comparisons *)

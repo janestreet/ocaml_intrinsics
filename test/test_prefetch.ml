@@ -74,10 +74,7 @@ let%expect_test "prefetch" =
     List.iter all_of_temporal_locality ~f:(fun temporal_locality ->
       (* The data is probably already in cache so the test's effectiveness
          is limited to code generation. *)
-      printf
-        !"%{sexp:operation} %{sexp:temporal_locality}\n"
-        operation
-        temporal_locality;
+      printf !"%{sexp:operation} %{sexp:temporal_locality}\n" operation temporal_locality;
       let test_int n r =
         P.ext_pointer r ~operation ~temporal_locality;
         let n' = EP.load_untagged_int r in
