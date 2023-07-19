@@ -18,6 +18,16 @@ type t = private int
 
 external create : int -> t = "%identity"
 
+(** [offset_by_2n_bytes t n] represents an external pointer to address [t + 2*n]. *)
+let offset_by_2n_bytes (t : t) n =
+  (* Because the least significant bit of the pointer is implicitly zero, adding to the
+     represented integer value adds twice as much to the represented pointer value.
+     Argument is doubled to ensure that the resulting address is 2-byte aligned.  Checking
+     that the argument is even would result in worse code generation with a conditional
+     branch. *)
+  create ((t :> int) + n)
+;;
+
 module Immediate (V : sig
     type t [@@immediate]
   end) =
