@@ -107,23 +107,23 @@ let () =
     ~name:"discover"
     ~args:[ "-o", Set_string output, "FILENAME output file" ]
     (fun c ->
-       let flags =
-         List.filter_map
-           (fun (flag, prog) ->
-              match c_test c ~c_flags:[ flag ] prog with
-              | true -> Some flag
-              | false -> None)
-           [ "-mpopcnt", prog_popcnt (* ; "-mlzcnt", prog_lzcnt
-                                      * ; "-mbmi", prog_tzcnt *)
-           ; "-mcrc32", prog_crc32
-           ; "-mcrc32", prog_crc32_on_32bit_target
-           ; "-msse4.2", prog_sse42
-           ; "-msse4.1", prog_sse41
-           ; "-mprfchw", prog_prefetchw
-           ; "-mprefetchwt1", prog_prefetchwt1
-           ; "-march=armv8-a+crc", prog_arm_crc32
-           ]
-         |> List.sort_uniq String.compare
-       in
-       Flags.write_sexp !output flags)
+      let flags =
+        List.filter_map
+          (fun (flag, prog) ->
+            match c_test c ~c_flags:[ flag ] prog with
+            | true -> Some flag
+            | false -> None)
+          [ "-mpopcnt", prog_popcnt (* ; "-mlzcnt", prog_lzcnt
+                                     * ; "-mbmi", prog_tzcnt *)
+          ; "-mcrc32", prog_crc32
+          ; "-mcrc32", prog_crc32_on_32bit_target
+          ; "-msse4.2", prog_sse42
+          ; "-msse4.1", prog_sse41
+          ; "-mprfchw", prog_prefetchw
+          ; "-mprefetchwt1", prog_prefetchwt1
+          ; "-march=armv8-a+crc", prog_arm_crc32
+          ]
+        |> List.sort_uniq String.compare
+      in
+      Flags.write_sexp !output flags)
 ;;
