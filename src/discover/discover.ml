@@ -101,6 +101,18 @@ int main(int argc, char ** argv)
 |}
 ;;
 
+let prog_bmi2 =
+  {|
+int main(int argc, char ** argv)
+{
+#ifndef __BMI2__
+#error "BMI2 Not supported"
+#endif
+  return 0;
+}
+|}
+;;
+
 let () =
   let output = ref "" in
   main
@@ -117,6 +129,7 @@ let () =
                                      * ; "-mbmi", prog_tzcnt *)
           ; "-mcrc32", prog_crc32
           ; "-mcrc32", prog_crc32_on_32bit_target
+          ; "-mbmi2", prog_bmi2
           ; "-msse4.2", prog_sse42
           ; "-msse4.1", prog_sse41
           ; "-mprfchw", prog_prefetchw

@@ -25,7 +25,7 @@ library supports performance monitoring instructions `rdtsc`/`rdpmc`,
 `crc32`, and `s/l/mfence` for the x86_64 architecture only. 
 
 The library provides default implementations using C stubs for all
-targets.  Ocaml compiler with support for intrinsics intercepts calls
+targets.  OCaml compiler with support for intrinsics intercepts calls
 to these C stubs and emits inline assembly instead.
 
 The library and the compiler support was only tested on x86_64 Linux
