@@ -1,9 +1,18 @@
-(library (name ocaml_intrinsics) (public_name ocaml_intrinsics) (libraries)
- (c_names atomic_stubs int_stubs float_stubs perfmon_stubs crc_stubs
-  conditional_stubs ext_pointer_stubs native_pointer_stubs fences_stubs
-  prefetch_stubs)
- (c_flags :standard (:include builtin_flags.sexp))
+(library
+ (foreign_stubs
+  (language c)
+  (names atomic_stubs int_stubs float_stubs perfmon_stubs crc_stubs
+    conditional_stubs ext_pointer_stubs native_pointer_stubs fences_stubs
+    prefetch_stubs)
+  (flags
+   :standard
+   (:include builtin_flags.sexp)))
+ (name ocaml_intrinsics)
+ (public_name ocaml_intrinsics)
+ (libraries)
  (preprocess no_preprocessing))
 
-(rule (targets builtin_flags.sexp)
- (action (run ./discover/discover.exe -o %{targets})))
+(rule
+ (targets builtin_flags.sexp)
+ (action
+  (run ./discover/discover.exe -o %{targets})))

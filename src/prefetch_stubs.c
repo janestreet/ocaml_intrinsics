@@ -90,7 +90,7 @@ static inline void prefetch_read_low(__attribute__ ((unused)) void *ptr) {}
 static inline void prefetch_read_none(__attribute__ ((unused)) void *ptr) {}
 #endif
 
-/* Used for both raw Ocaml values and unboxed native pointers */
+/* Used for both raw OCaml values and unboxed native pointers */
 
 value caml_prefetch_write_high(intnat ptr)
 {

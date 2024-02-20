@@ -244,3 +244,51 @@ module _ = struct
 
   type t = int [@@deriving quickcheck]
 end
+
+module _ = struct
+  external alloc : int -> int = "external_untagged_int_array_ref"
+
+  let create_array n = P.create (alloc n)
+  let word_size_in_bytes = Sys.word_size_in_bits / 8
+  let offset = word_size_in_bytes / 2
+  let advance p word = P.offset_by_2n_bytes p (offset * word)
+
+  let print p n =
+    for i = 0 to n - 1 do
+      let p' = advance p i in
+      printf "%2d:%d " i (P.load_untagged_int p')
+    done;
+    printf "\n"
+  ;;
+
+  let%expect_test "ext_pointer offset_by_2n" =
+    printf "ext_pointer offset_by_2n\n";
+    let n = 20 in
+    let p = create_array n in
+    print p n;
+    P.store_untagged_int p (-1);
+    print p n;
+    let k = 5 in
+    let p' = advance p k in
+    let x = P.load_untagged_int p' in
+    (* are we pointing to the correct element? *)
+    printf "%d\n" x;
+    P.store_untagged_int p' (-1);
+    print p n;
+    print p' (n - k);
+    (* check that negative offsets work correctly *)
+    let m = -2 in
+    let p'' = advance p' m in
+    P.store_untagged_int p'' (-2);
+    print p n;
+    [%expect
+      {|
+      ext_pointer offset_by_2n
+       0:0  1:1  2:2  3:3  4:4  5:5  6:6  7:7  8:8  9:9 10:10 11:11 12:12 13:13 14:14 15:15 16:16 17:17 18:18 19:19
+       0:-1  1:1  2:2  3:3  4:4  5:5  6:6  7:7  8:8  9:9 10:10 11:11 12:12 13:13 14:14 15:15 16:16 17:17 18:18 19:19
+      5
+       0:-1  1:1  2:2  3:3  4:4  5:-1  6:6  7:7  8:8  9:9 10:10 11:11 12:12 13:13 14:14 15:15 16:16 17:17 18:18 19:19
+       0:-1  1:6  2:7  3:8  4:9  5:10  6:11  7:12  8:13  9:14 10:15 11:16 12:17 13:18 14:19
+       0:-1  1:1  2:2  3:-2  4:4  5:-1  6:6  7:7  8:8  9:9 10:10 11:11 12:12 13:13 14:14 15:15 16:16 17:17 18:18 19:19 |}]
+  ;;
+end
