@@ -4,20 +4,6 @@ external iround_half_to_even
   = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
   [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
-external min
-  :  (float[@unboxed])
-  -> (float[@unboxed])
-  -> (float[@unboxed])
-  = "caml_sse2_float64_min_bytecode" "caml_sse2_float64_min"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
-
-external max
-  :  (float[@unboxed])
-  -> (float[@unboxed])
-  -> (float[@unboxed])
-  = "caml_sse2_float64_max_bytecode" "caml_sse2_float64_max"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
-
 external round
   :  (int[@untagged])
   -> (float[@unboxed])
@@ -39,3 +25,5 @@ let[@inline always] round_down x = round Rounding_mode.neg_inf x
 let[@inline always] round_up x = round Rounding_mode.pos_inf x
 let[@inline always] round_towards_zero x = round Rounding_mode.zero x
 let[@inline always] round_nearest x = round Rounding_mode.nearest x
+
+include Ocaml_intrinsics_kernel.Float

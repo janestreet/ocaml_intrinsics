@@ -13,28 +13,6 @@ external iround_half_to_even
   = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
   [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
-(** Equivalent to [if x < y then x else y].
-
-    On an x86-64 machine, this compiles to [minsd xmm0, xmm1].
-    On ARM, this calls a C implementation. *)
-external min
-  :  (float[@unboxed])
-  -> (float[@unboxed])
-  -> (float[@unboxed])
-  = "caml_sse2_float64_min_bytecode" "caml_sse2_float64_min"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
-
-(** Equivalent to [if x > y then x else y].
-
-    On an x86-64 machine, this compiles to [maxsd xmm0, xmm1].
-    On ARM, this calls a C implementation. *)
-external max
-  :  (float[@unboxed])
-  -> (float[@unboxed])
-  -> (float[@unboxed])
-  = "caml_sse2_float64_max_bytecode" "caml_sse2_float64_max"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
-
 (** Rounds a [float] to an integer [float] using the current rounding
     mode.  The default rounding mode is "round half to even", and we
     expect that no program will change the rounding mode.
@@ -55,3 +33,5 @@ val round_down : float -> float
 val round_up : float -> float
 val round_towards_zero : float -> float
 val round_nearest : float -> float
+
+include module type of Ocaml_intrinsics_kernel.Float

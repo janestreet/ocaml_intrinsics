@@ -11,7 +11,8 @@ build: [
 ]
 depends: [
   "ocaml" {>= "4.14.0"}
-  "dune"              {>= "2.0.0"}
+  "ocaml_intrinsics_kernel"
+  "dune"                    {>= "2.0.0"}
   "dune-configurator"
 ]
 synopsis: "Intrinsics"
