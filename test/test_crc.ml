@@ -37,7 +37,8 @@ let%expect_test "crc32" =
      (cumulative_crc 2649713533))
     ((x              4611686018427387903)
      (crc            130211721)
-     (cumulative_crc 130211721)) |}];
+     (cumulative_crc 130211721))
+    |}];
   List.iter examples ~f:(fun x ->
     let acc = 1 in
     let cumulative_crc = crc_cumulative ~acc x in
@@ -64,7 +65,8 @@ let%expect_test "crc32" =
      (cumulative_crc 3570603610))
     ((x              4611686018427387903)
      (acc            1)
-     (cumulative_crc 1325310638)) |}]
+     (cumulative_crc 1325310638))
+    |}]
 ;;
 
 let%expect_test "iterated_crc" =
@@ -78,21 +80,24 @@ let%expect_test "iterated_crc" =
     ((initial    0)
      (iterations 0)
      (data       1000)
-     (crc        3644803405)) |}];
+     (crc        3644803405))
+    |}];
   test ~initial:0 ~iterations:100 ~data:1000;
   [%expect
     {|
     ((initial    0)
      (iterations 100)
      (data       1000)
-     (crc        3734759765)) |}];
+     (crc        3734759765))
+    |}];
   test ~initial:100 ~iterations:100 ~data:1000;
   [%expect
     {|
-      ((initial    100)
-       (iterations 100)
-       (data       1000)
-       (crc        350685120)) |}]
+    ((initial    100)
+     (iterations 100)
+     (data       1000)
+     (crc        350685120))
+    |}]
 ;;
 
 let%expect_test "iterated_crc_exn" =

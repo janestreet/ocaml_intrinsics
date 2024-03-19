@@ -134,19 +134,20 @@ let%expect_test "prefetch" =
     Write None
     Write Low
     Write Moderate
-    Write High |}]
+    Write High
+    |}]
 ;;
 
 let%expect_test "pause" =
   P.pause ();
-  [%expect {||}]
+  [%expect {| |}]
 ;;
 
 let%expect_test "pause in a for loop" =
   for _ = 0 to Sys.opaque_identity 5 do
     P.pause ()
   done;
-  [%expect {||}]
+  [%expect {| |}]
 ;;
 
 type t =
@@ -201,7 +202,7 @@ let%expect_test "prefetch value" =
       value_pos floats ~pos:0;
       value_pos floats ~pos:7;
       value (List.hd floats)));
-  [%expect {||}]
+  [%expect {| |}]
 ;;
 
 let%expect_test "prefetch value with offset" =
@@ -217,5 +218,5 @@ let%expect_test "prefetch value with offset" =
         (* len is int, don't do it in user programs *)
         value_offset len offset;
         value_offset (List.hd floats) offset)));
-  [%expect {||}]
+  [%expect {| |}]
 ;;

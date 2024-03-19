@@ -67,8 +67,9 @@ let%expect_test "bigstring with offset -> untagged int" =
   let sb1 = A_BS.compare_and_swap bigstring ~pos:3 ~compare_with:3 ~set_to:0 in
   printf "%d %d %d %b %b\n" b0 b1 b2 sb0 sb1;
   [%expect {|
-   0 5 3 true false
-   0 5 3 true false |}]
+    0 5 3 true false
+    0 5 3 true false
+    |}]
 ;;
 
 let%expect_test "native pointer -> int64" =
@@ -113,7 +114,8 @@ let%expect_test "bigstring with offset -> int64" =
   printf "%Ld %Ld %Ld %b %b\n" b0 b1 b2 sb0 sb1;
   [%expect {|
     0 5 3 true false
-    0 5 3 true false |}]
+    0 5 3 true false
+    |}]
 ;;
 
 let%expect_test "native pointer -> int32" =
@@ -158,7 +160,8 @@ let%expect_test "bigstring with offset -> int32" =
   printf "%ld %ld %ld %b %b\n" b0 b1 b2 sb0 sb1;
   [%expect {|
     0 5 3 true false
-    0 5 3 true false |}]
+    0 5 3 true false
+    |}]
 ;;
 
 let%expect_test "native pointer -> nativeint" =
@@ -211,7 +214,8 @@ let%expect_test "bigstring with offset -> nativeint" =
   printf "%nd %nd %nd %b %b\n" b0 b1 b2 sb0 sb1;
   [%expect {|
     0 5 3 true false
-    0 5 3 true false |}]
+    0 5 3 true false
+    |}]
 ;;
 
 let%expect_test "cas loop codegen" =
@@ -227,8 +231,7 @@ let%expect_test "cas loop codegen" =
     printf "cas failed\n"
   done;
   printf "%nd" (NP.load_unboxed_nativeint np);
-  [%expect {|
-    -1|}]
+  [%expect {| -1 |}]
 ;;
 
 module _ = struct

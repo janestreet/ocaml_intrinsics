@@ -91,7 +91,8 @@ let%expect_test "iround_half_to_even" =
     iround_half_to_even 4611686018427387392 = 4611686018427387392
     iround_half_to_even 9223372036854774784 = 9223372036854774784
     iround_half_to_even -inf = -9223372036854775808
-    iround_half_to_even nan = -9223372036854775808 |}]
+    iround_half_to_even nan = -9223372036854775808
+    |}]
 ;;
 
 let%expect_test "round" =
@@ -138,7 +139,8 @@ let%expect_test "round" =
     [Base] round even (current) 4611686018427387392 = 4611686018427387392
     [Base] round even (current) 9223372036854774784 = 9223372036854774784
     [Base] round even (current) -inf = -inf
-    [Base] round even (current) nan = nan |}];
+    [Base] round even (current) nan = nan
+    |}];
   List.iter args ~f:(fun x ->
     printf "round even (current) %.19g = %.19g\n" x (I.round_half_to_even x));
   [%expect
@@ -179,7 +181,8 @@ let%expect_test "round" =
     round even (current) 4611686018427387392 = 4611686018427387392
     round even (current) 9223372036854774784 = 9223372036854774784
     round even (current) -inf = -inf
-    round even (current) nan = nan |}];
+    round even (current) nan = nan
+    |}];
   List.iter args ~f:(fun x ->
     printf "round nearest %.19g = %.19g\n" x (I.round_nearest x));
   [%expect
@@ -220,7 +223,8 @@ let%expect_test "round" =
     round nearest 4611686018427387392 = 4611686018427387392
     round nearest 9223372036854774784 = 9223372036854774784
     round nearest -inf = -inf
-    round nearest nan = nan |}];
+    round nearest nan = nan
+    |}];
   List.iter args ~f:(fun x -> printf "round up %.19g = %.19g\n" x (I.round_up x));
   [%expect
     {|
@@ -260,7 +264,8 @@ let%expect_test "round" =
     round up 4611686018427387392 = 4611686018427387392
     round up 9223372036854774784 = 9223372036854774784
     round up -inf = -inf
-    round up nan = nan |}];
+    round up nan = nan
+    |}];
   List.iter args ~f:(fun x -> printf "round down %.19g = %.19g\n" x (I.round_down x));
   [%expect
     {|
@@ -300,7 +305,8 @@ let%expect_test "round" =
     round down 4611686018427387392 = 4611686018427387392
     round down 9223372036854774784 = 9223372036854774784
     round down -inf = -inf
-    round down nan = nan |}];
+    round down nan = nan
+    |}];
   List.iter args ~f:(fun x ->
     printf "round to zero %.19g = %.19g\n" x (I.round_towards_zero x));
   [%expect
@@ -341,7 +347,8 @@ let%expect_test "round" =
     round to zero 4611686018427387392 = 4611686018427387392
     round to zero 9223372036854774784 = 9223372036854774784
     round to zero -inf = -inf
-    round to zero nan = nan |}]
+    round to zero nan = nan
+    |}]
 ;;
 
 [%%ifdef JSC_ARCH_SIXTYFOUR]
@@ -390,7 +397,8 @@ let%expect_test "bit_of_float" =
     bits_of_float 4611686018427387392 = 4886405595696988159 -> 4611686018427387392
     bits_of_float 9223372036854774784 = 4890909195324358655 -> 9223372036854774784
     bits_of_float -inf = -4503599627370496 -> -inf
-    bits_of_float nan = 9221120237041090561 -> nan |}]
+    bits_of_float nan = 9221120237041090561 -> nan
+    |}]
 ;;
 
 [%%else]
@@ -440,7 +448,8 @@ let%expect_test "bit_of_float" =
     bits_of_float 3.5 = 4615063718147915776 -> 3.5
     bits_of_float 4611686018427387392 = 4886405595696988159 -> 4611686018427387392
     bits_of_float 9223372036854774784 = 4890909195324358655 -> 9223372036854774784
-    bits_of_float -inf = -4503599627370496 -> -inf |}]
+    bits_of_float -inf = -4503599627370496 -> -inf
+    |}]
 ;;
 
 [%%endif]

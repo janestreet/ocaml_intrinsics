@@ -60,9 +60,9 @@ let%expect_test "ext_pointer int" =
   let numbers = [ 17 ] in
   List.iter ~f:(fun n -> ignore (test_int n : int * int)) numbers;
   [%expect {|
-   ext_pointer int: read 17 = 17
-   ext_pointer int: read 18 = 18
-   |}]
+    ext_pointer int: read 17 = 17
+    ext_pointer int: read 18 = 18
+    |}]
 ;;
 
 let%expect_test "ext_pointer float" =
@@ -70,9 +70,9 @@ let%expect_test "ext_pointer float" =
   List.iter ~f:(fun n -> ignore (test_float n : float * float)) numbers;
   [%expect
     {|
-   ext_pointer float: read 42.000000 = 42.000000
-   ext_pointer float: read 546.000000 = 546.000000
-   |}]
+    ext_pointer float: read 42.000000 = 42.000000
+    ext_pointer float: read 546.000000 = 546.000000
+    |}]
 ;;
 
 include Base_quickcheck.Export
@@ -289,6 +289,7 @@ module _ = struct
       5
        0:-1  1:1  2:2  3:3  4:4  5:-1  6:6  7:7  8:8  9:9 10:10 11:11 12:12 13:13 14:14 15:15 16:16 17:17 18:18 19:19
        0:-1  1:6  2:7  3:8  4:9  5:10  6:11  7:12  8:13  9:14 10:15 11:16 12:17 13:18 14:19
-       0:-1  1:1  2:2  3:-2  4:4  5:-1  6:6  7:7  8:8  9:9 10:10 11:11 12:12 13:13 14:14 15:15 16:16 17:17 18:18 19:19 |}]
+       0:-1  1:1  2:2  3:-2  4:4  5:-1  6:6  7:7  8:8  9:9 10:10 11:11 12:12 13:13 14:14 15:15 16:16 17:17 18:18 19:19
+      |}]
   ;;
 end

@@ -13,13 +13,3 @@
  (deps)
  (action
   (bash "cp %{lib:jst-config:config.h} .")))
-
-(rule
- (alias runtest)
- (deps
-  inline_tests_runner
-  inline_tests_runner.bc
-  (alias runtime-deps-of-tests))
- (action
-  (bash
-    "INLINE_TESTS_RUNNER_EXE=./inline_tests_runner.bc ./inline_tests_runner > /dev/null")))

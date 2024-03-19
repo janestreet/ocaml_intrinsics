@@ -104,7 +104,8 @@ let%expect_test "native_pointer immediate int" =
   List.iter ~f:(fun n -> ignore (test_immediate_int n : int * int)) numbers;
   [%expect {|
     read 35 from 17 (=17)
-    incr 37 (=18) |}]
+    incr 37 (=18)
+    |}]
 ;;
 
 let%expect_test "native pointer none matches" =
@@ -125,7 +126,7 @@ let%expect_test "native pointer values match" =
   let pv0 = unsafe_of_value v0 in
   let pv1 = unsafe_of_value v1 in
   Expect_test_helpers_base.require [%here] (pv0 = pv1);
-  [%expect {||}]
+  [%expect {| |}]
 ;;
 
 let%expect_test "native pointer values differ" =
@@ -135,7 +136,7 @@ let%expect_test "native pointer values differ" =
   let pv0 = unsafe_of_value v0 in
   let pv1 = unsafe_of_value v1 in
   Expect_test_helpers_base.require [%here] (pv0 <> pv1);
-  [%expect {||}]
+  [%expect {| |}]
 ;;
 
 let%expect_test "native pointer comparisons" =
@@ -153,7 +154,7 @@ let%expect_test "native pointer comparisons" =
     (module Nativeint)
     (difference_in_bytes p0 p1)
     17n;
-  [%expect {||}]
+  [%expect {| |}]
 ;;
 
 let[@inline never] throw_away x = (Sys.opaque_identity x : _) |> ignore
