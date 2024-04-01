@@ -24,16 +24,6 @@ int64_t caml_sse2_cast_float64_int64(double x)
   return _mm_cvtsd_si64(_mm_set_sd(x));
 }
 
-double caml_sse2_float64_min(double x, double y)
-{
-  return _mm_cvtsd_f64(_mm_min_sd(_mm_set_sd(x), _mm_set_sd(y)));
-}
-
-double caml_sse2_float64_max(double x, double y)
-{
-  return _mm_cvtsd_f64(_mm_max_sd(_mm_set_sd(x), _mm_set_sd(y)));
-}
-
 double caml_sse41_float64_round(int mode, double x)
 {
   __m128d zero = _mm_setzero_pd();
@@ -65,14 +55,6 @@ int64_t caml_sse2_cast_float64_int64(double x)
   return llrint(x);
 }
 
-double caml_sse2_float64_min(double x, double y) {
-  return x < y ? x : y;
-}
-
-double caml_sse2_float64_max(double x, double y) {
-  return x > y ? x : y;
-}
-
 double caml_sse41_float64_round(int mode, double x) {
   switch(mode) {
   case ROUND_NEG_INF: return floor(x);
@@ -89,16 +71,6 @@ double caml_sse41_float64_round(int mode, double x) {
 CAMLprim value caml_sse2_cast_float64_int64_bytecode(value x)
 {
   return caml_copy_int64(caml_sse2_cast_float64_int64(Double_val(x)));
-}
-
-CAMLprim value caml_sse2_float64_min_bytecode(value x, value y)
-{
-  return caml_copy_double(caml_sse2_float64_min(Double_val(x), Double_val(y)));
-}
-
-CAMLprim value caml_sse2_float64_max_bytecode(value x, value y)
-{
-  return caml_copy_double(caml_sse2_float64_max(Double_val(x), Double_val(y)));
 }
 
 CAMLprim value caml_sse41_float64_round_bytecode(value mode, value x)
