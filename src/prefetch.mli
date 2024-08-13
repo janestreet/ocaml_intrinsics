@@ -87,7 +87,7 @@ val bigstring
 
 (** Processor hint that improves performance of spin-wait loops.  *)
 external pause : unit -> unit = "caml_pause_hint"
-  [@@noalloc] [@@builtin]
+[@@noalloc] [@@builtin]
 
 (** The prefetch functions above rely on inlining heuristics to eliminate selection logic
     and emit a single call to an external function.  It usually works well with Flambda,

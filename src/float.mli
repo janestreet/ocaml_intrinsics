@@ -11,7 +11,7 @@ external iround_half_to_even
   :  (float[@unboxed])
   -> (int64[@unboxed])
   = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
 (** Rounds a [float] to an integer [float] using the current rounding
     mode.  The default rounding mode is "round half to even", and we
@@ -35,3 +35,19 @@ val round_towards_zero : float -> float
 val round_nearest : float -> float
 
 include module type of Ocaml_intrinsics_kernel.Float
+
+module Unboxed : sig
+  include module type of Unboxed
+
+  external iround_half_to_even
+    :  (float[@unboxed])
+    -> (int64[@unboxed])
+    = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
+  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+
+  val round_half_to_even : float -> float
+  val round_down : float -> float
+  val round_up : float -> float
+  val round_towards_zero : float -> float
+  val round_nearest : float -> float
+end

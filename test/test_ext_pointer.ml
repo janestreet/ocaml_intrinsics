@@ -59,7 +59,8 @@ let test_float n =
 let%expect_test "ext_pointer int" =
   let numbers = [ 17 ] in
   List.iter ~f:(fun n -> ignore (test_int n : int * int)) numbers;
-  [%expect {|
+  [%expect
+    {|
     ext_pointer int: read 17 = 17
     ext_pointer int: read 18 = 18
     |}]

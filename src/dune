@@ -1,7 +1,7 @@
 (library
  (foreign_stubs
   (language c)
-  (names atomic_stubs int_stubs float_stubs perfmon_stubs crc_stubs
+  (names float_stubs atomic_stubs int_stubs perfmon_stubs crc_stubs
     ext_pointer_stubs native_pointer_stubs fences_stubs prefetch_stubs)
   (flags
    :standard

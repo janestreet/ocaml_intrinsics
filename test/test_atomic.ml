@@ -66,7 +66,8 @@ let%expect_test "bigstring with offset -> untagged int" =
   let sb0 = A_BS.compare_and_swap bigstring ~pos:3 ~compare_with:3 ~set_to:0 in
   let sb1 = A_BS.compare_and_swap bigstring ~pos:3 ~compare_with:3 ~set_to:0 in
   printf "%d %d %d %b %b\n" b0 b1 b2 sb0 sb1;
-  [%expect {|
+  [%expect
+    {|
     0 5 3 true false
     0 5 3 true false
     |}]
@@ -112,7 +113,8 @@ let%expect_test "bigstring with offset -> int64" =
   let sb0 = A_BS.compare_and_swap_int64 bigstring ~pos:3 ~compare_with:3L ~set_to:0L in
   let sb1 = A_BS.compare_and_swap_int64 bigstring ~pos:3 ~compare_with:3L ~set_to:0L in
   printf "%Ld %Ld %Ld %b %b\n" b0 b1 b2 sb0 sb1;
-  [%expect {|
+  [%expect
+    {|
     0 5 3 true false
     0 5 3 true false
     |}]
@@ -158,7 +160,8 @@ let%expect_test "bigstring with offset -> int32" =
   let sb0 = A_BS.compare_and_swap_int32 bigstring ~pos:3 ~compare_with:3l ~set_to:0l in
   let sb1 = A_BS.compare_and_swap_int32 bigstring ~pos:3 ~compare_with:3l ~set_to:0l in
   printf "%ld %ld %ld %b %b\n" b0 b1 b2 sb0 sb1;
-  [%expect {|
+  [%expect
+    {|
     0 5 3 true false
     0 5 3 true false
     |}]
@@ -212,7 +215,8 @@ let%expect_test "bigstring with offset -> nativeint" =
     A_BS.compare_and_swap_nativeint bigstring ~pos:3 ~compare_with:3n ~set_to:0n
   in
   printf "%nd %nd %nd %b %b\n" b0 b1 b2 sb0 sb1;
-  [%expect {|
+  [%expect
+    {|
     0 5 3 true false
     0 5 3 true false
     |}]

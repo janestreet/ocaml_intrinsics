@@ -2,14 +2,14 @@ external iround_half_to_even
   :  (float[@unboxed])
   -> (int64[@unboxed])
   = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
 external round
   :  (int[@untagged])
   -> (float[@unboxed])
   -> (float[@unboxed])
   = "caml_sse41_float64_round_bytecode" "caml_sse41_float64_round"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
 module Rounding_mode = struct
   (* These also imply _MM_FROUND_NO_EXC *)
@@ -27,3 +27,26 @@ let[@inline always] round_towards_zero x = round Rounding_mode.zero x
 let[@inline always] round_nearest x = round Rounding_mode.nearest x
 
 include Ocaml_intrinsics_kernel.Float
+
+module Unboxed = struct
+  include Unboxed
+
+  external iround_half_to_even
+    :  (float[@unboxed])
+    -> (int64[@unboxed])
+    = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
+  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+
+  external round
+    :  (int[@untagged])
+    -> (float[@unboxed])
+    -> (float[@unboxed])
+    = "caml_sse41_float64_round_bytecode" "caml_sse41_float64_round"
+  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+
+  let[@inline always] round_half_to_even x = round Rounding_mode.current x
+  let[@inline always] round_down x = round Rounding_mode.neg_inf x
+  let[@inline always] round_up x = round Rounding_mode.pos_inf x
+  let[@inline always] round_towards_zero x = round Rounding_mode.zero x
+  let[@inline always] round_nearest x = round Rounding_mode.nearest x
+end

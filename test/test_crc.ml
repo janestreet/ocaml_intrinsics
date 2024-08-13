@@ -13,7 +13,7 @@ let%expect_test "crc32" =
   List.iter examples ~f:(fun x ->
     let crc = crc x in
     let cumulative_crc = crc_cumulative ~acc:0 x in
-    require_equal [%here] (module Int) crc cumulative_crc;
+    require_equal (module Int) crc cumulative_crc;
     print_s [%message (x : int) (crc : int) (cumulative_crc : int)]);
   [%expect
     {|

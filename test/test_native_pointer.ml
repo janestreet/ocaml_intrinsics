@@ -102,7 +102,8 @@ let test_immediate_int n =
 let%expect_test "native_pointer immediate int" =
   let numbers = [ 17 ] in
   List.iter ~f:(fun n -> ignore (test_immediate_int n : int * int)) numbers;
-  [%expect {|
+  [%expect
+    {|
     read 35 from 17 (=17)
     incr 37 (=18)
     |}]
@@ -114,7 +115,7 @@ let%expect_test "native pointer none matches" =
   let pv = unsafe_of_value v in
   let pn = unsafe_of_value None in
   printf "%nu = %nu" (Expert.to_nativeint pv) (Expert.to_nativeint pn);
-  Expect_test_helpers_base.require [%here] (pv = pn);
+  Expect_test_helpers_base.require (pv = pn);
   [%expect {| 1 = 1 |}]
 ;;
 
@@ -125,7 +126,7 @@ let%expect_test "native pointer values match" =
   let v1 = v in
   let pv0 = unsafe_of_value v0 in
   let pv1 = unsafe_of_value v1 in
-  Expect_test_helpers_base.require [%here] (pv0 = pv1);
+  Expect_test_helpers_base.require (pv0 = pv1);
   [%expect {| |}]
 ;;
 
@@ -135,7 +136,7 @@ let%expect_test "native pointer values differ" =
   let v1 = [ 4 ] in
   let pv0 = unsafe_of_value v0 in
   let pv1 = unsafe_of_value v1 in
-  Expect_test_helpers_base.require [%here] (pv0 <> pv1);
+  Expect_test_helpers_base.require (pv0 <> pv1);
   [%expect {| |}]
 ;;
 
@@ -143,14 +144,13 @@ let%expect_test "native pointer comparisons" =
   let open NP in
   let p0 = Expert.of_nativeint 0n in
   let p1 = advance p0 ~bytes:17n in
-  Expect_test_helpers_base.require [%here] (p0 = p0);
-  Expect_test_helpers_base.require [%here] (p0 <= p0);
-  Expect_test_helpers_base.require [%here] (p0 >= p0);
-  Expect_test_helpers_base.require [%here] (p0 <> p1);
-  Expect_test_helpers_base.require [%here] (p0 < p1);
-  Expect_test_helpers_base.require [%here] (p1 > p0);
+  Expect_test_helpers_base.require (p0 = p0);
+  Expect_test_helpers_base.require (p0 <= p0);
+  Expect_test_helpers_base.require (p0 >= p0);
+  Expect_test_helpers_base.require (p0 <> p1);
+  Expect_test_helpers_base.require (p0 < p1);
+  Expect_test_helpers_base.require (p1 > p0);
   Expect_test_helpers_base.require_equal
-    [%here]
     (module Nativeint)
     (difference_in_bytes p0 p1)
     17n;

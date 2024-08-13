@@ -10,12 +10,13 @@
 #endif
 
 // SFENCE requires SSE and LFENCE/MFENCE require SSE2
+// (defined(_MSC_VER) && defined(_M_X64)) implies at least SSE2
 
 CAMLprim value caml_load_fence (__attribute__ ((unused)) value unit)
 {
 #if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && defined(__SSE2__))
   __builtin_ia32_lfence();
-#elif (defined(__x86_64__) && defined(_MSC_VER))
+#elif (defined(_MSC_VER) && defined(_M_X64))
   _mm_lfence();
 #else
   /* Platform not supported, but we don't want to prevent the rest of the library from
@@ -29,7 +30,7 @@ CAMLprim value caml_store_fence (__attribute__ ((unused)) value unit)
 {
 #if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && defined(__SSE__))
   __builtin_ia32_sfence();
-#elif (defined(__x86_64__) && defined(_MSC_VER))
+#elif (defined(_MSC_VER) && defined(_M_X64))
   _mm_sfence();
 #else
   /* Platform not supported, but we don't want to prevent the rest of the library from
@@ -43,7 +44,7 @@ CAMLprim value caml_memory_fence (__attribute__ ((unused)) value unit)
 {
 #if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && defined(__SSE2__))
   __builtin_ia32_mfence();
-#elif (defined(__x86_64__) && defined(_MSC_VER))
+#elif (defined(_MSC_VER) && defined(_M_X64))
   _mm_mfence();
 #else
   /* Platform not supported, but we don't want to prevent the rest of the library from

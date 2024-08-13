@@ -4,7 +4,10 @@
   (names test_stubs))
  (name ocaml_intrinsics_test)
  (preprocessor_deps config.h)
- (libraries ocaml_intrinsics core expect_test_helpers_core)
+ (flags :standard -extension layouts)
+ (libraries float_u int32_u int64_u nativeint_u ocaml_intrinsics
+   base_bigstring core expect_test_helpers_core.expect_test_helpers_base
+   expect_test_helpers_core int_repr stdio)
  (preprocess
   (pps ppx_jane ppx_optcomp)))
 
