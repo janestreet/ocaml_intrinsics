@@ -97,14 +97,14 @@ external store_unboxed_float
 module Unboxed = struct
   external load_unboxed_nativeint
     :  t
-    -> nativeint
+    -> nativeint#
     = "caml_native_pointer_load_unboxed_nativeint_bytecode"
       "caml_native_pointer_load_unboxed_nativeint"
   [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_nativeint
     :  (t[@unboxed])
-    -> (nativeint[@unboxed])
+    -> (nativeint#[@unboxed])
     -> unit
     = "caml_native_pointer_store_unboxed_nativeint_bytecode"
       "caml_native_pointer_store_unboxed_nativeint"
@@ -112,14 +112,14 @@ module Unboxed = struct
 
   external load_unboxed_int64
     :  t
-    -> int64
+    -> int64#
     = "caml_native_pointer_load_unboxed_int64_bytecode"
       "caml_native_pointer_load_unboxed_int64"
   [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_int64
     :  (t[@unboxed])
-    -> (int64[@unboxed])
+    -> (int64#[@unboxed])
     -> unit
     = "caml_native_pointer_store_unboxed_int64_bytecode"
       "caml_native_pointer_store_unboxed_int64"
@@ -127,14 +127,14 @@ module Unboxed = struct
 
   external load_unboxed_int32
     :  t
-    -> int32
+    -> int32#
     = "caml_native_pointer_load_unboxed_int32_bytecode"
       "caml_native_pointer_load_unboxed_int32"
   [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_int32
     :  (t[@unboxed])
-    -> (int32[@unboxed])
+    -> (int32#[@unboxed])
     -> unit
     = "caml_native_pointer_store_unboxed_int32_bytecode"
       "caml_native_pointer_store_unboxed_int32"
@@ -142,14 +142,14 @@ module Unboxed = struct
 
   external load_unboxed_float
     :  t
-    -> float
+    -> float#
     = "caml_native_pointer_load_unboxed_float_bytecode"
       "caml_native_pointer_load_unboxed_float"
   [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_float
     :  (t[@unboxed])
-    -> (float[@unboxed])
+    -> (float#[@unboxed])
     -> unit
     = "caml_native_pointer_store_unboxed_float_bytecode"
       "caml_native_pointer_store_unboxed_float"
@@ -158,7 +158,7 @@ end
 
 module type Immediate_intf = sig
   module V : sig
-    type t [@@immediate64]
+    type t : immediate64
   end
 
   external unsafe_load_immediate
@@ -176,7 +176,7 @@ module type Immediate_intf = sig
 end
 
 module Immediate (V : sig
-    type t [@@immediate64]
+    type t : immediate64
   end) : Immediate_intf with module V = V = struct
   module V = V
 

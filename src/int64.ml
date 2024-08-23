@@ -24,7 +24,7 @@ external extract_bits
 module Unboxed = struct
   (** See [Stdlib.Float.bits_of_float]  *)
   external bits_of_float
-    :  float
+    :  float#
     -> int64
     = "caml_int64_bits_of_float" "caml_int64_bits_of_float_unboxed"
   [@@unboxed] [@@noalloc]
@@ -32,38 +32,38 @@ module Unboxed = struct
   (** See [Stdlib.Float.float_of_bits]  *)
   external float_of_bits
     :  int64
-    -> float
+    -> float#
     = "caml_int64_float_of_bits" "caml_int64_float_of_bits_unboxed"
   [@@unboxed] [@@noalloc]
 
   (** See [Ocaml_intrinsics_kernel.Int64]. *)
 
   external count_leading_zeros
-    :  (int64[@unboxed])
+    :  (int64#[@unboxed])
     -> (int[@untagged])
     = "caml_int64_clz" "caml_int64_clz_unboxed_to_untagged"
   [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
   external count_leading_zeros_nonzero_arg
-    :  (int64[@unboxed])
+    :  (int64#[@unboxed])
     -> (int[@untagged])
     = "caml_int64_clz" "caml_int64_clz_nonzero_unboxed_to_untagged"
   [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
   external count_trailing_zeros
-    :  (int64[@unboxed])
+    :  (int64#[@unboxed])
     -> (int[@untagged])
     = "caml_int64_ctz" "caml_int64_ctz_unboxed_to_untagged"
   [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
   external count_trailing_zeros_nonzero_arg
-    :  (int64[@unboxed])
+    :  (int64#[@unboxed])
     -> (int[@untagged])
     = "caml_int64_ctz" "caml_int64_ctz_nonzero_unboxed_to_untagged"
   [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
   external count_set_bits
-    :  (int64[@unboxed])
+    :  (int64#[@unboxed])
     -> (int[@untagged])
     = "caml_int64_popcnt" "caml_int64_popcnt_unboxed_to_untagged"
   [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]

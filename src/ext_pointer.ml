@@ -36,7 +36,7 @@ let offset_by_2n_bytes (t : t) n =
 ;;
 
 module Immediate (V : sig
-    type t [@@immediate]
+    type t : immediate
   end) =
 struct
   (** [load_immediate t] assumes without checking that
@@ -152,14 +152,14 @@ external store_unboxed_float
 module Unboxed = struct
   external load_unboxed_nativeint
     :  t
-    -> (nativeint[@unboxed])
+    -> (nativeint#[@unboxed])
     = "caml_ext_pointer_load_unboxed_nativeint_bytecode"
       "caml_ext_pointer_load_unboxed_nativeint"
   [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_nativeint
     :  t
-    -> (nativeint[@unboxed])
+    -> (nativeint#[@unboxed])
     -> unit
     = "caml_ext_pointer_store_unboxed_nativeint_bytecode"
       "caml_ext_pointer_store_unboxed_nativeint"
@@ -167,13 +167,13 @@ module Unboxed = struct
 
   external load_unboxed_int64
     :  t
-    -> (int64[@unboxed])
+    -> (int64#[@unboxed])
     = "caml_ext_pointer_load_unboxed_int64_bytecode" "caml_ext_pointer_load_unboxed_int64"
   [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_int64
     :  t
-    -> (int64[@unboxed])
+    -> (int64#[@unboxed])
     -> unit
     = "caml_ext_pointer_store_unboxed_int64_bytecode"
       "caml_ext_pointer_store_unboxed_int64"
@@ -181,13 +181,13 @@ module Unboxed = struct
 
   external load_unboxed_int32
     :  t
-    -> (int32[@unboxed])
+    -> (int32#[@unboxed])
     = "caml_ext_pointer_load_unboxed_int32_bytecode" "caml_ext_pointer_load_unboxed_int32"
   [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_int32
     :  t
-    -> (int32[@unboxed])
+    -> (int32#[@unboxed])
     -> unit
     = "caml_ext_pointer_store_unboxed_int32_bytecode"
       "caml_ext_pointer_store_unboxed_int32"
@@ -195,13 +195,13 @@ module Unboxed = struct
 
   external load_unboxed_float
     :  t
-    -> (float[@unboxed])
+    -> (float#[@unboxed])
     = "caml_ext_pointer_load_unboxed_float_bytecode" "caml_ext_pointer_load_unboxed_float"
   [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_float
     :  t
-    -> (float[@unboxed])
+    -> (float#[@unboxed])
     -> unit
     = "caml_ext_pointer_store_unboxed_float_bytecode"
       "caml_ext_pointer_store_unboxed_float"
