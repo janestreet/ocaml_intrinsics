@@ -118,11 +118,18 @@ let () =
   main
     ~name:"discover"
     ~args:[ "-o", Set_string output, "FILENAME output file" ]
-    (fun c ->
+    (fun _c ->
       let flags =
         List.filter_map
           (fun (flag, prog) ->
-            match c_test c ~c_flags:[ flag ] prog with
+           let test_flag flag prog =
+            let f, oc = Filename.open_temp_file "baseconf" ".c" in
+            Fun.protect ~finally:(fun () -> close_out oc; Sys.remove f)
+              (fun () ->
+                Out_channel.(output_string oc prog; flush oc);
+                Sys.command (Printf.sprintf "cc %s %s -o /dev/null >/dev/null 2>&1" f flag) = 0)
+            in
+            match test_flag flag prog with
             | true -> Some flag
             | false -> None)
           [ "-mpopcnt", prog_popcnt (* ; "-mlzcnt", prog_lzcnt
