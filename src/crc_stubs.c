@@ -1,5 +1,6 @@
 #include "caml/config.h"
 #include "caml/mlvalues.h"
+#include "caml/alloc.h"
 
 #ifdef  __ARM_FEATURE_CRC32
 #include <arm_acle.h>
@@ -75,4 +76,9 @@ CAMLprim value caml_sse42_int_untagged_crc_bytecode(value v_initial, value v_dat
 CAMLprim value caml_sse42_int64_crc_bytecode(value v_initial, value v_data)
 {
   return Val_long(caml_sse42_int64_crc(Long_val(v_initial), Int64_val(v_data)));
+}
+
+CAMLprim value caml_sse42_unboxed_int64_crc_bytecode(value v_initial, value v_data)
+{
+  return caml_copy_int64(caml_sse42_int64_crc(Int64_val(v_initial), Int64_val(v_data)));
 }

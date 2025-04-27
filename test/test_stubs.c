@@ -1,5 +1,6 @@
-#include <caml/mlvalues.h>
 #include <caml/alloc.h>
+#include <caml/mlvalues.h>
+
 #include <stdio.h>
 
 static inline value encode(void *ptr)
@@ -15,6 +16,14 @@ static inline void *alloc_aligned(size_t align_arg, size_t size)
     fprintf(stderr, "Error: cannot allocate aligned %zu bytes\n", size);
     exit(1);
   }
+  return ref;
+}
+
+static inline char *make_untagged_char(value init)
+{
+  size_t n = sizeof(char);
+  char *ref = alloc_aligned(n,n);
+  *ref = (char)(Long_val(init));
   return ref;
 }
 
@@ -109,32 +118,72 @@ CAMLprim value external_untagged_int_array_ref(value size)
   return encode(make_untagged_int_array_ref(Long_val(size)));
 }
 
-CAMLprim value external_untagged_int_ref_as_native_pointer(value init)
+CAMLprim value external_untagged_char_ref_as_native_pointer(value init)
 {
-  return caml_copy_nativeint((uintnat)make_untagged_int(init));
+  return (uintnat)make_untagged_char(init);
 }
 
-CAMLprim value external_immediate_ref_as_native_pointer(value init)
+intnat external_untagged_int_ref_as_native_pointer(value init)
 {
-  return caml_copy_nativeint((uintnat)make_immediate(init));
+  return (uintnat)make_untagged_int(init);
 }
 
-CAMLprim value external_unboxed_float_ref_as_native_pointer(value init)
+intnat external_immediate_ref_as_native_pointer(value init)
 {
-  return caml_copy_nativeint((uintnat)make_unboxed_float(init));
+  return (uintnat)make_immediate(init);
 }
 
-CAMLprim value external_unboxed_int64_ref_as_native_pointer(value init)
+intnat external_unboxed_float_ref_as_native_pointer(value init)
 {
-  return caml_copy_nativeint((uintnat)make_unboxed_int64(init));
+  return (uintnat)make_unboxed_float(init);
 }
 
-CAMLprim value external_unboxed_int32_ref_as_native_pointer(value init)
+intnat external_unboxed_int64_ref_as_native_pointer(value init)
 {
-  return caml_copy_nativeint((uintnat)make_unboxed_int32(init));
+  return (uintnat)make_unboxed_int64(init);
 }
 
-CAMLprim value external_unboxed_nativeint_ref_as_native_pointer(value init)
+intnat external_unboxed_int32_ref_as_native_pointer(value init)
 {
-  return caml_copy_nativeint((uintnat)make_unboxed_nativeint(init));
+  return (uintnat)make_unboxed_int32(init);
+}
+
+intnat external_unboxed_nativeint_ref_as_native_pointer(value init)
+{
+  return (uintnat)make_unboxed_nativeint(init);
+}
+
+CAMLprim value external_untagged_char_ref_as_native_pointer_bytecode(value init)
+{
+  return caml_copy_nativeint(external_untagged_char_ref_as_native_pointer(init));
+}
+
+CAMLprim value external_untagged_int_ref_as_native_pointer_bytecode(value init)
+{
+  return caml_copy_nativeint(external_untagged_int_ref_as_native_pointer(init));
+}
+
+CAMLprim value external_immediate_ref_as_native_pointer_bytecode(value init)
+{
+  return caml_copy_nativeint(external_immediate_ref_as_native_pointer(init));
+}
+
+CAMLprim value external_unboxed_float_ref_as_native_pointer_bytecode(value init)
+{
+  return caml_copy_nativeint(external_unboxed_float_ref_as_native_pointer(init));
+}
+
+CAMLprim value external_unboxed_int64_ref_as_native_pointer_bytecode(value init)
+{
+  return caml_copy_nativeint(external_unboxed_int64_ref_as_native_pointer(init));
+}
+
+CAMLprim value external_unboxed_int32_ref_as_native_pointer_bytecode(value init)
+{
+  return caml_copy_nativeint(external_unboxed_int32_ref_as_native_pointer(init));
+}
+
+CAMLprim value external_unboxed_nativeint_ref_as_native_pointer_bytecode(value init)
+{
+  return caml_copy_nativeint(external_unboxed_nativeint_ref_as_native_pointer(init));
 }

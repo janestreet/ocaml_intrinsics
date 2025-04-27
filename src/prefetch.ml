@@ -82,3 +82,9 @@ let bigstring bigstring ~pos ~operation ~temporal_locality =
 ;;
 
 external pause : unit -> unit = "caml_pause_hint" [@@noalloc] [@@builtin]
+
+external cldemote
+  :  (Native_pointer.t[@unboxed])
+  -> unit
+  = "caml_cldemote_ignore" "caml_cldemote"
+[@@noalloc] [@@builtin]

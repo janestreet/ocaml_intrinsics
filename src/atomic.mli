@@ -6,8 +6,8 @@ module Native_pointer : sig
   (** [fetch_and_$op_$type ptr val] atomically runs [*( *$type )ptr $op val], stores the
       result at [ptr], and returns the original value at [ptr]. *)
 
-  (** [compare_and_swap_$type ptr ~compare_with ~set_to] atomically checks if the value
-      at [ptr] is equal to [compare_with]: if so, it stores [set_to] to [ptr] and returns
+  (** [compare_and_swap_$type ptr ~compare_with ~set_to] atomically checks if the value at
+      [ptr] is equal to [compare_with]: if so, it stores [set_to] to [ptr] and returns
       true, otherwise returns false *)
 
   (** Pointer to untagged int *)
@@ -85,12 +85,13 @@ module Ext_pointer : sig
 end
 
 module Bigstring : sig
-  (** [fetch_and_$op_$type ptr ~pos val] atomically runs [*( *$type )((ptr + pos) $op val],
-      stores the result at [ptr + pos], and returns the original value at [ptr + pos].
+  (** [fetch_and_$op_$type ptr ~pos val] atomically runs
+      [*( *$type )((ptr + pos) $op val], stores the result at [ptr + pos], and returns the
+      original value at [ptr + pos].
 
-      Note that [pos] is a byte offset into the bigstring. If the offset is not
-      a multiple of the target int width in bytes, the operation will be unaligned
-      and potentially *much* slower than the aligned case. *)
+      Note that [pos] is a byte offset into the bigstring. If the offset is not a multiple
+      of the target int width in bytes, the operation will be unaligned and
+      potentially *much* slower than the aligned case. *)
 
   (** Pointer to untagged int *)
 

@@ -8,29 +8,30 @@ module type Value = sig
   val zero : t
   val one : t
   val num_bits : int
-  val ( + ) : t -> t -> t
-  val ( lsr ) : t -> int -> t
-  val ( land ) : t -> t -> t
-  val to_int_exn : t -> int
+  val ( + ) : local_ t -> local_ t -> t
+  val ( - ) : local_ t -> local_ t -> t
+  val ( lsr ) : local_ t -> int -> t
+  val ( land ) : local_ t -> local_ t -> t
+  val of_int_exn : int -> t
 end
 
 module type Test = sig
   type t
 
-  val count_set_bits : t -> int
-  val count_leading_zeros : t -> int
-  val count_trailing_zeros : t -> int
-  val count_leading_zeros_nonzero_arg : t -> int
-  val count_trailing_zeros_nonzero_arg : t -> int
+  val count_set_bits : t -> t
+  val count_leading_zeros : t -> t
+  val count_trailing_zeros : t -> t
+  val count_leading_zeros_nonzero_arg : t -> t
+  val count_trailing_zeros_nonzero_arg : t -> t
 end
 
 module Make (V : Value) (T : Test with type t = V.t) = struct
-  let count_set_bits_naive (v : V.t) : int =
+  let count_set_bits_naive (v : V.t) : V.t =
     let open V in
     let rec loop n count =
       if V.compare n zero <> 0 then loop (n lsr 1) (count + (n land one)) else count
     in
-    loop v zero |> to_int_exn
+    loop v zero
   ;;
 
   let%test_unit "count_set_bits" =
@@ -39,15 +40,15 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
       ~f:(fun v ->
         let expect = count_set_bits_naive v in
         let actual = T.count_set_bits v in
-        [%test_result: Base.Int.t] ~expect actual)
+        [%test_result: V.t] ~expect actual)
   ;;
 
-  let count_leading_zeros_naive (v : V.t) : int =
+  let count_leading_zeros_naive (v : V.t) : V.t =
     let open V in
     let rec loop n count =
-      if compare n zero <> 0 then loop (n lsr 1) Base.Int.(count - 1) else count
+      if compare n zero <> 0 then loop (n lsr 1) (count - one) else count
     in
-    loop v V.num_bits
+    loop v (of_int_exn V.num_bits)
   ;;
 
   let%test_unit "count_leading_zeros" =
@@ -56,7 +57,7 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
       ~f:(fun v ->
         let expect = count_leading_zeros_naive v in
         let actual = T.count_leading_zeros v in
-        [%test_result: Base.Int.t] ~expect actual)
+        [%test_result: V.t] ~expect actual)
   ;;
 
   let%test_unit "count_leading_zeros_nonzero_arg" =
@@ -67,10 +68,10 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
         then (
           let expect = count_leading_zeros_naive v in
           let actual = T.count_leading_zeros_nonzero_arg v in
-          [%test_result: Base.Int.t] ~expect actual))
+          [%test_result: V.t] ~expect actual))
   ;;
 
-  let count_trailing_zeros_naive (v : V.t) : int =
+  let count_trailing_zeros_naive (v : V.t) : V.t =
     let open V in
     let rec loop n count =
       let bit = n land one in
@@ -78,7 +79,7 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
       then count
       else loop (n lsr 1) Base.Int.(count + 1)
     in
-    loop v 0
+    loop v 0 |> V.of_int_exn
   ;;
 
   let%test_unit "count_trailing_zeros" =
@@ -87,7 +88,7 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
       ~f:(fun v ->
         let expect = count_trailing_zeros_naive v in
         let actual = T.count_trailing_zeros v in
-        [%test_result: Base.Int.t] ~expect actual)
+        [%test_result: V.t] ~expect actual)
   ;;
 
   let%test_unit "count_trailing_zeros_nonzero_arg" =
@@ -98,7 +99,7 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
         then (
           let expect = count_trailing_zeros_naive v in
           let actual = T.count_trailing_zeros_nonzero_arg v in
-          [%test_result: Base.Int.t] ~expect actual))
+          [%test_result: V.t] ~expect actual))
   ;;
 end
 
@@ -143,7 +144,7 @@ include
  *       let count_trailing_zeros x = Base.Int.(if x = 0 then num_bits else ctz x)
  *     end) *)
 
-(** Test Ocaml_intrinsics.Int64 implementation against the naive implementation.  *)
+(** Test Ocaml_intrinsics.Int64 implementation against the naive implementation. *)
 include
   Make
     (struct
@@ -157,7 +158,7 @@ include
       type t = int64
     end)
 
-(** Test Base.Int64 implementation of clz,popcount,ctz against the naive implementation.  *)
+(** Test Base.Int64 implementation of clz,popcount,ctz against the naive implementation. *)
 include
   Make
     (struct
@@ -168,14 +169,20 @@ include
     (struct
       type t = int64
 
-      let count_trailing_zeros x = Base.Int64.(if x = 0L then num_bits else ctz x)
-      let count_leading_zeros x = Base.Int64.(if x = 0L then num_bits else clz x)
+      let count_trailing_zeros x =
+        Base.Int64.(if x = 0L then num_bits |> of_int else ctz x)
+      ;;
+
+      let count_leading_zeros x =
+        Base.Int64.(if x = 0L then num_bits |> of_int else clz x)
+      ;;
+
       let count_trailing_zeros_nonzero_arg = count_trailing_zeros
       let count_leading_zeros_nonzero_arg = count_leading_zeros
       let count_set_bits = Base.Int64.popcount
     end)
 
-(** Test Ocaml_intrinsics.Int32 implementation against the naive implementation.  *)
+(** Test Ocaml_intrinsics.Int32 implementation against the naive implementation. *)
 include
   Make
     (struct
@@ -189,7 +196,7 @@ include
       type t = int32
     end)
 
-(** Test Base.Int32 implementation of clz,popcount,ctz against the naive implementation.  *)
+(** Test Base.Int32 implementation of clz,popcount,ctz against the naive implementation. *)
 include
   Make
     (struct
@@ -200,14 +207,20 @@ include
     (struct
       type t = int32
 
-      let count_trailing_zeros x = Base.Int32.(if x = 0l then num_bits else ctz x)
-      let count_leading_zeros x = Base.Int32.(if x = 0l then num_bits else clz x)
+      let count_trailing_zeros x =
+        Base.Int32.(if x = 0l then num_bits |> of_int_exn else ctz x)
+      ;;
+
+      let count_leading_zeros x =
+        Base.Int32.(if x = 0l then num_bits |> of_int_exn else clz x)
+      ;;
+
       let count_trailing_zeros_nonzero_arg = count_trailing_zeros
       let count_leading_zeros_nonzero_arg = count_leading_zeros
       let count_set_bits = Base.Int32.popcount
     end)
 
-(** Test Ocaml_intrinsics.Nativeint implementation against the naive implementation.  *)
+(** Test Ocaml_intrinsics.Nativeint implementation against the naive implementation. *)
 include
   Make
     (struct
@@ -222,7 +235,7 @@ include
     end)
 
 (** Test Base.Nativeint implementation of clz,popcount,ctz against the naive
-    implementation.  *)
+    implementation. *)
 include
   Make
     (struct
@@ -233,9 +246,16 @@ include
     (struct
       type t = nativeint
 
-      let count_leading_zeros x = Base.Nativeint.(if x = 0n then num_bits else clz x)
+      let count_leading_zeros x =
+        Base.Nativeint.(if x = 0n then num_bits |> of_int else clz x)
+      ;;
+
       let count_set_bits = Base.Nativeint.popcount
-      let count_trailing_zeros x = Base.Nativeint.(if x = 0n then num_bits else ctz x)
+
+      let count_trailing_zeros x =
+        Base.Nativeint.(if x = 0n then num_bits |> of_int else ctz x)
+      ;;
+
       let count_trailing_zeros_nonzero_arg = count_trailing_zeros
       let count_leading_zeros_nonzero_arg = count_leading_zeros
     end)

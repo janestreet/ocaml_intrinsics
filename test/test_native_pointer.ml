@@ -143,7 +143,7 @@ let%expect_test "native pointer values differ" =
 let%expect_test "native pointer comparisons" =
   let open NP in
   let p0 = Expert.of_nativeint 0n in
-  let p1 = advance p0 ~bytes:17n in
+  let p1 = advance p0 ~bytes:#17n in
   Expect_test_helpers_base.require (p0 = p0);
   Expect_test_helpers_base.require (p0 <= p0);
   Expect_test_helpers_base.require (p0 >= p0);
@@ -155,6 +155,48 @@ let%expect_test "native pointer comparisons" =
     (difference_in_bytes p0 p1)
     17n;
   [%expect {| |}]
+;;
+
+let%expect_test "native pointer blit" =
+  let open Core in
+  let blit_value = "1234" in
+  let len = String.length blit_value in
+  let value_to_blit = Bigstring.of_string blit_value in
+  let p0 = NP.unsafe_of_bigstring value_to_blit ~pos:0 in
+  let buf = Bigstring.create (len * 2) in
+  let p1 = NP.unsafe_of_bigstring buf ~pos:0 in
+  let check ~expected ~buf_index ~len =
+    let actual = Bigstring.sub buf ~pos:buf_index ~len |> Bigstring.to_string in
+    Expect_test_helpers_base.require String.(expected = actual)
+  in
+  let blit_to_bigstring ~p0_pos ~buf_index ~len ~expected =
+    NP.unsafe_blit_to_bigstring ~src:p0 ~src_pos:p0_pos ~dst:buf ~dst_pos:buf_index ~len;
+    check ~expected ~buf_index ~len
+  in
+  let blit_to_native_pointer ~p0_pos ~p1_pos ~len ~expected =
+    NP.unsafe_blit ~src:p0 ~src_pos:p0_pos ~dst:p1 ~dst_pos:p1_pos ~len;
+    check ~expected ~buf_index:p1_pos ~len
+  in
+  for blit_start_pos = 0 to len - 1 do
+    let len = len - blit_start_pos in
+    let expected = String.sub blit_value ~pos:blit_start_pos ~len in
+    for buf_index = 0 to len do
+      blit_to_bigstring ~p0_pos:blit_start_pos ~buf_index ~len ~expected;
+      blit_to_native_pointer ~p0_pos:blit_start_pos ~p1_pos:buf_index ~len ~expected
+    done
+  done
+;;
+
+let%expect_test "native pointer memset" =
+  let open Core in
+  let ch = 'a' in
+  let len = 10 in
+  let bstr = Bigstring.create len in
+  let p = NP.unsafe_of_bigstring bstr ~pos:0 in
+  NP.unsafe_memset p ch ~pos:0 ~len;
+  let expected = String.make len ch in
+  let actual = Bigstring.to_string bstr in
+  Expect_test_helpers_base.require String.(expected = actual)
 ;;
 
 let[@inline never] throw_away x = (Sys.opaque_identity x : _) |> ignore
@@ -176,16 +218,66 @@ let%expect_test "native_pointer frametable" =
 
 include Base_quickcheck.Export
 
+module BC = struct
+  include Base.Char
+
+  type t = char [@@deriving quickcheck]
+end
+
 module BI = struct
   include Base.Int
 
   type t = int [@@deriving quickcheck]
 end
 
+module BInt32 = struct
+  include Base.Int32
+
+  type t = int32 [@@deriving quickcheck]
+end
+
+module BInt64 = struct
+  include Base.Int64
+
+  type t = int64 [@@deriving quickcheck]
+end
+
 module BF = struct
   include Base.Float
 
   type t = float [@@deriving quickcheck]
+end
+
+module _ = struct
+  [%%import "config.h"]
+  [%%ifdef JSC_ARCH_BIG_ENDIAN]
+
+  let bigstring_store_int64 = Base_bigstring.set_int64_be
+
+  [%%else]
+
+  let bigstring_store_int64 = Base_bigstring.set_int64_le
+
+  [%%endif]
+
+  let test_unsafe_of_bigstring n ~offset =
+    let bstr = Base_bigstring.create (8 + offset) in
+    bigstring_store_int64 bstr n ~pos:offset;
+    let ptr = NP.unsafe_of_bigstring bstr ~pos:offset in
+    Int64.to_int_exn (NP.load_unboxed_int64 ptr)
+  ;;
+
+  let%test_unit "native_pointer unsafe_of_bigstring quickcheck" =
+    List.iter (List.init 8 ~f:Fn.id) ~f:(fun offset ->
+      Base_quickcheck.Test.run_exn
+        (module BI)
+        ~f:(fun n ->
+          let expect = n in
+          let actual = test_unsafe_of_bigstring n ~offset in
+          [%test_result: Int.t] ~expect actual))
+  ;;
+
+  type t = int [@@deriving quickcheck]
 end
 
 module _ = struct
@@ -228,7 +320,11 @@ module _ = struct
 end
 
 module _ = struct
-  external create_immediate : int -> NP.t = "external_immediate_ref_as_native_pointer"
+  external create_immediate
+    :  int
+    -> (NP.t[@unboxed])
+    = "external_immediate_ref_as_native_pointer_bytecode"
+      "external_immediate_ref_as_native_pointer"
 
   let direct_test_immediate n =
     let ir = create_immediate n in
@@ -254,10 +350,43 @@ module _ = struct
 end
 
 module _ = struct
+  external create_untagged_char
+    :  char
+    -> (NP.t[@unboxed])
+    = "external_untagged_char_ref_as_native_pointer_bytecode"
+      "external_untagged_char_ref_as_native_pointer"
+
+  let get_next_char n = Char.of_int_exn ((Char.to_int n + 1) % 256)
+
+  let direct_test_untagged_char n =
+    let ir = create_untagged_char n in
+    let n' = NP.load_untagged_char ir in
+    printf "native_pointer char: read %c = %c\n" n n';
+    let k = get_next_char n in
+    NP.store_untagged_char ir k;
+    let k' = NP.load_untagged_char ir in
+    printf "native_pointer char: read %c = %c\n" k k';
+    n', k'
+  ;;
+
+  let%test_unit "native_pointer untagged char quickcheck" =
+    Base_quickcheck.Test.run_exn
+      (module BC)
+      ~f:(fun n ->
+        let expect = n, get_next_char n in
+        let actual = direct_test_untagged_char n in
+        [%test_result: Char.t * Char.t] ~expect actual)
+  ;;
+
+  type t = char [@@deriving quickcheck]
+end
+
+module _ = struct
   external create_untagged_int
     :  int
-    -> NP.t
-    = "external_untagged_int_ref_as_native_pointer"
+    -> (NP.t[@unboxed])
+    = "external_untagged_int_ref_as_native_pointer_bytecode"
+      "external_untagged_int_ref_as_native_pointer"
 
   let direct_test_untagged_int n =
     let ir = create_untagged_int n in
@@ -266,6 +395,17 @@ module _ = struct
     let k = n + 1 in
     NP.store_untagged_int ir k;
     let k' = NP.load_untagged_int ir in
+    printf "native_pointer int: read %d = %d\n" k k';
+    n', k'
+  ;;
+
+  let direct_test_untagged_int64_le n =
+    let ir = create_untagged_int n in
+    let n' = NP.unsafe_load_int64_le_trunc ir in
+    printf "native_pointer int: read %d = %d\n" n n';
+    let k = n + 1 in
+    NP.unsafe_store_int64_le ir k;
+    let k' = NP.unsafe_load_int64_le_trunc ir in
     printf "native_pointer int: read %d = %d\n" k k';
     n', k'
   ;;
@@ -279,14 +419,24 @@ module _ = struct
         [%test_result: Int.t * Int.t] ~expect actual)
   ;;
 
+  let%test_unit "native_pointer little endian untagged int quickcheck" =
+    Base_quickcheck.Test.run_exn
+      (module BI)
+      ~f:(fun n ->
+        let expect = n, n + 1 in
+        let actual = direct_test_untagged_int64_le n in
+        [%test_result: Int.t * Int.t] ~expect actual)
+  ;;
+
   type t = int [@@deriving quickcheck]
 end
 
 module _ = struct
   external create_unboxed_float
     :  float
-    -> NP.t
-    = "external_unboxed_float_ref_as_native_pointer"
+    -> (NP.t[@unboxed])
+    = "external_unboxed_float_ref_as_native_pointer_bytecode"
+      "external_unboxed_float_ref_as_native_pointer"
 
   let direct_test_unboxed_float n =
     let ir = create_unboxed_float n in
@@ -314,25 +464,20 @@ end
 module _ = struct
   external create_unboxed_int64
     :  int64
-    -> NP.t
-    = "external_unboxed_int64_ref_as_native_pointer"
+    -> (NP.t[@unboxed])
+    = "external_unboxed_int64_ref_as_native_pointer_bytecode"
+      "external_unboxed_int64_ref_as_native_pointer"
 
   let direct_test_unboxed_int64 n =
     let ir = create_unboxed_int64 n in
     let n' = NP.load_unboxed_int64 ir in
-    printf "native_pointer float: read %Ld = %Ld\n" n n';
+    printf "native_pointer int64: read %Ld = %Ld\n" n n';
     let k = Int64.(n + 7L) in
     NP.store_unboxed_int64 ir k;
     let k' = NP.load_unboxed_int64 ir in
-    printf "native_pointer float: read %Ld = %Ld\n" k k';
+    printf "native_pointer int64: read %Ld = %Ld\n" k k';
     n', k'
   ;;
-
-  module BInt64 = struct
-    include Base.Int64
-
-    type t = int64 [@@deriving quickcheck]
-  end
 
   let%test_unit "native_pointer unboxed int64 quickcheck" =
     Base_quickcheck.Test.run_exn
@@ -349,25 +494,20 @@ end
 module _ = struct
   external create_unboxed_int32
     :  int32
-    -> NP.t
-    = "external_unboxed_int32_ref_as_native_pointer"
+    -> (NP.t[@unboxed])
+    = "external_unboxed_int32_ref_as_native_pointer_bytecode"
+      "external_unboxed_int32_ref_as_native_pointer"
 
   let direct_test_unboxed_int32 n =
     let ir = create_unboxed_int32 n in
     let n' = NP.load_unboxed_int32 ir in
-    printf "native_pointer float: read %ld = %ld\n" n n';
+    printf "native_pointer int32: read %ld = %ld\n" n n';
     let k = Int32.(n + 7l) in
     NP.store_unboxed_int32 ir k;
     let k' = NP.load_unboxed_int32 ir in
-    printf "native_pointer float: read %ld = %ld\n" k k';
+    printf "native_pointer int32: read %ld = %ld\n" k k';
     n', k'
   ;;
-
-  module BInt32 = struct
-    include Base.Int32
-
-    type t = int32 [@@deriving quickcheck]
-  end
 
   let%test_unit "native_pointer unboxed int32 quickcheck" =
     Base_quickcheck.Test.run_exn
@@ -384,17 +524,18 @@ end
 module _ = struct
   external create_unboxed_nativeint
     :  nativeint
-    -> NP.t
-    = "external_unboxed_nativeint_ref_as_native_pointer"
+    -> (NP.t[@unboxed])
+    = "external_unboxed_nativeint_ref_as_native_pointer_bytecode"
+      "external_unboxed_nativeint_ref_as_native_pointer"
 
   let direct_test_unboxed_nativeint n =
     let ir = create_unboxed_nativeint n in
     let n' = NP.load_unboxed_nativeint ir in
-    printf "native_pointer float: read %nd = %nd\n" n n';
+    printf "native_pointer nativeint: read %nd = %nd\n" n n';
     let k = Nativeint.(n + 7n) in
     NP.store_unboxed_nativeint ir k;
     let k' = NP.load_unboxed_nativeint ir in
-    printf "native_pointer float: read %nd = %nd\n" k k';
+    printf "native_pointer nativeint: read %nd = %nd\n" k k';
     n', k'
   ;;
 

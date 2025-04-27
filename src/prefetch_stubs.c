@@ -334,3 +334,19 @@ CAMLprim value caml_pause_hint (__attribute__ ((unused)) value unit)
 #endif
   return Val_unit;
 }
+
+CAMLprim value caml_cldemote_ignore(__attribute__ ((unused)) value v)
+{
+  return Val_unit;
+}
+
+CAMLprim value caml_cldemote(const volatile void *p)
+{
+#if (defined(__i386__) || defined(__x86_64__))
+  asm volatile(".byte 0x0f, 0x1c, 0x07" :: "r" (p));
+#else
+#warning "This target does not support CLDEMOTE, emitting NOP instead."
+  /* do nothing */
+#endif
+  return Val_unit;
+}
