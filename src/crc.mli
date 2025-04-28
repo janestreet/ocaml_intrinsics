@@ -12,6 +12,12 @@ external int64_crc
   = "caml_sse42_int64_crc_bytecode" "caml_sse42_int64_crc"
 [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
-(** Accumulates [iterations] of [int_crc].
-    If [iterations] < 0, raises Invalid_argument. *)
+external unboxed_int64_crc
+  :  initial:int64
+  -> data:int64
+  -> int64
+  = "caml_sse42_unboxed_int64_crc_bytecode" "caml_sse42_int64_crc"
+[@@noalloc] [@@unboxed] [@@builtin] [@@no_effects] [@@no_coeffects]
+
+(** Accumulates [iterations] of [int_crc]. If [iterations] < 0, raises Invalid_argument. *)
 val iterated_crc_exn : initial:int -> iterations:int -> data:int -> int

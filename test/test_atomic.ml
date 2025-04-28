@@ -7,7 +7,7 @@ module A_NP = Ocaml_intrinsics.Atomic.Native_pointer
 module A_EP = Ocaml_intrinsics.Atomic.Ext_pointer
 module A_BS = Ocaml_intrinsics.Atomic.Bigstring
 
-let word = Nativeint.of_int (Sys.word_size_in_bits / 8)
+let word = Sys.word_size_in_bits / 8
 
 let bigstring_of_string s =
   let a = Array1.create char c_layout (String.length s) in
@@ -16,6 +16,8 @@ let bigstring_of_string s =
   done;
   a
 ;;
+
+let np_advance ptr ~bytes = NP.advance ptr ~bytes:(Nativeint_u.of_int_exn bytes)
 
 (* int64, int32, and nativeint are boxed: these point to blocks with a one-word
    header and then the value. This uses 1000 so the pointers don't get unified
@@ -26,7 +28,7 @@ let nativeint_ptr = 1000n
 
 let%expect_test "native pointer -> untagged int" =
   (* unboxed nativeint is the same width as an immediate int *)
-  let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
   NP.store_unboxed_nativeint np 0n;
   let v0 = A_NP.fetch_and_add np 5 in
   let v1 = A_NP.fetch_and_sub np 2 in
@@ -39,7 +41,7 @@ let%expect_test "native pointer -> untagged int" =
 
 let%expect_test "ext pointer -> untagged int" =
   (* unboxed nativeint is the same width as an immediate int *)
-  let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
   NP.store_unboxed_nativeint np 0n;
   let ni = NP.Expert.to_nativeint np in
   let xp = EP.create (Nativeint.to_int_exn Nativeint.(ni / 2n)) in
@@ -74,7 +76,7 @@ let%expect_test "bigstring with offset -> untagged int" =
 ;;
 
 let%expect_test "native pointer -> int64" =
-  let np = NP.advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
   NP.store_unboxed_int64 np 0L;
   let v0 = A_NP.fetch_and_add_int64 np 5L in
   let v1 = A_NP.fetch_and_sub_int64 np 2L in
@@ -86,7 +88,7 @@ let%expect_test "native pointer -> int64" =
 ;;
 
 let%expect_test "ext pointer -> int64" =
-  let np = NP.advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
   NP.store_unboxed_int64 np 0L;
   let ni = NP.Expert.to_nativeint np in
   let xp = EP.create (Nativeint.to_int_exn Nativeint.(ni / 2n)) in
@@ -121,7 +123,7 @@ let%expect_test "bigstring with offset -> int64" =
 ;;
 
 let%expect_test "native pointer -> int32" =
-  let np = NP.advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
   NP.store_unboxed_int32 np 0l;
   let v0 = A_NP.fetch_and_add_int32 np 5l in
   let v1 = A_NP.fetch_and_sub_int32 np 2l in
@@ -133,7 +135,7 @@ let%expect_test "native pointer -> int32" =
 ;;
 
 let%expect_test "ext pointer -> int32" =
-  let np = NP.advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
   NP.store_unboxed_int32 np 0l;
   let ni = NP.Expert.to_nativeint np in
   let xp = EP.create (Nativeint.to_int_exn Nativeint.(ni / 2n)) in
@@ -168,7 +170,7 @@ let%expect_test "bigstring with offset -> int32" =
 ;;
 
 let%expect_test "native pointer -> nativeint" =
-  let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
   NP.store_unboxed_nativeint np 0n;
   let v0 = A_NP.fetch_and_add_nativeint np 5n in
   let v1 = A_NP.fetch_and_sub_nativeint np 2n in
@@ -180,7 +182,7 @@ let%expect_test "native pointer -> nativeint" =
 ;;
 
 let%expect_test "ext pointer -> nativeint" =
-  let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
   NP.store_unboxed_nativeint np 0n;
   let ni = NP.Expert.to_nativeint np in
   let xp = EP.create (Nativeint.to_int_exn Nativeint.(ni / 2n)) in
@@ -223,7 +225,7 @@ let%expect_test "bigstring with offset -> nativeint" =
 ;;
 
 let%expect_test "cas loop codegen" =
-  let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+  let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
   NP.store_unboxed_nativeint np 100n;
   while
     not
@@ -266,7 +268,7 @@ module _ = struct
   end
 
   let%test_unit "native_pointer -> nativeint quickcheck" =
-    let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+    let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
     Base_quickcheck.Test.run_exn
       (module BNative)
       ~f:(fun n ->
@@ -292,7 +294,7 @@ module _ = struct
   ;;
 
   let%test_unit "native_pointer -> int quickcheck" =
-    let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+    let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
     Base_quickcheck.Test.run_exn
       (module BInt)
       ~f:(fun n ->
@@ -318,7 +320,7 @@ module _ = struct
   ;;
 
   let%test_unit "native_pointer -> int64 quickcheck" =
-    let np = NP.advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
+    let np = np_advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
     Base_quickcheck.Test.run_exn
       (module BInt64)
       ~f:(fun n ->
@@ -344,7 +346,7 @@ module _ = struct
   ;;
 
   let%test_unit "native_pointer -> int32 quickcheck" =
-    let np = NP.advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
+    let np = np_advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
     Base_quickcheck.Test.run_exn
       (module BInt32)
       ~f:(fun n ->
@@ -370,7 +372,7 @@ module _ = struct
   ;;
 
   let%test_unit "ext_pointer -> nativeint quickcheck" =
-    let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+    let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
     let xp =
       EP.create (Nativeint.to_int_exn Nativeint.(NP.Expert.to_nativeint np / 2n))
     in
@@ -399,7 +401,7 @@ module _ = struct
   ;;
 
   let%test_unit "ext_pointer -> int quickcheck" =
-    let np = NP.advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
+    let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
     let xp =
       EP.create (Nativeint.to_int_exn Nativeint.(NP.Expert.to_nativeint np / 2n))
     in
@@ -428,7 +430,7 @@ module _ = struct
   ;;
 
   let%test_unit "ext_pointer -> int64 quickcheck" =
-    let np = NP.advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
+    let np = np_advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
     let xp =
       EP.create (Nativeint.to_int_exn Nativeint.(NP.Expert.to_nativeint np / 2n))
     in
@@ -457,7 +459,7 @@ module _ = struct
   ;;
 
   let%test_unit "ext_pointer -> int32 quickcheck" =
-    let np = NP.advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
+    let np = np_advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
     let xp =
       EP.create (Nativeint.to_int_exn Nativeint.(NP.Expert.to_nativeint np / 2n))
     in

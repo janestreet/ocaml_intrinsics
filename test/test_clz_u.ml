@@ -1,7 +1,7 @@
 [%%import "config.h"]
 
 open Base
-open Stdio
+open Import
 module I = Ocaml_intrinsics
 
 let%expect_test "clz int64" =
@@ -15,14 +15,11 @@ let%expect_test "clz int64" =
     ; -1L
     ]
   in
-  let test ~op ~op_name ~to_string x ~of_t =
-    printf "%s %s = %d\n" op_name (to_string x) (op (of_t x))
-  in
   let f =
-    test
+    [%template test_op [@kind bits64]]
       ~op:I.Int64.Unboxed.count_leading_zeros
       ~op_name:"clz"
-      ~to_string:Hex.to_string_hum
+      (module Int64_u)
       ~of_t:Int64_u.of_int64
   in
   List.iter ~f numbers;
@@ -48,14 +45,11 @@ let%expect_test "clz int32" =
     ; -1l
     ]
   in
-  let test ~op ~op_name ~to_string x ~of_t =
-    printf "%s %s = %d\n" op_name (to_string x) (op (of_t x))
-  in
   let f =
-    test
+    [%template test_op [@kind bits32]]
       ~op:I.Int32.Unboxed.count_leading_zeros
       ~op_name:"clz"
-      ~to_string:Hex.to_string_hum
+      (module Int32_u)
       ~of_t:Int32_u.of_int32
   in
   List.iter ~f numbers;
@@ -72,10 +66,6 @@ let%expect_test "clz int32" =
 
 [%%ifdef JSC_ARCH_SIXTYFOUR]
 
-let test ~op ~op_name ~to_string ~of_t x =
-  printf "%s %s = %d\n" op_name (to_string x) (op (of_t x))
-;;
-
 let%expect_test "clz nativeint" =
   let open Nativeint in
   let numbers =
@@ -88,10 +78,10 @@ let%expect_test "clz nativeint" =
     ]
   in
   let f =
-    test
+    [%template test_op [@kind word]]
       ~op:I.Nativeint.Unboxed.count_leading_zeros
       ~op_name:"clz"
-      ~to_string:Hex.to_string_hum
+      (module Nativeint_u)
       ~of_t:Nativeint_u.of_nativeint
   in
   List.iter ~f numbers;
@@ -120,10 +110,10 @@ let%expect_test "clz nativeint" =
     ]
   in
   let f =
-    test
+    [%template test_op [@kind word]]
       ~op:I.Nativeint.Unboxed.count_leading_zeros
       ~op_name:"clz"
-      ~to_string:Hex.to_string_hum
+      (module Nativeint_u)
       ~of_t:Nativeint_u.of_nativeint
   in
   List.iter ~f numbers;

@@ -1,22 +1,19 @@
 [%%import "config.h"]
 
 open Base
-open Stdio
 module I = Ocaml_intrinsics
+open Import
 
 let numbers = [ 0 (* Int.num_bits *); 1; 7; 2; 4; 12; 18; -1 ]
 
 let%expect_test "ctz int64" =
   let open Int64 in
   let numbers = List.map numbers ~f:of_int in
-  let test ~op ~op_name ~to_string ~of_t x =
-    printf "%s %s = %d\n" op_name (to_string x) (op (of_t x))
-  in
   let f =
-    test
+    [%template test_op [@kind bits64]]
+      (module Int64_u)
       ~op:I.Int64.Unboxed.count_trailing_zeros
       ~op_name:"ctz"
-      ~to_string:Hex.to_string_hum
       ~of_t:Int64_u.of_int64
   in
   List.iter ~f (max_value :: min_value :: numbers);
@@ -38,14 +35,11 @@ let%expect_test "ctz int64" =
 let%expect_test "ctz int32" =
   let open Int32 in
   let numbers = List.map numbers ~f:of_int_trunc in
-  let test ~op ~op_name ~to_string ~of_t x =
-    printf "%s %s = %d\n" op_name (to_string x) (op (of_t x))
-  in
   let f =
-    test
+    [%template test_op [@kind bits32]]
+      (module Int32_u)
       ~op:I.Int32.Unboxed.count_trailing_zeros
       ~op_name:"ctz"
-      ~to_string:Hex.to_string_hum
       ~of_t:Int32_u.of_int32
   in
   List.iter ~f (max_value :: min_value :: numbers);
@@ -64,20 +58,16 @@ let%expect_test "ctz int32" =
     |}]
 ;;
 
-let test ~op ~op_name ~to_string ~of_t x =
-  printf "%s %s = %d\n" op_name (to_string x) (op (of_t x))
-;;
-
 [%%ifdef JSC_ARCH_SIXTYFOUR]
 
 let%expect_test "ctz nativeint" =
   let open Nativeint in
   let numbers = List.map numbers ~f:of_int in
   let f =
-    test
+    [%template test_op [@kind word]]
+      (module Nativeint_u)
       ~op:I.Nativeint.Unboxed.count_trailing_zeros
       ~op_name:"ctz"
-      ~to_string:Hex.to_string_hum
       ~of_t:Nativeint_u.of_nativeint
   in
   List.iter ~f (max_value :: min_value :: numbers);
@@ -102,10 +92,10 @@ let%expect_test "ctz nativeint" =
   let open Nativeint in
   let numbers = List.map numbers ~f:of_int in
   let f =
-    test
+    [%template test_op [@kind word]]
+      (module Nativeint_u)
       ~op:I.Nativeint.Unboxed.count_trailing_zeros
       ~op_name:"ctz"
-      ~to_string:Hex.to_string_hum
       ~of_t:Nativeint_u.of_nativeint
   in
   List.iter ~f (max_value :: min_value :: numbers);

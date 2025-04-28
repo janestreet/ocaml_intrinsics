@@ -16,13 +16,15 @@ let create_unboxed_float_ref init_val = alloc_unboxed_float_ref init_val |> EP.c
 
 external create_untagged_int_ref_as_native_pointer
   :  int
-  -> NP.t
-  = "external_untagged_int_ref_as_native_pointer"
+  -> (NP.t[@unboxed])
+  = "external_untagged_int_ref_as_native_pointer_bytecode"
+    "external_untagged_int_ref_as_native_pointer"
 
 external create_unboxed_float_ref_as_native_pointer
   :  float
-  -> NP.t
-  = "external_unboxed_float_ref_as_native_pointer"
+  -> (NP.t[@unboxed])
+  = "external_unboxed_float_ref_as_native_pointer_bytecode"
+    "external_unboxed_float_ref_as_native_pointer"
 
 external caml_bigstring_get_16 : bigstring -> int -> int = "%caml_bigstring_get16"
 
@@ -51,11 +53,13 @@ let int_refs = List.map ints ~f:create_untagged_int_ref
 let float_refs = List.map floats ~f:create_unboxed_float_ref
 
 let int_refs_as_native_pointer =
-  List.map ints ~f:create_untagged_int_ref_as_native_pointer
+  List.map ints ~f:(fun num ->
+    create_untagged_int_ref_as_native_pointer num |> NP.Expert.to_nativeint)
 ;;
 
 let float_refs_as_native_pointer =
-  List.map floats ~f:create_unboxed_float_ref_as_native_pointer
+  List.map floats ~f:(fun num ->
+    create_unboxed_float_ref_as_native_pointer num |> NP.Expert.to_nativeint)
 ;;
 
 let bigstring_of_string s =
@@ -95,7 +99,8 @@ let%expect_test "prefetch" =
         if not (Float.equal k k') then printf "n=%f n'=%f\n" k k';
         EP.store_unboxed_float r n
       in
-      let test_int_np n r =
+      let test_int_np n r_boxed =
+        let r = NP.Expert.of_nativeint r_boxed in
         P.native_pointer r ~operation ~temporal_locality;
         let n' = NP.load_untagged_int r in
         if not (Int.equal n n') then printf "int np: n=%d n'=%d\n" n n';
@@ -105,7 +110,8 @@ let%expect_test "prefetch" =
         if not (Int.equal k k') then printf "n=%d n'=%d\n" k k';
         NP.store_untagged_int r n
       in
-      let test_float_np n r =
+      let test_float_np n r_boxed =
+        let r = NP.Expert.of_nativeint r_boxed in
         P.native_pointer r ~operation ~temporal_locality;
         let n' = NP.load_unboxed_float r in
         if not (Float.equal n n') then printf "float ext: n=%f n'=%f\n" n n';
@@ -148,6 +154,11 @@ let%expect_test "pause in a for loop" =
     P.pause ()
   done;
   [%expect {| |}]
+;;
+
+let%expect_test "cldemote" =
+  (* Demoting an arbitrary value. We can't easily observe the effect of this anyway. *)
+  P.cldemote (NP.unsafe_of_value "test")
 ;;
 
 type t =

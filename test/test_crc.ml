@@ -5,6 +5,8 @@ open Core
 open Expect_test_helpers_core
 module P = Ocaml_intrinsics.Crc
 
+let int64_crc data = P.int64_crc ~initial:0 ~data
+let unboxed_int64_crc data = P.unboxed_int64_crc ~initial:0L ~data
 let crc data = P.int_crc ~initial:0 ~data
 let crc_cumulative ~acc data = P.int_crc ~initial:acc ~data
 
@@ -66,6 +68,72 @@ let%expect_test "crc32" =
     ((x              4611686018427387903)
      (acc            1)
      (cumulative_crc 1325310638))
+    |}]
+;;
+
+let%expect_test "int64_crc32" =
+  let examples = [ Int.min_value; -1234; -1; 0; 1; 1234; Int.max_value ] in
+  List.iter examples ~f:(fun x ->
+    let int64_crc = int64_crc (Int64.of_int x) in
+    let unboxed_int64_crc = unboxed_int64_crc (Int64_u.of_int x) in
+    require_equal (module Int) int64_crc (unboxed_int64_crc |> Int64_u.to_int_trunc);
+    print_s [%message (x : int) (int64_crc : int) (unboxed_int64_crc : Int64_u.t)]);
+  [%expect
+    {|
+    ((x                 -4611686018427387904)
+     (int64_crc         3280807620)
+     (unboxed_int64_crc 3280807620))
+    ((x                 -1234)
+     (int64_crc         2195985753)
+     (unboxed_int64_crc 2195985753))
+    ((x                 -1)
+     (int64_crc         3293575501)
+     (unboxed_int64_crc 3293575501))
+    ((x                 0)
+     (int64_crc         0)
+     (unboxed_int64_crc 0))
+    ((x                 1)
+     (int64_crc         1228700967)
+     (unboxed_int64_crc 1228700967))
+    ((x                 1234)
+     (int64_crc         2649713533)
+     (unboxed_int64_crc 2649713533))
+    ((x                 4611686018427387903)
+     (int64_crc         130211721)
+     (unboxed_int64_crc 130211721))
+    |}]
+;;
+
+let%expect_test "unboxed_int64_crc32" =
+  let examples = [ Int.min_value; -1234; -1; 0; 1; 1234; Int.max_value ] in
+  List.iter examples ~f:(fun x ->
+    let crc = crc x in
+    let unboxed_int64_crc = unboxed_int64_crc (Int64_u.of_int x) in
+    require_equal (module Int) crc (unboxed_int64_crc |> Int64_u.to_int_trunc);
+    print_s [%message (x : int) (crc : int) (unboxed_int64_crc : Int64_u.t)]);
+  [%expect
+    {|
+    ((x                 -4611686018427387904)
+     (crc               3280807620)
+     (unboxed_int64_crc 3280807620))
+    ((x                 -1234)
+     (crc               2195985753)
+     (unboxed_int64_crc 2195985753))
+    ((x                 -1)
+     (crc               3293575501)
+     (unboxed_int64_crc 3293575501))
+    ((x                 0)
+     (crc               0)
+     (unboxed_int64_crc 0))
+    ((x                 1)
+     (crc               1228700967)
+     (unboxed_int64_crc 1228700967))
+    ((x                 1234)
+     (crc               2649713533)
+     (unboxed_int64_crc 2649713533))
+    ((x                 4611686018427387903)
+     (crc               130211721)
+     (unboxed_int64_crc 130211721))
     |}]
 ;;
 

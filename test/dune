@@ -7,9 +7,9 @@
  (flags :standard -extension layouts)
  (libraries float_u int32_u int64_u nativeint_u ocaml_intrinsics
    base_bigstring core expect_test_helpers_core.expect_test_helpers_base
-   expect_test_helpers_core int_repr stdio)
+   expect_test_helpers_core int_repr ocaml_intrinsics_kernel_test stdio)
  (preprocess
-  (pps ppx_jane ppx_optcomp)))
+  (pps ppx_jane ppx_optcomp ppx_template)))
 
 (rule
  (targets config.h)
