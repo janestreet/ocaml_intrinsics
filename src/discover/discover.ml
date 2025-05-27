@@ -12,8 +12,8 @@ let prog_aarch64 =
 int main() {
     int64_t i64, d64;
     int32_t i32, d32;
-    __crc32ud(i64, d64);
-    __crc32uw(i32, d32);
+    __crc32cd(i64, d64);
+    __crc32cw(i32, d32);
     return 0;
 }|}
 ;;
