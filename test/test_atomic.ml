@@ -269,106 +269,82 @@ module _ = struct
 
   let%test_unit "native_pointer -> nativeint quickcheck" =
     let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = A_NP.fetch_and_add_nativeint np n in
-        let expect = Nativeint.( + ) fetch n in
-        let actual = NP.load_unboxed_nativeint np in
-        [%test_result: Nativeint.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = A_NP.fetch_and_sub_nativeint np n in
-        let expect = Nativeint.( - ) fetch n in
-        let actual = NP.load_unboxed_nativeint np in
-        [%test_result: Nativeint.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = NP.load_unboxed_nativeint np in
-        let swapped = A_NP.compare_and_swap_nativeint np ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = NP.load_unboxed_nativeint np in
-        [%test_result: Nativeint.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = A_NP.fetch_and_add_nativeint np n in
+      let expect = Nativeint.( + ) fetch n in
+      let actual = NP.load_unboxed_nativeint np in
+      [%test_result: Nativeint.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = A_NP.fetch_and_sub_nativeint np n in
+      let expect = Nativeint.( - ) fetch n in
+      let actual = NP.load_unboxed_nativeint np in
+      [%test_result: Nativeint.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = NP.load_unboxed_nativeint np in
+      let swapped = A_NP.compare_and_swap_nativeint np ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = NP.load_unboxed_nativeint np in
+      [%test_result: Nativeint.t] ~expect:n actual)
   ;;
 
   let%test_unit "native_pointer -> int quickcheck" =
     let np = np_advance (NP.unsafe_of_value nativeint_ptr) ~bytes:word in
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = A_NP.fetch_and_add np n in
-        let expect = fetch + n in
-        let actual = NP.load_untagged_int np in
-        [%test_result: int] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = A_NP.fetch_and_sub np n in
-        let expect = fetch - n in
-        let actual = NP.load_untagged_int np in
-        [%test_result: int] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = NP.load_untagged_int np in
-        let swapped = A_NP.compare_and_swap np ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = NP.load_untagged_int np in
-        [%test_result: int] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = A_NP.fetch_and_add np n in
+      let expect = fetch + n in
+      let actual = NP.load_untagged_int np in
+      [%test_result: int] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = A_NP.fetch_and_sub np n in
+      let expect = fetch - n in
+      let actual = NP.load_untagged_int np in
+      [%test_result: int] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = NP.load_untagged_int np in
+      let swapped = A_NP.compare_and_swap np ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = NP.load_untagged_int np in
+      [%test_result: int] ~expect:n actual)
   ;;
 
   let%test_unit "native_pointer -> int64 quickcheck" =
     let np = np_advance (NP.unsafe_of_value int64_ptr) ~bytes:word in
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = A_NP.fetch_and_add_int64 np n in
-        let expect = Int64.( + ) fetch n in
-        let actual = NP.load_unboxed_int64 np in
-        [%test_result: Int64.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = A_NP.fetch_and_sub_int64 np n in
-        let expect = Int64.( - ) fetch n in
-        let actual = NP.load_unboxed_int64 np in
-        [%test_result: Int64.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = NP.load_unboxed_int64 np in
-        let swapped = A_NP.compare_and_swap_int64 np ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = NP.load_unboxed_int64 np in
-        [%test_result: Int64.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = A_NP.fetch_and_add_int64 np n in
+      let expect = Int64.( + ) fetch n in
+      let actual = NP.load_unboxed_int64 np in
+      [%test_result: Int64.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = A_NP.fetch_and_sub_int64 np n in
+      let expect = Int64.( - ) fetch n in
+      let actual = NP.load_unboxed_int64 np in
+      [%test_result: Int64.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = NP.load_unboxed_int64 np in
+      let swapped = A_NP.compare_and_swap_int64 np ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = NP.load_unboxed_int64 np in
+      [%test_result: Int64.t] ~expect:n actual)
   ;;
 
   let%test_unit "native_pointer -> int32 quickcheck" =
     let np = np_advance (NP.unsafe_of_value int32_ptr) ~bytes:word in
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = A_NP.fetch_and_add_int32 np n in
-        let expect = Int32.( + ) fetch n in
-        let actual = NP.load_unboxed_int32 np in
-        [%test_result: Int32.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = A_NP.fetch_and_sub_int32 np n in
-        let expect = Int32.( - ) fetch n in
-        let actual = NP.load_unboxed_int32 np in
-        [%test_result: Int32.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = NP.load_unboxed_int32 np in
-        let swapped = A_NP.compare_and_swap_int32 np ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = NP.load_unboxed_int32 np in
-        [%test_result: Int32.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = A_NP.fetch_and_add_int32 np n in
+      let expect = Int32.( + ) fetch n in
+      let actual = NP.load_unboxed_int32 np in
+      [%test_result: Int32.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = A_NP.fetch_and_sub_int32 np n in
+      let expect = Int32.( - ) fetch n in
+      let actual = NP.load_unboxed_int32 np in
+      [%test_result: Int32.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = NP.load_unboxed_int32 np in
+      let swapped = A_NP.compare_and_swap_int32 np ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = NP.load_unboxed_int32 np in
+      [%test_result: Int32.t] ~expect:n actual)
   ;;
 
   let%test_unit "ext_pointer -> nativeint quickcheck" =
@@ -376,28 +352,22 @@ module _ = struct
     let xp =
       EP.create (Nativeint.to_int_exn Nativeint.(NP.Expert.to_nativeint np / 2n))
     in
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = A_EP.fetch_and_add_nativeint xp n in
-        let expect = Nativeint.( + ) fetch n in
-        let actual = NP.load_unboxed_nativeint np in
-        [%test_result: Nativeint.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = A_EP.fetch_and_sub_nativeint xp n in
-        let expect = Nativeint.( - ) fetch n in
-        let actual = NP.load_unboxed_nativeint np in
-        [%test_result: Nativeint.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = NP.load_unboxed_nativeint np in
-        let swapped = A_EP.compare_and_swap_nativeint xp ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = NP.load_unboxed_nativeint np in
-        [%test_result: Nativeint.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = A_EP.fetch_and_add_nativeint xp n in
+      let expect = Nativeint.( + ) fetch n in
+      let actual = NP.load_unboxed_nativeint np in
+      [%test_result: Nativeint.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = A_EP.fetch_and_sub_nativeint xp n in
+      let expect = Nativeint.( - ) fetch n in
+      let actual = NP.load_unboxed_nativeint np in
+      [%test_result: Nativeint.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = NP.load_unboxed_nativeint np in
+      let swapped = A_EP.compare_and_swap_nativeint xp ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = NP.load_unboxed_nativeint np in
+      [%test_result: Nativeint.t] ~expect:n actual)
   ;;
 
   let%test_unit "ext_pointer -> int quickcheck" =
@@ -405,28 +375,22 @@ module _ = struct
     let xp =
       EP.create (Nativeint.to_int_exn Nativeint.(NP.Expert.to_nativeint np / 2n))
     in
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = A_EP.fetch_and_add xp n in
-        let expect = fetch + n in
-        let actual = NP.load_untagged_int np in
-        [%test_result: int] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = A_EP.fetch_and_sub xp n in
-        let expect = fetch - n in
-        let actual = NP.load_untagged_int np in
-        [%test_result: int] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = NP.load_untagged_int np in
-        let swapped = A_EP.compare_and_swap xp ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = NP.load_untagged_int np in
-        [%test_result: int] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = A_EP.fetch_and_add xp n in
+      let expect = fetch + n in
+      let actual = NP.load_untagged_int np in
+      [%test_result: int] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = A_EP.fetch_and_sub xp n in
+      let expect = fetch - n in
+      let actual = NP.load_untagged_int np in
+      [%test_result: int] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = NP.load_untagged_int np in
+      let swapped = A_EP.compare_and_swap xp ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = NP.load_untagged_int np in
+      [%test_result: int] ~expect:n actual)
   ;;
 
   let%test_unit "ext_pointer -> int64 quickcheck" =
@@ -434,28 +398,22 @@ module _ = struct
     let xp =
       EP.create (Nativeint.to_int_exn Nativeint.(NP.Expert.to_nativeint np / 2n))
     in
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = A_EP.fetch_and_add_int64 xp n in
-        let expect = Int64.( + ) fetch n in
-        let actual = NP.load_unboxed_int64 np in
-        [%test_result: Int64.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = A_EP.fetch_and_sub_int64 xp n in
-        let expect = Int64.( - ) fetch n in
-        let actual = NP.load_unboxed_int64 np in
-        [%test_result: Int64.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = NP.load_unboxed_int64 np in
-        let swapped = A_EP.compare_and_swap_int64 xp ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = NP.load_unboxed_int64 np in
-        [%test_result: Int64.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = A_EP.fetch_and_add_int64 xp n in
+      let expect = Int64.( + ) fetch n in
+      let actual = NP.load_unboxed_int64 np in
+      [%test_result: Int64.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = A_EP.fetch_and_sub_int64 xp n in
+      let expect = Int64.( - ) fetch n in
+      let actual = NP.load_unboxed_int64 np in
+      [%test_result: Int64.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = NP.load_unboxed_int64 np in
+      let swapped = A_EP.compare_and_swap_int64 xp ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = NP.load_unboxed_int64 np in
+      [%test_result: Int64.t] ~expect:n actual)
   ;;
 
   let%test_unit "ext_pointer -> int32 quickcheck" =
@@ -463,28 +421,22 @@ module _ = struct
     let xp =
       EP.create (Nativeint.to_int_exn Nativeint.(NP.Expert.to_nativeint np / 2n))
     in
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = A_EP.fetch_and_add_int32 xp n in
-        let expect = Int32.( + ) fetch n in
-        let actual = NP.load_unboxed_int32 np in
-        [%test_result: Int32.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = A_EP.fetch_and_sub_int32 xp n in
-        let expect = Int32.( - ) fetch n in
-        let actual = NP.load_unboxed_int32 np in
-        [%test_result: Int32.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = NP.load_unboxed_int32 np in
-        let swapped = A_EP.compare_and_swap_int32 xp ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = NP.load_unboxed_int32 np in
-        [%test_result: Int32.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = A_EP.fetch_and_add_int32 xp n in
+      let expect = Int32.( + ) fetch n in
+      let actual = NP.load_unboxed_int32 np in
+      [%test_result: Int32.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = A_EP.fetch_and_sub_int32 xp n in
+      let expect = Int32.( - ) fetch n in
+      let actual = NP.load_unboxed_int32 np in
+      [%test_result: Int32.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = NP.load_unboxed_int32 np in
+      let swapped = A_EP.compare_and_swap_int32 xp ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = NP.load_unboxed_int32 np in
+      [%test_result: Int32.t] ~expect:n actual)
   ;;
 
   let%test_unit "bigstring -> nativeint quickcheck" =
@@ -497,30 +449,24 @@ module _ = struct
         |> Nativeint.of_int32_exn
       else Base_bigstring.Int_repr.get_int64_le bs ~pos:0 |> Nativeint.of_int64_exn
     in
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = A_BS.fetch_and_add_nativeint bs ~pos:0 n in
-        let expect = Nativeint.( + ) fetch n in
-        let actual = load () in
-        [%test_result: Nativeint.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = A_BS.fetch_and_sub_nativeint bs ~pos:0 n in
-        let expect = Nativeint.( - ) fetch n in
-        let actual = load () in
-        [%test_result: Nativeint.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BNative)
-      ~f:(fun n ->
-        let fetch = load () in
-        let swapped =
-          A_BS.compare_and_swap_nativeint bs ~pos:0 ~compare_with:fetch ~set_to:n
-        in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = load () in
-        [%test_result: Nativeint.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = A_BS.fetch_and_add_nativeint bs ~pos:0 n in
+      let expect = Nativeint.( + ) fetch n in
+      let actual = load () in
+      [%test_result: Nativeint.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = A_BS.fetch_and_sub_nativeint bs ~pos:0 n in
+      let expect = Nativeint.( - ) fetch n in
+      let actual = load () in
+      [%test_result: Nativeint.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BNative) ~f:(fun n ->
+      let fetch = load () in
+      let swapped =
+        A_BS.compare_and_swap_nativeint bs ~pos:0 ~compare_with:fetch ~set_to:n
+      in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = load () in
+      [%test_result: Nativeint.t] ~expect:n actual)
   ;;
 
   let%test_unit "bigstring -> int quickcheck" =
@@ -530,57 +476,43 @@ module _ = struct
       then Base_bigstring.get_int32_le bs ~pos:0
       else Base_bigstring.get_int64_le_trunc bs ~pos:0
     in
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = A_BS.fetch_and_add ~pos:0 bs n in
-        let expect = fetch + n in
-        let actual = load () in
-        [%test_result: int] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = A_BS.fetch_and_sub ~pos:0 bs n in
-        let expect = fetch - n in
-        let actual = load () in
-        [%test_result: int] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt)
-      ~f:(fun n ->
-        let fetch = load () in
-        let swapped = A_BS.compare_and_swap ~pos:0 bs ~compare_with:fetch ~set_to:n in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = load () in
-        [%test_result: int] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = A_BS.fetch_and_add ~pos:0 bs n in
+      let expect = fetch + n in
+      let actual = load () in
+      [%test_result: int] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = A_BS.fetch_and_sub ~pos:0 bs n in
+      let expect = fetch - n in
+      let actual = load () in
+      [%test_result: int] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt) ~f:(fun n ->
+      let fetch = load () in
+      let swapped = A_BS.compare_and_swap ~pos:0 bs ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = load () in
+      [%test_result: int] ~expect:n actual)
   ;;
 
   let%test_unit "bigstring -> int64 quickcheck" =
     let bs = bigstring_of_string (String.make 500 '\x00') in
     let load () = Base_bigstring.Int_repr.get_int64_le bs ~pos:0 in
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = A_BS.fetch_and_add_int64 ~pos:0 bs n in
-        let expect = Int64.( + ) fetch n in
-        let actual = load () in
-        [%test_result: Int64.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = A_BS.fetch_and_sub_int64 ~pos:0 bs n in
-        let expect = Int64.( - ) fetch n in
-        let actual = load () in
-        [%test_result: Int64.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let fetch = load () in
-        let swapped =
-          A_BS.compare_and_swap_int64 ~pos:0 bs ~compare_with:fetch ~set_to:n
-        in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = load () in
-        [%test_result: Int64.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = A_BS.fetch_and_add_int64 ~pos:0 bs n in
+      let expect = Int64.( + ) fetch n in
+      let actual = load () in
+      [%test_result: Int64.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = A_BS.fetch_and_sub_int64 ~pos:0 bs n in
+      let expect = Int64.( - ) fetch n in
+      let actual = load () in
+      [%test_result: Int64.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let fetch = load () in
+      let swapped = A_BS.compare_and_swap_int64 ~pos:0 bs ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = load () in
+      [%test_result: Int64.t] ~expect:n actual)
   ;;
 
   let%test_unit "bigstring -> int32 quickcheck" =
@@ -588,29 +520,21 @@ module _ = struct
     let load () =
       Base_bigstring.Int_repr.get_int32_le bs ~pos:0 |> Int_repr.Int32.to_base_int32
     in
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = A_BS.fetch_and_add_int32 ~pos:0 bs n in
-        let expect = Int32.( + ) fetch n in
-        let actual = load () in
-        [%test_result: Int32.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = A_BS.fetch_and_sub_int32 ~pos:0 bs n in
-        let expect = Int32.( - ) fetch n in
-        let actual = load () in
-        [%test_result: Int32.t] ~expect actual);
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let fetch = load () in
-        let swapped =
-          A_BS.compare_and_swap_int32 ~pos:0 bs ~compare_with:fetch ~set_to:n
-        in
-        [%test_result: bool] ~expect:true swapped;
-        let actual = load () in
-        [%test_result: Int32.t] ~expect:n actual)
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = A_BS.fetch_and_add_int32 ~pos:0 bs n in
+      let expect = Int32.( + ) fetch n in
+      let actual = load () in
+      [%test_result: Int32.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = A_BS.fetch_and_sub_int32 ~pos:0 bs n in
+      let expect = Int32.( - ) fetch n in
+      let actual = load () in
+      [%test_result: Int32.t] ~expect actual);
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let fetch = load () in
+      let swapped = A_BS.compare_and_swap_int32 ~pos:0 bs ~compare_with:fetch ~set_to:n in
+      [%test_result: bool] ~expect:true swapped;
+      let actual = load () in
+      [%test_result: Int32.t] ~expect:n actual)
   ;;
 end

@@ -35,12 +35,10 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
   ;;
 
   let%test_unit "count_set_bits" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        let expect = count_set_bits_naive v in
-        let actual = T.count_set_bits v in
-        [%test_result: V.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      let expect = count_set_bits_naive v in
+      let actual = T.count_set_bits v in
+      [%test_result: V.t] ~expect actual)
   ;;
 
   let count_leading_zeros_naive (v : V.t) : V.t =
@@ -52,23 +50,19 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
   ;;
 
   let%test_unit "count_leading_zeros" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        let expect = count_leading_zeros_naive v in
-        let actual = T.count_leading_zeros v in
-        [%test_result: V.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      let expect = count_leading_zeros_naive v in
+      let actual = T.count_leading_zeros v in
+      [%test_result: V.t] ~expect actual)
   ;;
 
   let%test_unit "count_leading_zeros_nonzero_arg" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        if not (V.zero = v)
-        then (
-          let expect = count_leading_zeros_naive v in
-          let actual = T.count_leading_zeros_nonzero_arg v in
-          [%test_result: V.t] ~expect actual))
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      if not (V.zero = v)
+      then (
+        let expect = count_leading_zeros_naive v in
+        let actual = T.count_leading_zeros_nonzero_arg v in
+        [%test_result: V.t] ~expect actual))
   ;;
 
   let count_trailing_zeros_naive (v : V.t) : V.t =
@@ -83,23 +77,19 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
   ;;
 
   let%test_unit "count_trailing_zeros" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        let expect = count_trailing_zeros_naive v in
-        let actual = T.count_trailing_zeros v in
-        [%test_result: V.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      let expect = count_trailing_zeros_naive v in
+      let actual = T.count_trailing_zeros v in
+      [%test_result: V.t] ~expect actual)
   ;;
 
   let%test_unit "count_trailing_zeros_nonzero_arg" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        if not (V.zero = v)
-        then (
-          let expect = count_trailing_zeros_naive v in
-          let actual = T.count_trailing_zeros_nonzero_arg v in
-          [%test_result: V.t] ~expect actual))
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      if not (V.zero = v)
+      then (
+        let expect = count_trailing_zeros_naive v in
+        let actual = T.count_trailing_zeros_nonzero_arg v in
+        [%test_result: V.t] ~expect actual))
   ;;
 end
 
