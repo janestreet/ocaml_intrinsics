@@ -19,8 +19,8 @@ let%expect_test "ctz int64" =
   List.iter ~f (max_value :: min_value :: numbers);
   [%expect
     {|
-    ctz 0x7fff_ffff_ffff_ffff = 0
-    ctz -0x8000_0000_0000_0000 = 63
+    ctz 0x7fffffffffffffff = 0
+    ctz 0x8000000000000000 = 63
     ctz 0x0 = 64
     ctz 0x1 = 0
     ctz 0x7 = 0
@@ -28,7 +28,7 @@ let%expect_test "ctz int64" =
     ctz 0x4 = 2
     ctz 0xc = 2
     ctz 0x12 = 1
-    ctz -0x1 = 0
+    ctz 0xffffffffffffffff = 0
     |}]
 ;;
 
@@ -45,8 +45,8 @@ let%expect_test "ctz int32" =
   List.iter ~f (max_value :: min_value :: numbers);
   [%expect
     {|
-    ctz 0x7fff_ffff = 0
-    ctz -0x8000_0000 = 31
+    ctz 0x7fffffff = 0
+    ctz 0x80000000 = 31
     ctz 0x0 = 32
     ctz 0x1 = 0
     ctz 0x7 = 0
@@ -54,7 +54,7 @@ let%expect_test "ctz int32" =
     ctz 0x4 = 2
     ctz 0xc = 2
     ctz 0x12 = 1
-    ctz -0x1 = 0
+    ctz 0xffffffff = 0
     |}]
 ;;
 
@@ -73,8 +73,8 @@ let%expect_test "ctz nativeint" =
   List.iter ~f (max_value :: min_value :: numbers);
   [%expect
     {|
-    ctz 0x7fff_ffff_ffff_ffff = 0
-    ctz -0x8000_0000_0000_0000 = 63
+    ctz 0x7fffffffffffffff = 0
+    ctz 0x8000000000000000 = 63
     ctz 0x0 = 64
     ctz 0x1 = 0
     ctz 0x7 = 0
@@ -82,7 +82,7 @@ let%expect_test "ctz nativeint" =
     ctz 0x4 = 2
     ctz 0xc = 2
     ctz 0x12 = 1
-    ctz -0x1 = 0
+    ctz 0xffffffffffffffff = 0
     |}]
 ;;
 

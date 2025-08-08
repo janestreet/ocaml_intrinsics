@@ -13,14 +13,14 @@ external ext_pointer_as_native_pointer
 [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
 external unsafe_of_value
-  :  'a
-  -> (t[@unboxed])
+  : 'a.
+  'a -> (t[@unboxed])
   = "caml_native_pointer_of_value_bytecode" "caml_native_pointer_of_value"
 [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
 external unsafe_to_value
-  :  (t[@unboxed])
-  -> 'a
+  : 'a.
+  (t[@unboxed]) -> 'a
   = "caml_native_pointer_to_value_bytecode" "caml_native_pointer_to_value"
 [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 

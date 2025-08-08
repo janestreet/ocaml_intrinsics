@@ -7,12 +7,11 @@ module type Value = sig
 
   val zero : t
   val one : t
-  val num_bits : int
+  val num_bits : t
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
   val ( lsr ) : t -> int -> t
   val ( land ) : t -> t -> t
-  val of_int_exn : int -> t
 end
 
 module type Test = sig
@@ -35,12 +34,10 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
   ;;
 
   let%test_unit "count_set_bits" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        let expect = count_set_bits_naive v in
-        let actual = T.count_set_bits v in
-        [%test_result: V.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      let expect = count_set_bits_naive v in
+      let actual = T.count_set_bits v in
+      [%test_result: V.t] ~expect actual)
   ;;
 
   let count_leading_zeros_naive (v : V.t) : V.t =
@@ -48,58 +45,50 @@ module Make (V : Value) (T : Test with type t = V.t) = struct
     let rec loop n count =
       if compare n zero <> 0 then loop (n lsr 1) (count - one) else count
     in
-    loop v (of_int_exn V.num_bits)
+    loop v V.num_bits
   ;;
 
   let%test_unit "count_leading_zeros" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        let expect = count_leading_zeros_naive v in
-        let actual = T.count_leading_zeros v in
-        [%test_result: V.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      let expect = count_leading_zeros_naive v in
+      let actual = T.count_leading_zeros v in
+      [%test_result: V.t] ~expect actual)
   ;;
 
   let%test_unit "count_leading_zeros_nonzero_arg" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        if not (V.zero = v)
-        then (
-          let expect = count_leading_zeros_naive v in
-          let actual = T.count_leading_zeros_nonzero_arg v in
-          [%test_result: V.t] ~expect actual))
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      if not (V.zero = v)
+      then (
+        let expect = count_leading_zeros_naive v in
+        let actual = T.count_leading_zeros_nonzero_arg v in
+        [%test_result: V.t] ~expect actual))
   ;;
 
   let count_trailing_zeros_naive (v : V.t) : V.t =
     let open V in
     let rec loop n count =
       let bit = n land one in
-      if Base.Int.compare count V.num_bits = 0 || compare bit zero <> 0
+      if V.compare count V.num_bits = 0 || compare bit zero <> 0
       then count
-      else loop (n lsr 1) Base.Int.(count + 1)
+      else loop (n lsr 1) V.(count + one)
     in
-    loop v 0 |> V.of_int_exn
+    loop v V.zero
   ;;
 
   let%test_unit "count_trailing_zeros" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        let expect = count_trailing_zeros_naive v in
-        let actual = T.count_trailing_zeros v in
-        [%test_result: V.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      let expect = count_trailing_zeros_naive v in
+      let actual = T.count_trailing_zeros v in
+      [%test_result: V.t] ~expect actual)
   ;;
 
   let%test_unit "count_trailing_zeros_nonzero_arg" =
-    Base_quickcheck.Test.run_exn
-      (module V)
-      ~f:(fun v ->
-        if not (V.zero = v)
-        then (
-          let expect = count_trailing_zeros_naive v in
-          let actual = T.count_trailing_zeros_nonzero_arg v in
-          [%test_result: V.t] ~expect actual))
+    Base_quickcheck.Test.run_exn (module V) ~f:(fun v ->
+      if not (V.zero = v)
+      then (
+        let expect = count_trailing_zeros_naive v in
+        let actual = T.count_trailing_zeros_nonzero_arg v in
+        [%test_result: V.t] ~expect actual))
   ;;
 end
 
@@ -169,14 +158,8 @@ include
     (struct
       type t = int64
 
-      let count_trailing_zeros x =
-        Base.Int64.(if x = 0L then num_bits |> of_int else ctz x)
-      ;;
-
-      let count_leading_zeros x =
-        Base.Int64.(if x = 0L then num_bits |> of_int else clz x)
-      ;;
-
+      let count_trailing_zeros x = Base.Int64.(if x = 0L then num_bits else ctz x)
+      let count_leading_zeros x = Base.Int64.(if x = 0L then num_bits else clz x)
       let count_trailing_zeros_nonzero_arg = count_trailing_zeros
       let count_leading_zeros_nonzero_arg = count_leading_zeros
       let count_set_bits = Base.Int64.popcount
@@ -207,14 +190,8 @@ include
     (struct
       type t = int32
 
-      let count_trailing_zeros x =
-        Base.Int32.(if x = 0l then num_bits |> of_int_exn else ctz x)
-      ;;
-
-      let count_leading_zeros x =
-        Base.Int32.(if x = 0l then num_bits |> of_int_exn else clz x)
-      ;;
-
+      let count_trailing_zeros x = Base.Int32.(if x = 0l then num_bits else ctz x)
+      let count_leading_zeros x = Base.Int32.(if x = 0l then num_bits else clz x)
       let count_trailing_zeros_nonzero_arg = count_trailing_zeros
       let count_leading_zeros_nonzero_arg = count_leading_zeros
       let count_set_bits = Base.Int32.popcount
@@ -246,16 +223,9 @@ include
     (struct
       type t = nativeint
 
-      let count_leading_zeros x =
-        Base.Nativeint.(if x = 0n then num_bits |> of_int else clz x)
-      ;;
-
+      let count_leading_zeros x = Base.Nativeint.(if x = 0n then num_bits else clz x)
       let count_set_bits = Base.Nativeint.popcount
-
-      let count_trailing_zeros x =
-        Base.Nativeint.(if x = 0n then num_bits |> of_int else ctz x)
-      ;;
-
+      let count_trailing_zeros x = Base.Nativeint.(if x = 0n then num_bits else ctz x)
       let count_trailing_zeros_nonzero_arg = count_trailing_zeros
       let count_leading_zeros_nonzero_arg = count_leading_zeros
     end)

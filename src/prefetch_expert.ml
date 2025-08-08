@@ -11,105 +11,100 @@
    Otherwise, the compiler can eliminate them, because they have no result. *)
 
 external prefetch_write_high
-  :  'a
-  -> unit
+  : 'a.
+  'a -> unit
   = "caml_prefetch_ignore" "caml_prefetch_write_high"
 [@@noalloc] [@@builtin]
 
 external prefetch_write_moderate
-  :  'a
-  -> unit
+  : 'a.
+  'a -> unit
   = "caml_prefetch_ignore" "caml_prefetch_write_moderate"
 [@@noalloc] [@@builtin]
 
 external prefetch_write_low
-  :  'a
-  -> unit
+  : 'a.
+  'a -> unit
   = "caml_prefetch_ignore" "caml_prefetch_write_low"
 [@@noalloc] [@@builtin]
 
 external prefetch_write_none
-  :  'a
-  -> unit
+  : 'a.
+  'a -> unit
   = "caml_prefetch_ignore" "caml_prefetch_write_none"
 [@@noalloc] [@@builtin]
 
 external prefetch_read_none
-  :  'a
-  -> unit
+  : 'a.
+  'a -> unit
   = "caml_prefetch_ignore" "caml_prefetch_read_none"
 [@@noalloc] [@@builtin]
 
-external prefetch_read_low : 'a -> unit = "caml_prefetch_ignore" "caml_prefetch_read_low"
+external prefetch_read_low
+  : 'a.
+  'a -> unit
+  = "caml_prefetch_ignore" "caml_prefetch_read_low"
 [@@noalloc] [@@builtin]
 
 external prefetch_read_moderate
-  :  'a
-  -> unit
+  : 'a.
+  'a -> unit
   = "caml_prefetch_ignore" "caml_prefetch_read_moderate"
 [@@noalloc] [@@builtin]
 
 external prefetch_read_high
-  :  'a
-  -> unit
+  : 'a.
+  'a -> unit
   = "caml_prefetch_ignore" "caml_prefetch_read_high"
 [@@noalloc] [@@builtin]
 
 (* Prefetch at the given byte offset from an OCaml value. *)
 
 external prefetch_write_high_val_offset
-  :  'a
-  -> byte_offset:(int[@untagged])
-  -> unit
+  : 'a.
+  'a -> byte_offset:(int[@untagged]) -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_write_high_val_offset_untagged"
 [@@noalloc] [@@builtin]
 
 external prefetch_write_moderate_val_offset
-  :  'a
-  -> byte_offset:(int[@untagged])
-  -> unit
+  : 'a.
+  'a -> byte_offset:(int[@untagged]) -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_write_moderate_val_offset_untagged"
 [@@noalloc] [@@builtin]
 
 external prefetch_write_low_val_offset
-  :  'a
-  -> byte_offset:(int[@untagged])
-  -> unit
+  : 'a.
+  'a -> byte_offset:(int[@untagged]) -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_write_low_val_offset_untagged"
 [@@noalloc] [@@builtin]
 
 external prefetch_write_none_val_offset
-  :  'a
-  -> byte_offset:(int[@untagged])
-  -> unit
+  : 'a.
+  'a -> byte_offset:(int[@untagged]) -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_write_none_val_offset_untagged"
 [@@noalloc] [@@builtin]
 
 external prefetch_read_none_val_offset
-  :  'a
-  -> byte_offset:(int[@untagged])
-  -> unit
+  : 'a.
+  'a -> byte_offset:(int[@untagged]) -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_read_none_val_offset_untagged"
 [@@noalloc] [@@builtin]
 
 external prefetch_read_low_val_offset
-  :  'a
-  -> byte_offset:(int[@untagged])
-  -> unit
+  : 'a.
+  'a -> byte_offset:(int[@untagged]) -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_read_low_val_offset_untagged"
 [@@noalloc] [@@builtin]
 
 external prefetch_read_moderate_val_offset
-  :  'a
-  -> byte_offset:(int[@untagged])
-  -> unit
+  : 'a.
+  'a -> byte_offset:(int[@untagged]) -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_read_moderate_val_offset_untagged"
 [@@noalloc] [@@builtin]
 
 external prefetch_read_high_val_offset
-  :  'a
-  -> byte_offset:(int[@untagged])
-  -> unit
+  : 'a.
+  'a -> byte_offset:(int[@untagged]) -> unit
   = "caml_prefetch_ignore2" "caml_prefetch_read_high_val_offset_untagged"
 [@@noalloc] [@@builtin]
 

@@ -16,8 +16,8 @@ external ext_pointer_as_native_pointer
     representation as the input value. If 'a is a pointer to outside the OCaml heap, the
     result may be used with load or store operations. *)
 external unsafe_of_value
-  :  'a
-  -> (t[@unboxed])
+  : 'a.
+  'a -> (t[@unboxed])
   = "caml_native_pointer_of_value_bytecode" "caml_native_pointer_of_value"
 [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
@@ -26,8 +26,8 @@ external unsafe_of_value
     must be a valid OCaml value: either an immediate or a pointer to an address with a
     valid OCaml header. *)
 external unsafe_to_value
-  :  (t[@unboxed])
-  -> 'a
+  : 'a.
+  (t[@unboxed]) -> 'a
   = "caml_native_pointer_to_value_bytecode" "caml_native_pointer_to_value"
 [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
