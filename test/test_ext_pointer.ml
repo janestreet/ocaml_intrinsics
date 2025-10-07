@@ -101,12 +101,10 @@ module _ = struct
   ;;
 
   let%test_unit "native_pointer immediate quickcheck" =
-    Base_quickcheck.Test.run_exn
-      (module BI)
-      ~f:(fun n ->
-        let expect = n, n + 1 in
-        let actual = direct_test_immediate n in
-        [%test_result: Int.t * Int.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module BI) ~f:(fun n ->
+      let expect = n, n + 1 in
+      let actual = direct_test_immediate n in
+      [%test_result: Int.t * Int.t] ~expect actual)
   ;;
 
   type t = int [@@deriving quickcheck]
@@ -114,12 +112,10 @@ end
 
 module _ = struct
   let%test_unit "ext_pointer int quickcheck" =
-    Base_quickcheck.Test.run_exn
-      (module BI)
-      ~f:(fun n ->
-        let expect = n, n + 1 in
-        let actual = test_int n in
-        [%test_result: Int.t * Int.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module BI) ~f:(fun n ->
+      let expect = n, n + 1 in
+      let actual = test_int n in
+      [%test_result: Int.t * Int.t] ~expect actual)
   ;;
 
   type t = int [@@deriving quickcheck]
@@ -133,12 +129,10 @@ module _ = struct
   end
 
   let%test_unit "ext_pointer float quickcheck" =
-    Base_quickcheck.Test.run_exn
-      (module BF)
-      ~f:(fun n ->
-        let expect = n, n *. 13.0 in
-        let actual = test_float n in
-        [%test_result: Float.t * Float.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module BF) ~f:(fun n ->
+      let expect = n, n *. 13.0 in
+      let actual = test_float n in
+      [%test_result: Float.t * Float.t] ~expect actual)
   ;;
 
   type t = int [@@deriving quickcheck]
@@ -167,12 +161,10 @@ module _ = struct
   end
 
   let%test_unit "native_pointer unboxed int64 quickcheck" =
-    Base_quickcheck.Test.run_exn
-      (module BInt64)
-      ~f:(fun n ->
-        let expect = n, Int64.(n + 7L) in
-        let actual = direct_test_unboxed_int64 n in
-        [%test_result: Int64.t * Int64.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module BInt64) ~f:(fun n ->
+      let expect = n, Int64.(n + 7L) in
+      let actual = direct_test_unboxed_int64 n in
+      [%test_result: Int64.t * Int64.t] ~expect actual)
   ;;
 
   type t = int [@@deriving quickcheck]
@@ -201,12 +193,10 @@ module _ = struct
   end
 
   let%test_unit "native_pointer unboxed int32 quickcheck" =
-    Base_quickcheck.Test.run_exn
-      (module BInt32)
-      ~f:(fun n ->
-        let expect = n, Int32.(n + 7l) in
-        let actual = direct_test_unboxed_int32 n in
-        [%test_result: Int32.t * Int32.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module BInt32) ~f:(fun n ->
+      let expect = n, Int32.(n + 7l) in
+      let actual = direct_test_unboxed_int32 n in
+      [%test_result: Int32.t * Int32.t] ~expect actual)
   ;;
 
   type t = int [@@deriving quickcheck]
@@ -235,12 +225,10 @@ module _ = struct
   end
 
   let%test_unit "native_pointer unboxed nativeint quickcheck" =
-    Base_quickcheck.Test.run_exn
-      (module BNativeint)
-      ~f:(fun n ->
-        let expect = n, Nativeint.(n + 7n) in
-        let actual = direct_test_unboxed_nativeint n in
-        [%test_result: Nativeint.t * Nativeint.t] ~expect actual)
+    Base_quickcheck.Test.run_exn (module BNativeint) ~f:(fun n ->
+      let expect = n, Nativeint.(n + 7n) in
+      let actual = direct_test_unboxed_nativeint n in
+      [%test_result: Nativeint.t * Nativeint.t] ~expect actual)
   ;;
 
   type t = int [@@deriving quickcheck]

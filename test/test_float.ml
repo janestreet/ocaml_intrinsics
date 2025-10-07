@@ -52,7 +52,7 @@ let args =
 
 let%expect_test "iround_half_to_even" =
   List.iter args ~f:(fun x ->
-    printf "iround_half_to_even %.19g = %Ld\n" x (I.iround_half_to_even x));
+    printf "iround_half_to_even %.19g = %Ld\n" x (I.iround_current x));
   [%expect
     {|
     iround_half_to_even inf = -9223372036854775808

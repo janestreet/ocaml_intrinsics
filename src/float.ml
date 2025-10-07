@@ -1,13 +1,8 @@
-external iround_half_to_even
-  :  (float[@unboxed])
-  -> (int64[@unboxed])
-  = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
-[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
-
 external round
   :  (int[@untagged])
   -> (float[@unboxed])
   -> (float[@unboxed])
+  @@ portable
   = "caml_sse41_float64_round_bytecode" "caml_sse41_float64_round"
 [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
@@ -31,16 +26,11 @@ include Ocaml_intrinsics_kernel.Float
 module Unboxed = struct
   include Unboxed
 
-  external iround_half_to_even
-    :  (float#[@unboxed])
-    -> (int64[@unboxed])
-    = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
-
   external round
     :  (int[@untagged])
     -> (float#[@unboxed])
     -> (float#[@unboxed])
+    @@ portable
     = "caml_sse41_float64_round_bytecode" "caml_sse41_float64_round"
   [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 

@@ -24,7 +24,9 @@ type operation =
 
 (** [value a] prefetches the OCaml value [a]. It should not be used when [a] is an
     immediate: it is safe, but will attempt to prefetch an arbitrary memory address. *)
-val value : 'a -> operation:operation -> temporal_locality:temporal_locality -> unit
+val value
+  : ('a : value_or_null).
+  'a -> operation:operation -> temporal_locality:temporal_locality -> unit
 
 (** [value a ~pos] prefetches record field, tuple or array element at position [pos],
     starting from 0. For records, field positions are determined by the order of fields in
@@ -33,11 +35,8 @@ val value : 'a -> operation:operation -> temporal_locality:temporal_locality -> 
     It should not be used when [a] is an immediate: it is safe, but will attempt to
     prefetch an arbitrary memory address. Similarly, there are no bounds checks on [pos]. *)
 val value_pos
-  :  'a
-  -> pos:int
-  -> operation:operation
-  -> temporal_locality:temporal_locality
-  -> unit
+  : ('a : value_or_null).
+  'a -> pos:int -> operation:operation -> temporal_locality:temporal_locality -> unit
 
 (** [value a ~byte_offset] prefetches memory at [byte_offset] from address of OCaml value
     [a].
@@ -54,7 +53,8 @@ val value_pos
     [value_byte_offset] expects the caller to calculate the byte offset. It should be used
     for [String.t],[Bytes.t], float arrays, and (in the future) unboxed types. *)
 val value_byte_offset
-  :  'a
+  : ('a : value_or_null).
+  'a
   -> byte_offset:int
   -> operation:operation
   -> temporal_locality:temporal_locality

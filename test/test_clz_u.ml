@@ -28,9 +28,9 @@ let%expect_test "clz int64" =
     clz 0x0 = 64
     clz 0x1 = 63
     clz 0x7 = 61
-    clz 0x7fff_ffff_ffff_ffff = 1
-    clz -0x8000_0000_0000_0000 = 0
-    clz -0x1 = 0
+    clz 0x7fffffffffffffff = 1
+    clz 0x8000000000000000 = 0
+    clz 0xffffffffffffffff = 0
     |}]
 ;;
 
@@ -58,9 +58,9 @@ let%expect_test "clz int32" =
     clz 0x0 = 32
     clz 0x1 = 31
     clz 0x7 = 29
-    clz 0x7fff_ffff = 1
-    clz -0x8000_0000 = 0
-    clz -0x1 = 0
+    clz 0x7fffffff = 1
+    clz 0x80000000 = 0
+    clz 0xffffffff = 0
     |}]
 ;;
 
@@ -90,9 +90,9 @@ let%expect_test "clz nativeint" =
     clz 0x0 = 64
     clz 0x1 = 63
     clz 0x7 = 61
-    clz 0x7fff_ffff_ffff_ffff = 1
-    clz -0x8000_0000_0000_0000 = 0
-    clz -0x1 = 0
+    clz 0x7fffffffffffffff = 1
+    clz 0x8000000000000000 = 0
+    clz 0xffffffffffffffff = 0
     |}]
 ;;
 

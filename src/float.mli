@@ -1,17 +1,4 @@
-(** Rounds a [float] to an [int64] using the current rounding mode. The default rounding
-    mode is "round half to even", and we expect that no program will change the rounding
-    mode.
-
-    If the argument is NaN or infinite or if the rounded value cannot be represented, then
-    the result is unspecified.
-
-    On an x86-64 machine, this compiles to [cvtsd2si rax, xmm0]. On ARM, this calls a C
-    implementation. *)
-external iround_half_to_even
-  :  (float[@unboxed])
-  -> (int64[@unboxed])
-  = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
-[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+@@ portable
 
 (** Rounds a [float] to an integer [float] using the current rounding mode. The default
     rounding mode is "round half to even", and we expect that no program will change the
@@ -35,12 +22,6 @@ include module type of Ocaml_intrinsics_kernel.Float
 
 module Unboxed : sig
   include module type of Unboxed
-
-  external iround_half_to_even
-    :  (float#[@unboxed])
-    -> (int64[@unboxed])
-    = "caml_sse2_cast_float64_int64_bytecode" "caml_sse2_cast_float64_int64"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
 
   val round_half_to_even : float# -> float#
   val round_down : float# -> float#

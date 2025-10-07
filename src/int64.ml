@@ -7,6 +7,7 @@ external deposit_bits
   :  int64
   -> int64
   -> int64
+  @@ portable
   = "caml_bmi2_int64_deposit_bits_bytecode" "caml_bmi2_int64_deposit_bits"
 [@@noalloc] [@@unboxed] [@@builtin] [@@no_effects] [@@no_coeffects]
 
@@ -17,6 +18,7 @@ external extract_bits
   :  int64
   -> int64
   -> int64
+  @@ portable
   = "caml_bmi2_int64_extract_bits_bytecode" "caml_bmi2_int64_extract_bits"
 [@@noalloc] [@@unboxed] [@@builtin] [@@no_effects] [@@no_coeffects]
 

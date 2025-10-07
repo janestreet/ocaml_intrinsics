@@ -231,3 +231,14 @@ let%expect_test "prefetch value with offset" =
         value_offset (List.hd floats) offset)));
   [%expect {| |}]
 ;;
+
+let%expect_test "prefetch value_or_null" =
+  let t_or_null = Sys.opaque_identity (This t) in
+  let null = Sys.opaque_identity Null in
+  List.iter all_of_operation ~f:(fun operation ->
+    List.iter all_of_temporal_locality ~f:(fun temporal_locality ->
+      let value_or_null = P.value ~operation ~temporal_locality in
+      value_or_null t_or_null;
+      value_or_null null));
+  [%expect {| |}]
+;;

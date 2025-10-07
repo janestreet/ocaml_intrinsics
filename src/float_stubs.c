@@ -5,34 +5,6 @@
 #include <caml/mlvalues.h>
 
 
-#if defined(__SSE2__) || defined(_MSC_VER)
-
-#ifdef _MSC_VER
-#include <intrin.h>
-#else // _MSC_VER
-#include <emmintrin.h>
-#endif // _MSC_VER
-
-int64_t caml_sse2_cast_float64_int64(double x)
-{
-  return _mm_cvtsd_si64(_mm_set_sd(x));
-}
-
-#else // __SSE2__ || _MSC_VER
-
-#include <math.h>
-
-#if defined(__GNUC__) && !defined(__llvm__)
-__attribute__((optimize("no-math-errno")))
-#endif
-int64_t caml_sse2_cast_float64_int64(double x)
-{
-  return llrint(x);
-}
-
-#endif // __SSE2__
-
-
 // These also imply _MM_FROUND_NO_EXC
 #define ROUND_NEAREST 0x8
 #define ROUND_NEG_INF 0x9
@@ -87,11 +59,6 @@ double caml_sse41_float64_round(int mode, double x) {
 }
 
 #endif // __SSE4_1__
-
-CAMLprim value caml_sse2_cast_float64_int64_bytecode(value x)
-{
-  return caml_copy_int64(caml_sse2_cast_float64_int64(Double_val(x)));
-}
 
 CAMLprim value caml_sse41_float64_round_bytecode(value mode, value x)
 {
