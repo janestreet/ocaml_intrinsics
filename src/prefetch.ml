@@ -81,10 +81,10 @@ let bigstring bigstring ~pos ~operation ~temporal_locality =
   | Read, High -> Expert.prefetch_read_high_bigstring bigstring pos
 ;;
 
-external pause : unit -> unit = "caml_pause_hint" [@@noalloc] [@@builtin]
+external pause : unit -> unit = "caml_pause_hint" [@@noalloc]
 
 external cldemote
   :  (Native_pointer.t[@unboxed])
   -> unit
   = "caml_cldemote_ignore" "caml_cldemote"
-[@@noalloc] [@@builtin]
+[@@noalloc]

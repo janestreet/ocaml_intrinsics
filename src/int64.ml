@@ -9,7 +9,7 @@ external deposit_bits
   -> int64
   @@ portable
   = "caml_bmi2_int64_deposit_bits_bytecode" "caml_bmi2_int64_deposit_bits"
-[@@noalloc] [@@unboxed] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@unboxed]
 
 (** [extract_bits a mask]: Extract bits from unsigned 64-bit integer a at the
     corresponding bit locations specified by mask to contiguous low bits in dst; the
@@ -20,7 +20,7 @@ external extract_bits
   -> int64
   @@ portable
   = "caml_bmi2_int64_extract_bits_bytecode" "caml_bmi2_int64_extract_bits"
-[@@noalloc] [@@unboxed] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@unboxed]
 
 (** Intrinsics for unboxed types. *)
 module Unboxed = struct
@@ -29,14 +29,14 @@ module Unboxed = struct
     :  (float#[@unboxed])
     -> (int64#[@unboxed])
     = "caml_int64_bits_of_float" "caml_int64_bits_of_float_unboxed"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+  [@@noalloc]
 
   (** See [Stdlib.Float.float_of_bits] *)
   external float_of_bits
     :  (int64#[@unboxed])
     -> (float#[@unboxed])
     = "caml_int64_float_of_bits" "caml_int64_float_of_bits_unboxed"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+  [@@noalloc]
 
   (** See [Ocaml_intrinsics_kernel.Int64]. *)
 
@@ -44,29 +44,29 @@ module Unboxed = struct
     :  (int64#[@unboxed])
     -> (int64#[@unboxed])
     = "caml_int64_clz" "caml_int64_clz_unboxed_to_untagged"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+  [@@noalloc]
 
   external count_leading_zeros_nonzero_arg
     :  (int64#[@unboxed])
     -> (int64#[@unboxed])
     = "caml_int64_clz" "caml_int64_clz_nonzero_unboxed_to_untagged"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+  [@@noalloc]
 
   external count_trailing_zeros
     :  (int64#[@unboxed])
     -> (int64#[@unboxed])
     = "caml_int64_ctz" "caml_int64_ctz_unboxed_to_untagged"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+  [@@noalloc]
 
   external count_trailing_zeros_nonzero_arg
     :  (int64#[@unboxed])
     -> (int64#[@unboxed])
     = "caml_int64_ctz" "caml_int64_ctz_nonzero_unboxed_to_untagged"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+  [@@noalloc]
 
   external count_set_bits
     :  (int64#[@unboxed])
     -> (int64#[@unboxed])
     = "caml_int64_popcnt" "caml_int64_popcnt_unboxed_to_untagged"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+  [@@noalloc]
 end

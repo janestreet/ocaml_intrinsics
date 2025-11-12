@@ -81,14 +81,14 @@ val bigstring
 
 (** Processor hint that improves performance of spin-wait loops. *)
 external pause : unit -> unit = "caml_pause_hint"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 (** Processor hint to demote a cacheline from L1/L2 to L3. *)
 external cldemote
   :  (Native_pointer.t[@unboxed])
   -> unit
   = "caml_cldemote_ignore" "caml_cldemote"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 (** The prefetch functions above rely on inlining heuristics to eliminate selection logic
     and emit a single call to an external function. It usually works well with Flambda,
