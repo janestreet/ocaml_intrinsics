@@ -7,21 +7,21 @@ external int_crc
   -> data:int
   -> int
   = "caml_sse42_int_untagged_crc_bytecode" "caml_sse42_int_untagged_crc"
-[@@noalloc] [@@untagged] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@untagged]
 
 external int64_crc
   :  initial:(int[@untagged])
   -> data:(int64[@unboxed])
   -> (int[@untagged])
   = "caml_sse42_int64_crc_bytecode" "caml_sse42_int64_crc"
-[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc]
 
 external unboxed_int64_crc
   :  initial:int64#
   -> data:int64#
   -> int64#
   = "caml_sse42_unboxed_int64_crc_bytecode" "caml_sse42_int64_crc"
-[@@noalloc] [@@unboxed] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@unboxed]
 
 let iterated_crc_exn ~initial ~iterations ~data =
   if iterations < 0
