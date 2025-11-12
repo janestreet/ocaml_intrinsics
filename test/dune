@@ -5,10 +5,10 @@
  (name ocaml_intrinsics_test)
  (preprocessor_deps config.h)
  (flags :standard -extension layouts)
- (libraries unboxed.float_u unboxed.int32_u unboxed.int64_u
-   unboxed.nativeint_u ocaml_intrinsics base_bigstring core
+ (libraries base_bigstring core
    expect_test_helpers_core.expect_test_helpers_base expect_test_helpers_core
-   int_repr ocaml_intrinsics_kernel_test stdio)
+   unboxed.float_u unboxed.int32_u unboxed.int64_u int_repr
+   unboxed.nativeint_u ocaml_intrinsics ocaml_intrinsics_kernel_test stdio)
  (preprocess
   (pps ppx_jane ppx_optcomp ppx_template)))
 
