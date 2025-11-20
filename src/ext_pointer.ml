@@ -28,7 +28,7 @@ external create : int -> t = "%identity"
 let offset_by_2n_bytes (t : t) n =
   (* Because the least significant bit of the pointer is implicitly zero, adding to the
      represented integer value adds twice as much to the represented pointer value.
-     Argument is doubled to ensure that the resulting address is 2-byte aligned.  Checking
+     Argument is doubled to ensure that the resulting address is 2-byte aligned. Checking
      that the argument is even would result in worse code generation with a conditional
      branch. *)
   create ((t :> int) + n)
@@ -41,11 +41,11 @@ struct
   (** [load_immediate t] assumes without checking that the value pointed to by [t] is
       immediate. *)
   external unsafe_load_immediate : t -> V.t = "caml_ext_pointer_load_immediate"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_effects]
 
   (** [store_int t i] stores the immediate [i] to the memory address represented by [t]. *)
   external store_immediate : t -> V.t -> unit = "caml_ext_pointer_store_immediate"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_coeffects]
 end
 
 module Int = Immediate (Stdlib.Int)
@@ -60,7 +60,7 @@ external load_untagged_int
   :  t
   -> (int[@untagged])
   = "caml_ext_pointer_load_untagged_int" "caml_ext_pointer_load_unboxed_nativeint"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_int t d] untags [d] and stores the result to the memory pointed to by [t]. *)
 external store_untagged_int
@@ -68,7 +68,7 @@ external store_untagged_int
   -> (int[@untagged])
   -> unit
   = "caml_ext_pointer_store_untagged_int" "caml_ext_pointer_store_unboxed_nativeint"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** [load_unboxed_nativeint t] reads unboxed nativeint pointed to by [t] and returns the
     corresponding (boxed) nativeint allocated on the OCaml heap. *)
@@ -77,7 +77,7 @@ external load_unboxed_nativeint
   -> (nativeint[@unboxed])
   = "caml_ext_pointer_load_unboxed_nativeint_bytecode"
     "caml_ext_pointer_load_unboxed_nativeint"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_nativeint t d] stores the unboxed nativeint to the memory pointed to by
     [t]. *)
@@ -87,7 +87,7 @@ external store_unboxed_nativeint
   -> unit
   = "caml_ext_pointer_store_unboxed_nativeint_bytecode"
     "caml_ext_pointer_store_unboxed_nativeint"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** [load_unboxed_int64 t] reads unboxed int64 pointed to by [t] and returns the
     corresponding (boxed) int64 allocated on the OCaml heap. *)
@@ -95,7 +95,7 @@ external load_unboxed_int64
   :  t
   -> (int64[@unboxed])
   = "caml_ext_pointer_load_unboxed_int64_bytecode" "caml_ext_pointer_load_unboxed_int64"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_int64 t d] stores the unboxed int64 to the memory pointed to by [t]. *)
 external store_unboxed_int64
@@ -103,7 +103,7 @@ external store_unboxed_int64
   -> (int64[@unboxed])
   -> unit
   = "caml_ext_pointer_store_unboxed_int64_bytecode" "caml_ext_pointer_store_unboxed_int64"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** [load_unboxed_int32 t] reads unboxed int32 pointed to by [t] and returns the
     corresponding (boxed) int32 allocated on the OCaml heap. *)
@@ -111,7 +111,7 @@ external load_unboxed_int32
   :  t
   -> (int32[@unboxed])
   = "caml_ext_pointer_load_unboxed_int32_bytecode" "caml_ext_pointer_load_unboxed_int32"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_int32 t d] stores the unboxed int32 to the memory pointed to by [t]. *)
 external store_unboxed_int32
@@ -119,7 +119,7 @@ external store_unboxed_int32
   -> (int32[@unboxed])
   -> unit
   = "caml_ext_pointer_store_unboxed_int32_bytecode" "caml_ext_pointer_store_unboxed_int32"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** For float operations, the pointer must be aligned at least to the native integer
     machine width (meaning on 32-bit platforms, a 32-bit-aligned pointer is acceptable
@@ -132,7 +132,7 @@ external load_unboxed_float
   :  t
   -> (float[@unboxed])
   = "caml_ext_pointer_load_unboxed_float_bytecode" "caml_ext_pointer_load_unboxed_float"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_effects]
 
 (** [store_unboxed_float t d] stores the unboxed float to the memory pointed to by [t]. *)
 external store_unboxed_float
@@ -140,7 +140,7 @@ external store_unboxed_float
   -> (float[@unboxed])
   -> unit
   = "caml_ext_pointer_store_unboxed_float_bytecode" "caml_ext_pointer_store_unboxed_float"
-[@@noalloc]
+[@@noalloc] [@@builtin] [@@no_coeffects]
 
 (** Intrinsics for unboxed types of arguments or results. *)
 module Unboxed = struct
@@ -149,7 +149,7 @@ module Unboxed = struct
     -> (nativeint#[@unboxed])
     = "caml_ext_pointer_load_unboxed_nativeint_bytecode"
       "caml_ext_pointer_load_unboxed_nativeint"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_nativeint
     :  t
@@ -157,13 +157,13 @@ module Unboxed = struct
     -> unit
     = "caml_ext_pointer_store_unboxed_nativeint_bytecode"
       "caml_ext_pointer_store_unboxed_nativeint"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_coeffects]
 
   external load_unboxed_int64
     :  t
     -> (int64#[@unboxed])
     = "caml_ext_pointer_load_unboxed_int64_bytecode" "caml_ext_pointer_load_unboxed_int64"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_int64
     :  t
@@ -171,13 +171,13 @@ module Unboxed = struct
     -> unit
     = "caml_ext_pointer_store_unboxed_int64_bytecode"
       "caml_ext_pointer_store_unboxed_int64"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_coeffects]
 
   external load_unboxed_int32
     :  t
     -> (int32#[@unboxed])
     = "caml_ext_pointer_load_unboxed_int32_bytecode" "caml_ext_pointer_load_unboxed_int32"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_int32
     :  t
@@ -185,13 +185,13 @@ module Unboxed = struct
     -> unit
     = "caml_ext_pointer_store_unboxed_int32_bytecode"
       "caml_ext_pointer_store_unboxed_int32"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_coeffects]
 
   external load_unboxed_float
     :  t
     -> (float#[@unboxed])
     = "caml_ext_pointer_load_unboxed_float_bytecode" "caml_ext_pointer_load_unboxed_float"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_effects]
 
   external store_unboxed_float
     :  t
@@ -199,5 +199,5 @@ module Unboxed = struct
     -> unit
     = "caml_ext_pointer_store_unboxed_float_bytecode"
       "caml_ext_pointer_store_unboxed_float"
-  [@@noalloc]
+  [@@noalloc] [@@builtin] [@@no_coeffects]
 end

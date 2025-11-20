@@ -9,7 +9,7 @@ let%expect_test "clz int64" =
   let numbers =
     [ 0L (* Int.num_bits *)
     ; 1L (* Int.num_bits - 1 *)
-    ; 7L (* Int.num_bits - 3  *)
+    ; 7L (* Int.num_bits - 3 *)
     ; max_value
     ; min_value
     ; -1L
@@ -39,7 +39,7 @@ let%expect_test "clz int32" =
   let numbers =
     [ 0l (* Int.num_bits *)
     ; 1l (* Int.num_bits - 1 *)
-    ; 7l (* Int.num_bits - 3  *)
+    ; 7l (* Int.num_bits - 3 *)
     ; max_value
     ; min_value
     ; -1l
@@ -71,7 +71,7 @@ let%expect_test "clz nativeint" =
   let numbers =
     [ 0n (* Int.num_bits *)
     ; 1n (* Int.num_bits - 1 *)
-    ; 7n (* Int.num_bits - 3  *)
+    ; 7n (* Int.num_bits - 3 *)
     ; max_value
     ; min_value
     ; -1n
@@ -103,7 +103,7 @@ let%expect_test "clz nativeint" =
   let numbers =
     [ 0n (* Int.num_bits *)
     ; 1n (* Int.num_bits - 1 *)
-    ; 7n (* Int.num_bits - 3  *)
+    ; 7n (* Int.num_bits - 3 *)
     ; max_value
     ; min_value
     ; -1n
