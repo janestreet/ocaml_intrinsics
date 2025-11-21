@@ -6,7 +6,7 @@ external native_pointer_fetch_and_add_int
   -> (int[@untagged])
   = "caml_native_pointer_fetch_and_add_int_bytecode"
     "caml_native_pointer_fetch_and_add_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external native_pointer_fetch_and_sub_int
   :  (Native_pointer.t[@unboxed])
@@ -14,7 +14,7 @@ external native_pointer_fetch_and_sub_int
   -> (int[@untagged])
   = "caml_native_pointer_fetch_and_sub_int_bytecode"
     "caml_native_pointer_fetch_and_sub_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external native_pointer_compare_and_swap_int
   :  (Native_pointer.t[@unboxed])
@@ -23,7 +23,7 @@ external native_pointer_compare_and_swap_int
   -> bool
   = "caml_native_pointer_compare_and_swap_int_bytecode"
     "caml_native_pointer_compare_and_swap_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_fetch_and_add_int
   :  Ext_pointer.t
@@ -31,7 +31,7 @@ external ext_pointer_fetch_and_add_int
   -> (int[@untagged])
   = "caml_ext_pointer_fetch_and_add_int_bytecode"
     "caml_ext_pointer_fetch_and_add_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_fetch_and_sub_int
   :  Ext_pointer.t
@@ -39,7 +39,7 @@ external ext_pointer_fetch_and_sub_int
   -> (int[@untagged])
   = "caml_ext_pointer_fetch_and_sub_int_bytecode"
     "caml_ext_pointer_fetch_and_sub_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_compare_and_swap_int
   :  Ext_pointer.t
@@ -48,7 +48,7 @@ external ext_pointer_compare_and_swap_int
   -> bool
   = "caml_ext_pointer_compare_and_swap_int_bytecode"
     "caml_ext_pointer_compare_and_swap_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_fetch_and_add_int
   :  Bigstring_intf.t
@@ -57,7 +57,7 @@ external bigstring_fetch_and_add_int
   -> (int[@untagged])
   = "caml_bigstring_fetch_and_add_int_bytecode"
     "caml_bigstring_fetch_and_add_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_fetch_and_sub_int
   :  Bigstring_intf.t
@@ -66,7 +66,7 @@ external bigstring_fetch_and_sub_int
   -> (int[@untagged])
   = "caml_bigstring_fetch_and_sub_int_bytecode"
     "caml_bigstring_fetch_and_sub_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_compare_and_swap_int
   :  Bigstring_intf.t
@@ -76,7 +76,7 @@ external bigstring_compare_and_swap_int
   -> bool
   = "caml_bigstring_compare_and_swap_int_bytecode"
     "caml_bigstring_compare_and_swap_int_untagged"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 (** Unboxed int64 *)
 
@@ -86,7 +86,7 @@ external native_pointer_fetch_and_add_int64
   -> (int64[@unboxed])
   = "caml_native_pointer_fetch_and_add_int64_bytecode"
     "caml_native_pointer_fetch_and_add_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external native_pointer_fetch_and_sub_int64
   :  (Native_pointer.t[@unboxed])
@@ -94,7 +94,7 @@ external native_pointer_fetch_and_sub_int64
   -> (int64[@unboxed])
   = "caml_native_pointer_fetch_and_sub_int64_bytecode"
     "caml_native_pointer_fetch_and_sub_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external native_pointer_compare_and_swap_int64
   :  (Native_pointer.t[@unboxed])
@@ -103,7 +103,7 @@ external native_pointer_compare_and_swap_int64
   -> bool
   = "caml_native_pointer_compare_and_swap_int64_bytecode"
     "caml_native_pointer_compare_and_swap_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_fetch_and_add_int64
   :  Ext_pointer.t
@@ -111,7 +111,7 @@ external ext_pointer_fetch_and_add_int64
   -> (int64[@unboxed])
   = "caml_ext_pointer_fetch_and_add_int64_bytecode"
     "caml_ext_pointer_fetch_and_add_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_fetch_and_sub_int64
   :  Ext_pointer.t
@@ -119,7 +119,7 @@ external ext_pointer_fetch_and_sub_int64
   -> (int64[@unboxed])
   = "caml_ext_pointer_fetch_and_sub_int64_bytecode"
     "caml_ext_pointer_fetch_and_sub_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_compare_and_swap_int64
   :  Ext_pointer.t
@@ -128,7 +128,7 @@ external ext_pointer_compare_and_swap_int64
   -> bool
   = "caml_ext_pointer_compare_and_swap_int64_bytecode"
     "caml_ext_pointer_compare_and_swap_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_fetch_and_add_int64
   :  Bigstring_intf.t
@@ -137,7 +137,7 @@ external bigstring_fetch_and_add_int64
   -> (int64[@unboxed])
   = "caml_bigstring_fetch_and_add_int64_bytecode"
     "caml_bigstring_fetch_and_add_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_fetch_and_sub_int64
   :  Bigstring_intf.t
@@ -146,7 +146,7 @@ external bigstring_fetch_and_sub_int64
   -> (int64[@unboxed])
   = "caml_bigstring_fetch_and_sub_int64_bytecode"
     "caml_bigstring_fetch_and_sub_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_compare_and_swap_int64
   :  Bigstring_intf.t
@@ -156,7 +156,7 @@ external bigstring_compare_and_swap_int64
   -> bool
   = "caml_bigstring_compare_and_swap_int64_bytecode"
     "caml_bigstring_compare_and_swap_int64_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 (** Unboxed int32 *)
 
@@ -166,7 +166,7 @@ external native_pointer_fetch_and_add_int32
   -> (int32[@unboxed])
   = "caml_native_pointer_fetch_and_add_int32_bytecode"
     "caml_native_pointer_fetch_and_add_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external native_pointer_fetch_and_sub_int32
   :  (Native_pointer.t[@unboxed])
@@ -174,7 +174,7 @@ external native_pointer_fetch_and_sub_int32
   -> (int32[@unboxed])
   = "caml_native_pointer_fetch_and_sub_int32_bytecode"
     "caml_native_pointer_fetch_and_sub_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external native_pointer_compare_and_swap_int32
   :  (Native_pointer.t[@unboxed])
@@ -183,7 +183,7 @@ external native_pointer_compare_and_swap_int32
   -> bool
   = "caml_native_pointer_compare_and_swap_int32_bytecode"
     "caml_native_pointer_compare_and_swap_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_fetch_and_add_int32
   :  Ext_pointer.t
@@ -191,7 +191,7 @@ external ext_pointer_fetch_and_add_int32
   -> (int32[@unboxed])
   = "caml_ext_pointer_fetch_and_add_int32_bytecode"
     "caml_ext_pointer_fetch_and_add_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_fetch_and_sub_int32
   :  Ext_pointer.t
@@ -199,7 +199,7 @@ external ext_pointer_fetch_and_sub_int32
   -> (int32[@unboxed])
   = "caml_ext_pointer_fetch_and_sub_int32_bytecode"
     "caml_ext_pointer_fetch_and_sub_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_compare_and_swap_int32
   :  Ext_pointer.t
@@ -208,7 +208,7 @@ external ext_pointer_compare_and_swap_int32
   -> bool
   = "caml_ext_pointer_compare_and_swap_int32_bytecode"
     "caml_ext_pointer_compare_and_swap_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_fetch_and_add_int32
   :  Bigstring_intf.t
@@ -217,7 +217,7 @@ external bigstring_fetch_and_add_int32
   -> (int32[@unboxed])
   = "caml_bigstring_fetch_and_add_int32_bytecode"
     "caml_bigstring_fetch_and_add_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_fetch_and_sub_int32
   :  Bigstring_intf.t
@@ -226,7 +226,7 @@ external bigstring_fetch_and_sub_int32
   -> (int32[@unboxed])
   = "caml_bigstring_fetch_and_sub_int32_bytecode"
     "caml_bigstring_fetch_and_sub_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_compare_and_swap_int32
   :  Bigstring_intf.t
@@ -236,7 +236,7 @@ external bigstring_compare_and_swap_int32
   -> bool
   = "caml_bigstring_compare_and_swap_int32_bytecode"
     "caml_bigstring_compare_and_swap_int32_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 (** Unboxed nativeint *)
 
@@ -246,7 +246,7 @@ external native_pointer_fetch_and_add_nativeint
   -> (nativeint[@unboxed])
   = "caml_native_pointer_fetch_and_add_nativeint_bytecode"
     "caml_native_pointer_fetch_and_add_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external native_pointer_fetch_and_sub_nativeint
   :  (Native_pointer.t[@unboxed])
@@ -254,7 +254,7 @@ external native_pointer_fetch_and_sub_nativeint
   -> (nativeint[@unboxed])
   = "caml_native_pointer_fetch_and_sub_nativeint_bytecode"
     "caml_native_pointer_fetch_and_sub_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external native_pointer_compare_and_swap_nativeint
   :  (Native_pointer.t[@unboxed])
@@ -263,7 +263,7 @@ external native_pointer_compare_and_swap_nativeint
   -> bool
   = "caml_native_pointer_compare_and_swap_nativeint_bytecode"
     "caml_native_pointer_compare_and_swap_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_fetch_and_add_nativeint
   :  Ext_pointer.t
@@ -271,7 +271,7 @@ external ext_pointer_fetch_and_add_nativeint
   -> (nativeint[@unboxed])
   = "caml_ext_pointer_fetch_and_add_nativeint_bytecode"
     "caml_ext_pointer_fetch_and_add_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_fetch_and_sub_nativeint
   :  Ext_pointer.t
@@ -279,7 +279,7 @@ external ext_pointer_fetch_and_sub_nativeint
   -> (nativeint[@unboxed])
   = "caml_ext_pointer_fetch_and_sub_nativeint_bytecode"
     "caml_ext_pointer_fetch_and_sub_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external ext_pointer_compare_and_swap_nativeint
   :  Ext_pointer.t
@@ -288,7 +288,7 @@ external ext_pointer_compare_and_swap_nativeint
   -> bool
   = "caml_ext_pointer_compare_and_swap_nativeint_bytecode"
     "caml_ext_pointer_compare_and_swap_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_fetch_and_add_nativeint
   :  Bigstring_intf.t
@@ -297,7 +297,7 @@ external bigstring_fetch_and_add_nativeint
   -> (nativeint[@unboxed])
   = "caml_bigstring_fetch_and_add_nativeint_bytecode"
     "caml_bigstring_fetch_and_add_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_fetch_and_sub_nativeint
   :  Bigstring_intf.t
@@ -306,7 +306,7 @@ external bigstring_fetch_and_sub_nativeint
   -> (nativeint[@unboxed])
   = "caml_bigstring_fetch_and_sub_nativeint_bytecode"
     "caml_bigstring_fetch_and_sub_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]
 
 external bigstring_compare_and_swap_nativeint
   :  Bigstring_intf.t
@@ -316,4 +316,4 @@ external bigstring_compare_and_swap_nativeint
   -> bool
   = "caml_bigstring_compare_and_swap_nativeint_bytecode"
     "caml_bigstring_compare_and_swap_nativeint_unboxed"
-[@@noalloc] [@@builtin]
+[@@noalloc]

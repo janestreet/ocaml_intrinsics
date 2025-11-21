@@ -31,14 +31,14 @@ external unsafe_of_bigstring
   -> pos:(int[@untagged])
   -> (t[@unboxed])
   = "caml_native_pointer_of_bigstring_bytecode" "caml_native_pointer_of_bigstring"
-[@@noalloc] [@@no_effects] [@@no_coeffects]
+[@@noalloc]
 
 external load_untagged_char
   :  (t[@unboxed])
   -> (char[@untagged])
   = "caml_native_pointer_load_untagged_char_bytecode"
     "caml_native_pointer_load_untagged_char"
-[@@noalloc] [@@no_effects]
+[@@noalloc]
 
 external store_untagged_char
   :  (t[@unboxed])
@@ -46,14 +46,14 @@ external store_untagged_char
   -> unit
   = "caml_native_pointer_store_untagged_char_bytecode"
     "caml_native_pointer_store_untagged_char"
-[@@noalloc] [@@no_coeffects]
+[@@noalloc]
 
 external load_untagged_int
   :  (t[@unboxed])
   -> (int[@untagged])
   = "caml_native_pointer_load_untagged_int_bytecode"
     "caml_native_pointer_load_unboxed_nativeint"
-[@@noalloc] [@@builtin] [@@no_effects]
+[@@noalloc]
 
 external store_untagged_int
   :  (t[@unboxed])
@@ -61,14 +61,14 @@ external store_untagged_int
   -> unit
   = "caml_native_pointer_store_untagged_int_bytecode"
     "caml_native_pointer_store_unboxed_nativeint"
-[@@noalloc] [@@builtin] [@@no_coeffects]
+[@@noalloc]
 
 external load_unboxed_nativeint
   :  t
   -> nativeint
   = "caml_native_pointer_load_unboxed_nativeint_bytecode"
     "caml_native_pointer_load_unboxed_nativeint"
-[@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
+[@@unboxed] [@@noalloc]
 
 external store_unboxed_nativeint
   :  (t[@unboxed])
@@ -76,14 +76,14 @@ external store_unboxed_nativeint
   -> unit
   = "caml_native_pointer_store_unboxed_nativeint_bytecode"
     "caml_native_pointer_store_unboxed_nativeint"
-[@@noalloc] [@@builtin] [@@no_coeffects]
+[@@noalloc]
 
 external load_unboxed_int64
   :  t
   -> (int64[@local_opt])
   = "caml_native_pointer_load_unboxed_int64_bytecode"
     "caml_native_pointer_load_unboxed_int64"
-[@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
+[@@unboxed] [@@noalloc]
 
 external store_unboxed_int64
   :  (t[@unboxed])
@@ -91,14 +91,14 @@ external store_unboxed_int64
   -> unit
   = "caml_native_pointer_store_unboxed_int64_bytecode"
     "caml_native_pointer_store_unboxed_int64"
-[@@noalloc] [@@builtin] [@@no_coeffects]
+[@@noalloc]
 
 external load_unboxed_int32
   :  t
   -> int32
   = "caml_native_pointer_load_unboxed_int32_bytecode"
     "caml_native_pointer_load_unboxed_int32"
-[@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
+[@@unboxed] [@@noalloc]
 
 external store_unboxed_int32
   :  (t[@unboxed])
@@ -106,14 +106,14 @@ external store_unboxed_int32
   -> unit
   = "caml_native_pointer_store_unboxed_int32_bytecode"
     "caml_native_pointer_store_unboxed_int32"
-[@@noalloc] [@@builtin] [@@no_coeffects]
+[@@noalloc]
 
 external load_unboxed_float
   :  t
   -> float
   = "caml_native_pointer_load_unboxed_float_bytecode"
     "caml_native_pointer_load_unboxed_float"
-[@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
+[@@unboxed] [@@noalloc]
 
 external store_unboxed_float
   :  (t[@unboxed])
@@ -121,7 +121,7 @@ external store_unboxed_float
   -> unit
   = "caml_native_pointer_store_unboxed_float_bytecode"
     "caml_native_pointer_store_unboxed_float"
-[@@noalloc] [@@builtin] [@@no_coeffects]
+[@@noalloc]
 
 let[@inline always] [@zero_alloc] unsafe_load_int64_int t =
   int64_to_int (load_unboxed_int64 t)
@@ -156,7 +156,7 @@ external unsafe_blit_to_bigstring
   -> unit
   = "caml_native_pointer_unsafe_blit_to_bigstring_bytecode"
     "caml_native_pointer_unsafe_blit_to_bigstring"
-[@@noalloc] [@@no_coeffects]
+[@@noalloc]
 
 external unsafe_blit
   :  src:(t[@unboxed])
@@ -166,7 +166,7 @@ external unsafe_blit
   -> len:(int[@untagged])
   -> unit
   = "caml_native_pointer_unsafe_blit_bytecode" "caml_native_pointer_unsafe_blit"
-[@@noalloc] [@@no_coeffects]
+[@@noalloc]
 
 external unsafe_memset
   :  (t[@unboxed])
@@ -175,7 +175,7 @@ external unsafe_memset
   -> len:(int[@untagged])
   -> unit
   = "caml_native_pointer_unsafe_memset_bytecode" "caml_native_pointer_unsafe_memset"
-[@@noalloc] [@@no_coeffects]
+[@@noalloc]
 
 [@@@warning "-incompatible-with-upstream"]
 
@@ -291,14 +291,14 @@ module type Immediate_intf = sig
     :  (t[@unboxed])
     -> V.t
     = "caml_native_pointer_load_immediate_bytecode" "caml_native_pointer_load_immediate"
-  [@@noalloc] [@@builtin] [@@no_effects]
+  [@@noalloc]
 
   external store_immediate
     :  (t[@unboxed])
     -> V.t
     -> unit
     = "caml_native_pointer_store_immediate_bytecode" "caml_native_pointer_store_immediate"
-  [@@noalloc] [@@builtin] [@@no_coeffects]
+  [@@noalloc]
 end
 
 module Immediate (V : sig
@@ -310,14 +310,14 @@ module Immediate (V : sig
     :  (t[@unboxed])
     -> V.t
     = "caml_native_pointer_load_immediate_bytecode" "caml_native_pointer_load_immediate"
-  [@@noalloc] [@@builtin] [@@no_effects]
+  [@@noalloc]
 
   external store_immediate
     :  (t[@unboxed])
     -> V.t
     -> unit
     = "caml_native_pointer_store_immediate_bytecode" "caml_native_pointer_store_immediate"
-  [@@noalloc] [@@builtin] [@@no_coeffects]
+  [@@noalloc]
 end
 
 module Int = Immediate (Stdlib.Int)

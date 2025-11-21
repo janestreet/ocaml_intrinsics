@@ -3,12 +3,12 @@
 
 (* Load fence: does not execute until all prior instructions have completed locally, and
    no later instruction begins until lfence completes. *)
-external load_fence : unit -> unit = "caml_load_fence" [@@noalloc] [@@builtin]
+external load_fence : unit -> unit = "caml_load_fence" [@@noalloc]
 
 (* Store fence: does not execute until all stores from prior instructions are globally
    visible. *)
-external store_fence : unit -> unit = "caml_store_fence" [@@noalloc] [@@builtin]
+external store_fence : unit -> unit = "caml_store_fence" [@@noalloc]
 
 (* Memory fence: does not execute until all loads and stores from prior instructions have
    completed locally/become globally visible, respectively. *)
-external memory_fence : unit -> unit = "caml_memory_fence" [@@noalloc] [@@builtin]
+external memory_fence : unit -> unit = "caml_memory_fence" [@@noalloc]
