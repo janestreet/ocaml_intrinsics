@@ -19,9 +19,9 @@ let bigstring_of_string s =
 
 let np_advance ptr ~bytes = NP.advance ptr ~bytes:(Nativeint_u.of_int_exn bytes)
 
-(* int64, int32, and nativeint are boxed: these point to blocks with a one-word
-   header and then the value. This uses 1000 so the pointers don't get unified
-   with constants in the tests...yeah this is very undefined behavior *)
+(* int64, int32, and nativeint are boxed: these point to blocks with a one-word header and
+   then the value. This uses 1000 so the pointers don't get unified with constants in the
+   tests...yeah this is very undefined behavior *)
 let int64_ptr = 1000L
 let int32_ptr = 1000l
 let nativeint_ptr = 1000n

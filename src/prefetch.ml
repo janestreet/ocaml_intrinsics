@@ -10,8 +10,8 @@ type operation =
 
 (* The compiler needs to know statically the operation and the temporal locality hints,
    because they correspond to different instructions on amd64 target and different GCC
-   builtins in the C stubs.  We have one "external" declaration for each pair of
-   operation, locality, and pointer type. Naming convention:
+   builtins in the C stubs. We have one "external" declaration for each pair of operation,
+   locality, and pointer type. Naming convention:
    caml_prefetch_<operation>_<temporal_locality>_<pointer_type>
 *)
 module Expert = Prefetch_expert
@@ -81,10 +81,10 @@ let bigstring bigstring ~pos ~operation ~temporal_locality =
   | Read, High -> Expert.prefetch_read_high_bigstring bigstring pos
 ;;
 
-external pause : unit -> unit = "caml_pause_hint" [@@noalloc] [@@builtin]
+external pause : unit -> unit = "caml_pause_hint" [@@noalloc]
 
 external cldemote
   :  (Native_pointer.t[@unboxed])
   -> unit
   = "caml_cldemote_ignore" "caml_cldemote"
-[@@noalloc] [@@builtin]
+[@@noalloc]

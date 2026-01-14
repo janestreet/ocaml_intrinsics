@@ -3,7 +3,7 @@ external round
   -> (float[@unboxed])
   -> (float[@unboxed])
   = "caml_sse41_float64_round_bytecode" "caml_sse41_float64_round"
-[@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@no_effects] [@@no_coeffects]
 
 module Rounding_mode = struct
   (* These also imply _MM_FROUND_NO_EXC *)
@@ -30,7 +30,7 @@ module Unboxed = struct
     -> (float[@unboxed])
     -> (float[@unboxed])
     = "caml_sse41_float64_round_bytecode" "caml_sse41_float64_round"
-  [@@noalloc] [@@builtin] [@@no_effects] [@@no_coeffects]
+  [@@noalloc] [@@no_effects] [@@no_coeffects]
 
   let[@inline always] round_half_to_even x = round Rounding_mode.current x
   let[@inline always] round_down x = round Rounding_mode.neg_inf x

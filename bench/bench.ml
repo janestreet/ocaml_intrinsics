@@ -2,7 +2,7 @@ open! Base
 
 module%bench Overheads = struct
   (* Using [%bench_fun] to bind the input outside the benchmarked code actually has less
-       overhead then using [%bench] naively. *)
+     overhead then using [%bench] naively. *)
   let%bench_fun "int overhead" =
     let n = Sys.opaque_identity (Random.int Int.max_value) in
     fun () -> Fn.id n

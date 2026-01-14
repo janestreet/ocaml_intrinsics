@@ -13,7 +13,7 @@ let%expect_test "int64 deposit bits" =
   let numbers =
     [ 0L (* Int.num_bits *)
     ; 1L (* Int.num_bits - 1 *)
-    ; 7L (* Int.num_bits - 3  *)
+    ; 7L (* Int.num_bits - 3 *)
     ; max_value
     ; min_value
     ; -1L
@@ -72,7 +72,7 @@ let%expect_test "int64 extract bits" =
   let numbers =
     [ 0L (* Int.num_bits *)
     ; 1L (* Int.num_bits - 1 *)
-    ; 7L (* Int.num_bits - 3  *)
+    ; 7L (* Int.num_bits - 3 *)
     ; max_value
     ; min_value
     ; -1L

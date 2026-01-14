@@ -13,7 +13,7 @@
 #define ARCH_BMI2
 #endif
 
-uint64_t caml_bmi2_int64_deposit_bits(uint64_t a, uint64_t mask)
+uint64_t caml_bmi2_pdep_int64(uint64_t a, uint64_t mask)
 {
 #ifdef ARCH_BMI2
   return _pdep_u64(a, mask);
@@ -26,7 +26,7 @@ uint64_t caml_bmi2_int64_deposit_bits(uint64_t a, uint64_t mask)
 #endif
 }
 
-uint64_t caml_bmi2_int64_extract_bits(uint64_t a, uint64_t mask)
+uint64_t caml_bmi2_pext_int64(uint64_t a, uint64_t mask)
 {
 #ifdef ARCH_BMI2
   return _pext_u64(a, mask);
@@ -39,10 +39,10 @@ uint64_t caml_bmi2_int64_extract_bits(uint64_t a, uint64_t mask)
 #endif
 }
 
-CAMLprim value caml_bmi2_int64_deposit_bits_bytecode(value a, value mask) {
-  return caml_copy_int64(caml_bmi2_int64_deposit_bits(Int64_val(a), Int64_val(mask)));
+CAMLprim value caml_bmi2_pdep_int64_bytecode(value a, value mask) {
+  return caml_copy_int64(caml_bmi2_pdep_int64(Int64_val(a), Int64_val(mask)));
 }
 
-CAMLprim value caml_bmi2_int64_extract_bits_bytecode(value a, value mask) {
-  return caml_copy_int64(caml_bmi2_int64_extract_bits(Int64_val(a), Int64_val(mask)));
+CAMLprim value caml_bmi2_pext_int64_bytecode(value a, value mask) {
+  return caml_copy_int64(caml_bmi2_pext_int64(Int64_val(a), Int64_val(mask)));
 }

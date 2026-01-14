@@ -28,8 +28,8 @@ external create_unboxed_float_ref_as_native_pointer
 
 external caml_bigstring_get_16 : bigstring -> int -> int = "%caml_bigstring_get16"
 
-(* We want intrinsics library to be eventually included in the compiler,
-   and therefore have no other dependencies, but the tests can use Base. *)
+(* We want intrinsics library to be eventually included in the compiler, and therefore
+   have no other dependencies, but the tests can use Base. *)
 module T = struct
   type temporal_locality = P.temporal_locality =
     | None
@@ -76,8 +76,8 @@ let positions = [ 0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 16; 32; 64; 256 ]
 let%expect_test "prefetch" =
   List.iter all_of_operation ~f:(fun operation ->
     List.iter all_of_temporal_locality ~f:(fun temporal_locality ->
-      (* The data is probably already in cache so the test's effectiveness
-         is limited to code generation. *)
+      (* The data is probably already in cache so the test's effectiveness is limited to
+         code generation. *)
       printf !"%{sexp:operation} %{sexp:temporal_locality}\n" operation temporal_locality;
       let test_int n r =
         P.ext_pointer r ~operation ~temporal_locality;
@@ -194,8 +194,7 @@ let%expect_test "prefetch value" =
       value positions;
       value_pos positions ~pos:11;
       value_pos positions ~pos:120;
-      (* out of bounds, no check, don't do it in user
-         programs, it is safe but expensive. *)
+      (* out of bounds, no check, don't do it in user programs, it is safe but expensive. *)
       for pos = 0 to 8 do
         value_pos t ~pos
       done;
