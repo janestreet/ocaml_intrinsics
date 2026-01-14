@@ -10,7 +10,7 @@ external ext_pointer_as_native_pointer
   :  int
   -> (t[@unboxed])
   = "caml_ext_pointer_as_native_pointer_bytecode" "caml_ext_pointer_as_native_pointer"
-[@@noalloc]
+[@@noalloc] [@@no_effects] [@@no_coeffects]
 
 (** Reinterpret any 'a as a native pointer. The unboxed result will have the same bit
     representation as the input value. If 'a is a pointer to outside the OCaml heap, the
@@ -20,7 +20,7 @@ external unsafe_of_value
   'a @ local -> (t[@unboxed])
   @@ portable
   = "caml_native_pointer_of_value_bytecode" "caml_native_pointer_of_value"
-[@@noalloc]
+[@@noalloc] [@@no_effects] [@@no_coeffects]
 
 (** Reinterpret the unboxed contents of a native pointer as a value of any type. The
     result will have the same bit representation as the unboxed input pointer. The result
@@ -31,7 +31,7 @@ external unsafe_to_value
   (t[@unboxed]) -> 'a
   @@ portable
   = "caml_native_pointer_to_value_bytecode" "caml_native_pointer_to_value"
-[@@noalloc]
+[@@noalloc] [@@no_effects] [@@no_coeffects]
 
 (** Returns a [Native_pointer] to the underlying data of a [Bigstring]. *)
 external unsafe_of_bigstring
@@ -39,7 +39,7 @@ external unsafe_of_bigstring
   -> pos:(int[@untagged])
   -> (t[@unboxed])
   = "caml_native_pointer_of_bigstring_bytecode" "caml_native_pointer_of_bigstring"
-[@@noalloc]
+[@@noalloc] [@@no_effects] [@@no_coeffects]
 
 (** [load_untagged_char t] reads untagged char pointed to by [t] and returns the
     corresponding tagged char. *)
@@ -48,7 +48,7 @@ external load_untagged_char
   -> (char[@untagged])
   = "caml_native_pointer_load_untagged_char_bytecode"
     "caml_native_pointer_load_untagged_char"
-[@@noalloc]
+[@@noalloc] [@@no_effects]
 
 (** [store_untagged_char t c] untags [c] and stores the result to the memory pointed to by
     [t]. *)
@@ -58,7 +58,7 @@ external store_untagged_char
   -> unit
   = "caml_native_pointer_store_untagged_char_bytecode"
     "caml_native_pointer_store_untagged_char"
-[@@noalloc]
+[@@noalloc] [@@no_coeffects]
 
 (** [load_untagged_int t] reads untagged int pointed to by [t] and returns the
     corresponding tagged int. This should only be used to read a value written by
@@ -70,7 +70,7 @@ external load_untagged_int
   -> (int[@untagged])
   = "caml_native_pointer_load_untagged_int_bytecode"
     "caml_native_pointer_load_unboxed_nativeint"
-[@@noalloc]
+[@@noalloc] [@@no_effects]
 
 (** [store_untagged_int t d] untags [d] and stores the result to the memory pointed to by
     [t]. *)
@@ -80,7 +80,7 @@ external store_untagged_int
   -> unit
   = "caml_native_pointer_store_untagged_int_bytecode"
     "caml_native_pointer_store_unboxed_nativeint"
-[@@noalloc]
+[@@noalloc] [@@no_coeffects]
 
 (** [load_unboxed_nativeint t] reads unboxed nativeint pointed to by [t] and returns the
     corresponding (boxed) nativeint allocated on the OCaml heap. *)
@@ -89,7 +89,7 @@ external load_unboxed_nativeint
   -> nativeint
   = "caml_native_pointer_load_unboxed_nativeint_bytecode"
     "caml_native_pointer_load_unboxed_nativeint"
-[@@unboxed] [@@noalloc]
+[@@unboxed] [@@noalloc] [@@no_effects]
 
 (** [store_unboxed_nativeint t d] stores the unboxed nativeint to the memory pointed to by
     [t]. *)
@@ -99,7 +99,7 @@ external store_unboxed_nativeint
   -> unit
   = "caml_native_pointer_store_unboxed_nativeint_bytecode"
     "caml_native_pointer_store_unboxed_nativeint"
-[@@noalloc]
+[@@noalloc] [@@no_coeffects]
 
 (** [load_unboxed_int64 t] reads unboxed int64 pointed to by [t] and returns the
     corresponding (boxed) int64 allocated on the OCaml heap. *)
@@ -108,7 +108,7 @@ external load_unboxed_int64
   -> int64
   = "caml_native_pointer_load_unboxed_int64_bytecode"
     "caml_native_pointer_load_unboxed_int64"
-[@@unboxed] [@@noalloc]
+[@@unboxed] [@@noalloc] [@@no_effects]
 
 (** [store_unboxed_int64 t d] stores the unboxed int64 to the memory pointed to by [t]. *)
 external store_unboxed_int64
@@ -117,7 +117,7 @@ external store_unboxed_int64
   -> unit
   = "caml_native_pointer_store_unboxed_int64_bytecode"
     "caml_native_pointer_store_unboxed_int64"
-[@@noalloc]
+[@@noalloc] [@@no_coeffects]
 
 (** [load_unboxed_int32 t] reads unboxed int32 pointed to by [t] and returns the
     corresponding (boxed) int32 allocated on the OCaml heap. *)
@@ -126,7 +126,7 @@ external load_unboxed_int32
   -> int32
   = "caml_native_pointer_load_unboxed_int32_bytecode"
     "caml_native_pointer_load_unboxed_int32"
-[@@unboxed] [@@noalloc]
+[@@unboxed] [@@noalloc] [@@no_effects]
 
 (** [store_unboxed_int32 t d] stores the unboxed int32 to the memory pointed to by [t]. *)
 external store_unboxed_int32
@@ -135,7 +135,7 @@ external store_unboxed_int32
   -> unit
   = "caml_native_pointer_store_unboxed_int32_bytecode"
     "caml_native_pointer_store_unboxed_int32"
-[@@noalloc]
+[@@noalloc] [@@no_coeffects]
 
 (** For float operations, the pointer must be aligned at least to the native integer
     machine width (meaning on 32-bit platforms, a 32-bit-aligned pointer is acceptable
@@ -149,7 +149,7 @@ external load_unboxed_float
   -> float
   = "caml_native_pointer_load_unboxed_float_bytecode"
     "caml_native_pointer_load_unboxed_float"
-[@@unboxed] [@@noalloc]
+[@@unboxed] [@@noalloc] [@@no_effects]
 
 (** [store_unboxed_float t d] stores the unboxed float to the memory pointed to by [t]. *)
 external store_unboxed_float
@@ -158,7 +158,7 @@ external store_unboxed_float
   -> unit
   = "caml_native_pointer_store_unboxed_float_bytecode"
     "caml_native_pointer_store_unboxed_float"
-[@@noalloc]
+[@@noalloc] [@@no_coeffects]
 
 (** This function will read a 64 bit integer stored at [t], but will truncate the value
     since it returns an OCaml int to avoid allocation. *)
@@ -182,7 +182,7 @@ external unsafe_blit_to_bigstring
   -> unit
   = "caml_native_pointer_unsafe_blit_to_bigstring_bytecode"
     "caml_native_pointer_unsafe_blit_to_bigstring"
-[@@noalloc]
+[@@noalloc] [@@no_coeffects]
 
 (** Blits data from one [Native_pointer] to another. *)
 external unsafe_blit
@@ -193,7 +193,7 @@ external unsafe_blit
   -> len:(int[@untagged])
   -> unit
   = "caml_native_pointer_unsafe_blit_bytecode" "caml_native_pointer_unsafe_blit"
-[@@noalloc]
+[@@noalloc] [@@no_coeffects]
 
 external unsafe_memset
   :  (t[@unboxed])
@@ -202,112 +202,7 @@ external unsafe_memset
   -> len:(int[@untagged])
   -> unit
   = "caml_native_pointer_unsafe_memset_bytecode" "caml_native_pointer_unsafe_memset"
-[@@noalloc]
-
-[@@@warning "-incompatible-with-upstream"]
-
-module Unboxed : sig
-  external load_unboxed_nativeint
-    :  t
-    -> nativeint#
-    = "caml_native_pointer_load_unboxed_nativeint_bytecode"
-      "caml_native_pointer_load_unboxed_nativeint"
-  [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
-
-  external store_unboxed_nativeint
-    : ('a : word).
-    (t[@unboxed]) -> local_ ('a[@unboxed]) -> unit
-    = "caml_native_pointer_store_unboxed_nativeint_bytecode"
-      "caml_native_pointer_store_unboxed_nativeint"
-  [@@noalloc] [@@builtin] [@@no_coeffects]
-
-  external load_unboxed_int64
-    :  t
-    -> int64#
-    = "caml_native_pointer_load_unboxed_int64_bytecode"
-      "caml_native_pointer_load_unboxed_int64"
-  [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
-
-  external store_unboxed_int64
-    : ('a : bits64).
-    (t[@unboxed]) -> local_ ('a[@unboxed]) -> unit
-    = "caml_native_pointer_store_unboxed_int64_bytecode"
-      "caml_native_pointer_store_unboxed_int64"
-  [@@noalloc] [@@builtin] [@@no_coeffects]
-
-  external load_unboxed_int32
-    :  t
-    -> int32#
-    = "caml_native_pointer_load_unboxed_int32_bytecode"
-      "caml_native_pointer_load_unboxed_int32"
-  [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
-
-  external store_unboxed_int32
-    : ('a : bits32).
-    (t[@unboxed]) -> local_ ('a[@unboxed]) -> unit
-    = "caml_native_pointer_store_unboxed_int32_bytecode"
-      "caml_native_pointer_store_unboxed_int32"
-  [@@noalloc] [@@builtin] [@@no_coeffects]
-
-  external load_unboxed_float
-    :  t
-    -> float#
-    = "caml_native_pointer_load_unboxed_float_bytecode"
-      "caml_native_pointer_load_unboxed_float"
-  [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
-
-  external store_unboxed_float
-    : ('a : float64).
-    (t[@unboxed]) -> local_ ('a[@unboxed]) -> unit
-    = "caml_native_pointer_store_unboxed_float_bytecode"
-      "caml_native_pointer_store_unboxed_float"
-  [@@noalloc] [@@builtin] [@@no_coeffects]
-
-  module Unchecked : sig
-    external load_unboxed_nativeint
-      : ('a : word).
-      t -> 'a
-      = "caml_native_pointer_load_unboxed_nativeint_bytecode"
-        "caml_native_pointer_load_unboxed_nativeint"
-    [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
-
-    external load_unboxed_int64
-      : ('a : bits64).
-      t -> 'a
-      = "caml_native_pointer_load_unboxed_int64_bytecode"
-        "caml_native_pointer_load_unboxed_int64"
-    [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
-
-    external load_unboxed_int32
-      : ('a : bits32).
-      t -> 'a
-      = "caml_native_pointer_load_unboxed_int32_bytecode"
-        "caml_native_pointer_load_unboxed_int32"
-    [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
-
-    external load_unboxed_float
-      : ('a : float64).
-      t -> 'a
-      = "caml_native_pointer_load_unboxed_float_bytecode"
-        "caml_native_pointer_load_unboxed_float"
-    [@@unboxed] [@@noalloc] [@@builtin] [@@no_effects]
-  end
-end
-[@@ocaml.doc {| Intrinsics for unboxed types. |}]
-
-module Unchecked : sig
-  external load_immediate
-    : ('a : immediate64).
-    (t[@unboxed]) -> 'a
-    = "caml_native_pointer_load_immediate_bytecode" "caml_native_pointer_load_immediate"
-  [@@noalloc] [@@builtin] [@@no_effects]
-end
-
-external store_immediate
-  : ('a : immediate64).
-  (t[@unboxed]) -> 'a -> unit
-  = "caml_native_pointer_store_immediate_bytecode" "caml_native_pointer_store_immediate"
-[@@noalloc] [@@builtin] [@@no_coeffects]
+[@@noalloc] [@@no_coeffects]
 
 (** Pointer arithmetic and comparisons *)
 
@@ -320,18 +215,19 @@ val advance : t -> bytes:nativeint# -> t
     pointer. *)
 val difference_in_bytes : t -> t -> nativeint
 
-val equal : t -> t -> bool
-val compare : t -> t -> int
+val equal : t -> t -> bool [@@zero_alloc]
+val compare : t -> t -> int [@@zero_alloc]
 
 (** Equal operator is defined for any two pointers. Inequality operators are only defined
     when both pointers point to the same block of memory (such as an array). *)
 val ( = ) : t -> t -> bool
+[@@zero_alloc]
 
-val ( <> ) : t -> t -> bool
-val ( < ) : t -> t -> bool
-val ( > ) : t -> t -> bool
-val ( <= ) : t -> t -> bool
-val ( >= ) : t -> t -> bool
+val ( <> ) : t -> t -> bool [@@zero_alloc]
+val ( < ) : t -> t -> bool [@@zero_alloc]
+val ( > ) : t -> t -> bool [@@zero_alloc]
+val ( <= ) : t -> t -> bool [@@zero_alloc]
+val ( >= ) : t -> t -> bool [@@zero_alloc]
 
 (** Load and store immediate values. Intended for use with [Int] and [Bool]. *)
 module type Immediate_intf = sig
@@ -343,14 +239,14 @@ module type Immediate_intf = sig
     :  (t[@unboxed])
     -> V.t
     = "caml_native_pointer_load_immediate_bytecode" "caml_native_pointer_load_immediate"
-  [@@noalloc]
+  [@@noalloc] [@@no_effects]
 
   external store_immediate
     :  (t[@unboxed])
     -> V.t
     -> unit
     = "caml_native_pointer_store_immediate_bytecode" "caml_native_pointer_store_immediate"
-  [@@noalloc]
+  [@@noalloc] [@@no_coeffects]
 end
 
 module Int : Immediate_intf with type V.t = Stdlib.Int.t

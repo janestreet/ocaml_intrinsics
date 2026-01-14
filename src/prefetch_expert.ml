@@ -7,7 +7,7 @@
 (* Prefetching hints are meant for highly-optimized code, the bytecode stubs do nothing,
    so they all call the same C stub [caml_prefetch_ignore]. *)
 
-(* Prefetching primitives should not be annotated with. Otherwise, the
+(* Prefetching primitives should not be annotated with [@@no_effects]. Otherwise, the
    compiler can eliminate them, because they have no result. *)
 
 external prefetch_write_high
