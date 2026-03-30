@@ -1,5 +1,3 @@
-[%%import "config.h"]
-
 open Base
 open Import
 module I = Ocaml_intrinsics
@@ -64,8 +62,6 @@ let%expect_test "clz int32" =
     |}]
 ;;
 
-[%%ifdef JSC_ARCH_SIXTYFOUR]
-
 let%expect_test "clz nativeint" =
   let open Nativeint in
   let numbers =
@@ -95,37 +91,3 @@ let%expect_test "clz nativeint" =
     clz 0xffffffffffffffff = 0
     |}]
 ;;
-
-[%%else]
-
-let%expect_test "clz nativeint" =
-  let open Nativeint in
-  let numbers =
-    [ 0n (* Int.num_bits *)
-    ; 1n (* Int.num_bits - 1 *)
-    ; 7n (* Int.num_bits - 3 *)
-    ; max_value
-    ; min_value
-    ; -1n
-    ]
-  in
-  let f =
-    [%template test_op [@kind word]]
-      ~op:I.Nativeint.Unboxed.count_leading_zeros
-      ~op_name:"clz"
-      (module Nativeint_u)
-      ~of_t:Nativeint_u.of_nativeint
-  in
-  List.iter ~f numbers;
-  [%expect
-    {|
-    clz 0x0 = 32
-    clz 0x1 = 31
-    clz 0x7 = 29
-    clz 0x7fff_ffff = 1
-    clz -0x8000_0000 = 0
-    clz -0x1 = 0
-    |}]
-;;
-
-[%%endif]

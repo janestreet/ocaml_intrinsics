@@ -1,46 +1,317 @@
-module Expert = Atomic_expert
-
 module Native_pointer = struct
-  let fetch_and_add = Expert.native_pointer_fetch_and_add_int
-  let fetch_and_sub = Expert.native_pointer_fetch_and_sub_int
-  let fetch_and_add_int64 = Expert.native_pointer_fetch_and_add_int64
-  let fetch_and_sub_int64 = Expert.native_pointer_fetch_and_sub_int64
-  let fetch_and_add_int32 = Expert.native_pointer_fetch_and_add_int32
-  let fetch_and_sub_int32 = Expert.native_pointer_fetch_and_sub_int32
-  let fetch_and_add_nativeint = Expert.native_pointer_fetch_and_add_nativeint
-  let fetch_and_sub_nativeint = Expert.native_pointer_fetch_and_sub_nativeint
-  let compare_and_swap = Expert.native_pointer_compare_and_swap_int
-  let compare_and_swap_int64 = Expert.native_pointer_compare_and_swap_int64
-  let compare_and_swap_int32 = Expert.native_pointer_compare_and_swap_int32
-  let compare_and_swap_nativeint = Expert.native_pointer_compare_and_swap_nativeint
+  external fetch_and_add
+    :  (Native_pointer.t[@unboxed])
+    -> (int[@untagged])
+    -> (int[@untagged])
+    = "caml_native_pointer_fetch_and_add_int_bytecode"
+      "caml_native_pointer_fetch_and_add_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub
+    :  (Native_pointer.t[@unboxed])
+    -> (int[@untagged])
+    -> (int[@untagged])
+    = "caml_native_pointer_fetch_and_sub_int_bytecode"
+      "caml_native_pointer_fetch_and_sub_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap
+    :  (Native_pointer.t[@unboxed])
+    -> compare_with:(int[@untagged])
+    -> set_to:(int[@untagged])
+    -> bool
+    = "caml_native_pointer_compare_and_swap_int_bytecode"
+      "caml_native_pointer_compare_and_swap_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_int64
+    :  (Native_pointer.t[@unboxed])
+    -> (int64[@unboxed])
+    -> (int64[@unboxed])
+    = "caml_native_pointer_fetch_and_add_int64_bytecode"
+      "caml_native_pointer_fetch_and_add_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_int64
+    :  (Native_pointer.t[@unboxed])
+    -> (int64[@unboxed])
+    -> (int64[@unboxed])
+    = "caml_native_pointer_fetch_and_sub_int64_bytecode"
+      "caml_native_pointer_fetch_and_sub_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_int64
+    :  (Native_pointer.t[@unboxed])
+    -> compare_with:(int64[@unboxed])
+    -> set_to:(int64[@unboxed])
+    -> bool
+    = "caml_native_pointer_compare_and_swap_int64_bytecode"
+      "caml_native_pointer_compare_and_swap_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_int32
+    :  (Native_pointer.t[@unboxed])
+    -> (int32[@unboxed])
+    -> (int32[@unboxed])
+    = "caml_native_pointer_fetch_and_add_int32_bytecode"
+      "caml_native_pointer_fetch_and_add_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_int32
+    :  (Native_pointer.t[@unboxed])
+    -> (int32[@unboxed])
+    -> (int32[@unboxed])
+    = "caml_native_pointer_fetch_and_sub_int32_bytecode"
+      "caml_native_pointer_fetch_and_sub_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_int32
+    :  (Native_pointer.t[@unboxed])
+    -> compare_with:(int32[@unboxed])
+    -> set_to:(int32[@unboxed])
+    -> bool
+    = "caml_native_pointer_compare_and_swap_int32_bytecode"
+      "caml_native_pointer_compare_and_swap_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_nativeint
+    :  (Native_pointer.t[@unboxed])
+    -> (nativeint[@unboxed])
+    -> (nativeint[@unboxed])
+    = "caml_native_pointer_fetch_and_add_nativeint_bytecode"
+      "caml_native_pointer_fetch_and_add_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_nativeint
+    :  (Native_pointer.t[@unboxed])
+    -> (nativeint[@unboxed])
+    -> (nativeint[@unboxed])
+    = "caml_native_pointer_fetch_and_sub_nativeint_bytecode"
+      "caml_native_pointer_fetch_and_sub_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_nativeint
+    :  (Native_pointer.t[@unboxed])
+    -> compare_with:(nativeint[@unboxed])
+    -> set_to:(nativeint[@unboxed])
+    -> bool
+    = "caml_native_pointer_compare_and_swap_nativeint_bytecode"
+      "caml_native_pointer_compare_and_swap_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
 end
 
 module Ext_pointer = struct
-  let fetch_and_add = Expert.ext_pointer_fetch_and_add_int
-  let fetch_and_sub = Expert.ext_pointer_fetch_and_sub_int
-  let fetch_and_add_int64 = Expert.ext_pointer_fetch_and_add_int64
-  let fetch_and_sub_int64 = Expert.ext_pointer_fetch_and_sub_int64
-  let fetch_and_add_int32 = Expert.ext_pointer_fetch_and_add_int32
-  let fetch_and_sub_int32 = Expert.ext_pointer_fetch_and_sub_int32
-  let fetch_and_add_nativeint = Expert.ext_pointer_fetch_and_add_nativeint
-  let fetch_and_sub_nativeint = Expert.ext_pointer_fetch_and_sub_nativeint
-  let compare_and_swap = Expert.ext_pointer_compare_and_swap_int
-  let compare_and_swap_int64 = Expert.ext_pointer_compare_and_swap_int64
-  let compare_and_swap_int32 = Expert.ext_pointer_compare_and_swap_int32
-  let compare_and_swap_nativeint = Expert.ext_pointer_compare_and_swap_nativeint
+  external fetch_and_add
+    :  Ext_pointer.t
+    -> (int[@untagged])
+    -> (int[@untagged])
+    = "caml_ext_pointer_fetch_and_add_int_bytecode"
+      "caml_ext_pointer_fetch_and_add_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub
+    :  Ext_pointer.t
+    -> (int[@untagged])
+    -> (int[@untagged])
+    = "caml_ext_pointer_fetch_and_sub_int_bytecode"
+      "caml_ext_pointer_fetch_and_sub_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap
+    :  Ext_pointer.t
+    -> compare_with:(int[@untagged])
+    -> set_to:(int[@untagged])
+    -> bool
+    = "caml_ext_pointer_compare_and_swap_int_bytecode"
+      "caml_ext_pointer_compare_and_swap_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_int64
+    :  Ext_pointer.t
+    -> (int64[@unboxed])
+    -> (int64[@unboxed])
+    = "caml_ext_pointer_fetch_and_add_int64_bytecode"
+      "caml_ext_pointer_fetch_and_add_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_int64
+    :  Ext_pointer.t
+    -> (int64[@unboxed])
+    -> (int64[@unboxed])
+    = "caml_ext_pointer_fetch_and_sub_int64_bytecode"
+      "caml_ext_pointer_fetch_and_sub_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_int64
+    :  Ext_pointer.t
+    -> compare_with:(int64[@unboxed])
+    -> set_to:(int64[@unboxed])
+    -> bool
+    = "caml_ext_pointer_compare_and_swap_int64_bytecode"
+      "caml_ext_pointer_compare_and_swap_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_int32
+    :  Ext_pointer.t
+    -> (int32[@unboxed])
+    -> (int32[@unboxed])
+    = "caml_ext_pointer_fetch_and_add_int32_bytecode"
+      "caml_ext_pointer_fetch_and_add_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_int32
+    :  Ext_pointer.t
+    -> (int32[@unboxed])
+    -> (int32[@unboxed])
+    = "caml_ext_pointer_fetch_and_sub_int32_bytecode"
+      "caml_ext_pointer_fetch_and_sub_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_int32
+    :  Ext_pointer.t
+    -> compare_with:(int32[@unboxed])
+    -> set_to:(int32[@unboxed])
+    -> bool
+    = "caml_ext_pointer_compare_and_swap_int32_bytecode"
+      "caml_ext_pointer_compare_and_swap_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_nativeint
+    :  Ext_pointer.t
+    -> (nativeint[@unboxed])
+    -> (nativeint[@unboxed])
+    = "caml_ext_pointer_fetch_and_add_nativeint_bytecode"
+      "caml_ext_pointer_fetch_and_add_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_nativeint
+    :  Ext_pointer.t
+    -> (nativeint[@unboxed])
+    -> (nativeint[@unboxed])
+    = "caml_ext_pointer_fetch_and_sub_nativeint_bytecode"
+      "caml_ext_pointer_fetch_and_sub_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_nativeint
+    :  Ext_pointer.t
+    -> compare_with:(nativeint[@unboxed])
+    -> set_to:(nativeint[@unboxed])
+    -> bool
+    = "caml_ext_pointer_compare_and_swap_nativeint_bytecode"
+      "caml_ext_pointer_compare_and_swap_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
 end
 
 module Bigstring = struct
-  let fetch_and_add = Expert.bigstring_fetch_and_add_int
-  let fetch_and_sub = Expert.bigstring_fetch_and_sub_int
-  let fetch_and_add_int64 = Expert.bigstring_fetch_and_add_int64
-  let fetch_and_sub_int64 = Expert.bigstring_fetch_and_sub_int64
-  let fetch_and_add_int32 = Expert.bigstring_fetch_and_add_int32
-  let fetch_and_sub_int32 = Expert.bigstring_fetch_and_sub_int32
-  let fetch_and_add_nativeint = Expert.bigstring_fetch_and_add_nativeint
-  let fetch_and_sub_nativeint = Expert.bigstring_fetch_and_sub_nativeint
-  let compare_and_swap = Expert.bigstring_compare_and_swap_int
-  let compare_and_swap_int64 = Expert.bigstring_compare_and_swap_int64
-  let compare_and_swap_int32 = Expert.bigstring_compare_and_swap_int32
-  let compare_and_swap_nativeint = Expert.bigstring_compare_and_swap_nativeint
+  external fetch_and_add
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> (int[@untagged])
+    -> (int[@untagged])
+    = "caml_bigstring_fetch_and_add_int_bytecode"
+      "caml_bigstring_fetch_and_add_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> (int[@untagged])
+    -> (int[@untagged])
+    = "caml_bigstring_fetch_and_sub_int_bytecode"
+      "caml_bigstring_fetch_and_sub_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> compare_with:(int[@untagged])
+    -> set_to:(int[@untagged])
+    -> bool
+    = "caml_bigstring_compare_and_swap_int_bytecode"
+      "caml_bigstring_compare_and_swap_int_untagged"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_int64
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> (int64[@unboxed])
+    -> (int64[@unboxed])
+    = "caml_bigstring_fetch_and_add_int64_bytecode"
+      "caml_bigstring_fetch_and_add_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_int64
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> (int64[@unboxed])
+    -> (int64[@unboxed])
+    = "caml_bigstring_fetch_and_sub_int64_bytecode"
+      "caml_bigstring_fetch_and_sub_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_int64
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> compare_with:(int64[@unboxed])
+    -> set_to:(int64[@unboxed])
+    -> bool
+    = "caml_bigstring_compare_and_swap_int64_bytecode"
+      "caml_bigstring_compare_and_swap_int64_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_int32
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> (int32[@unboxed])
+    -> (int32[@unboxed])
+    = "caml_bigstring_fetch_and_add_int32_bytecode"
+      "caml_bigstring_fetch_and_add_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_int32
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> (int32[@unboxed])
+    -> (int32[@unboxed])
+    = "caml_bigstring_fetch_and_sub_int32_bytecode"
+      "caml_bigstring_fetch_and_sub_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_int32
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> compare_with:(int32[@unboxed])
+    -> set_to:(int32[@unboxed])
+    -> bool
+    = "caml_bigstring_compare_and_swap_int32_bytecode"
+      "caml_bigstring_compare_and_swap_int32_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_add_nativeint
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> (nativeint[@unboxed])
+    -> (nativeint[@unboxed])
+    = "caml_bigstring_fetch_and_add_nativeint_bytecode"
+      "caml_bigstring_fetch_and_add_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external fetch_and_sub_nativeint
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> (nativeint[@unboxed])
+    -> (nativeint[@unboxed])
+    = "caml_bigstring_fetch_and_sub_nativeint_bytecode"
+      "caml_bigstring_fetch_and_sub_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
+
+  external compare_and_swap_nativeint
+    :  Bigstring_intf.t
+    -> pos:(int[@untagged])
+    -> compare_with:(nativeint[@unboxed])
+    -> set_to:(nativeint[@unboxed])
+    -> bool
+    = "caml_bigstring_compare_and_swap_nativeint_bytecode"
+      "caml_bigstring_compare_and_swap_nativeint_unboxed"
+  [@@noalloc] [@@builtin amd64]
 end

@@ -1,21 +1,15 @@
-#include "caml/config.h"
-#include "caml/alloc.h"
-#include "caml/misc.h"
-#include "caml/mlvalues.h"
-#include "caml/bigarray.h"
+#include <caml/mlvalues.h>
+#include <caml/bigarray.h>
+
 #include "ext_pointer.h"
 
-#if ((defined(__i386__) || defined(__x86_64__)) && defined(__GNUC__))
+#ifdef __x86_64__
+#include <immintrin.h>
 
-/* Anticipated operation  */
+/* Anticipated operation */
 #define PREFETCH_FOR_READ 0
 #define PREFETCH_FOR_WRITE 1
 
-/* Mapping from user-level temporal locality hint to Intel specific values */
-#define LOCALITY_NONE 0     // NTA hint to fill snoop filter
-#define LOCALITY_LOW 1      // T2
-#define LOCALITY_MODERATE 2 // T1
-#define LOCALITY_HIGH 3     // T0
 /*
  The meaning of Intel temporal locality hints
 
@@ -36,317 +30,252 @@
  Section 9.3.2 Prefetch Instructions
  Table 9-1. Implementation Details of Prefetch Hint Instructions
 */
+#define LOCALITY_NONE 0     // NTA hint to fill snoop filter
+#define LOCALITY_LOW 1      // T2
+#define LOCALITY_MODERATE 2 // T1
+#define LOCALITY_HIGH 3     // T0
 
 // Arguments rw and locality of __builtin_prefetch must be compile-time constants.
 // Currently, some user-specified locality hints are ignored in prefetch for write.
-static inline void prefetch_write_high(void *ptr)
-{
+static void prefetch_write_high(void *ptr) {
   __builtin_prefetch(ptr, PREFETCH_FOR_WRITE, LOCALITY_HIGH);
 }
 
-static inline void prefetch_write_moderate(void *ptr)
-{
+static void prefetch_write_moderate(void *ptr) {
   __builtin_prefetch(ptr, PREFETCH_FOR_WRITE, LOCALITY_MODERATE);
 }
 
-static inline void prefetch_write_low(void *ptr)
-{
+static void prefetch_write_low(void *ptr) {
   __builtin_prefetch(ptr, PREFETCH_FOR_WRITE, LOCALITY_LOW);
 }
 
-static inline void prefetch_write_none(void *ptr)
-{
+static void prefetch_write_none(void *ptr) {
   __builtin_prefetch(ptr, PREFETCH_FOR_WRITE, LOCALITY_NONE);
 }
 
-static inline void prefetch_read_high(void *ptr)
-{
+static void prefetch_read_high(void *ptr) {
   __builtin_prefetch(ptr, PREFETCH_FOR_READ, LOCALITY_HIGH);
 }
 
-static inline void prefetch_read_moderate(void *ptr)
-{
+static void prefetch_read_moderate(void *ptr) {
   __builtin_prefetch(ptr, PREFETCH_FOR_READ, LOCALITY_MODERATE);
 }
 
-static inline void prefetch_read_low(void *ptr)
-{
+static void prefetch_read_low(void *ptr) {
   __builtin_prefetch(ptr, PREFETCH_FOR_READ, LOCALITY_LOW);
 }
 
-static inline void prefetch_read_none(void *ptr)
-{
+static void prefetch_read_none(void *ptr) {
   __builtin_prefetch(ptr, PREFETCH_FOR_READ, LOCALITY_NONE);
 }
 
+value caml_pause_hint(__attribute__((unused)) value unit) {
+  _mm_pause();
+  return Val_unit;
+}
+
+value caml_cldemote(const volatile void *ptr) {
+  // Ostensibly requires CPU support for CLDEMOTE, but decodes as a noop if unsupported.
+  // Uses inline assembly instead of _mm_cldemote() for compatibility with older GCC.
+  asm volatile(".byte 0x0f, 0x1c, 0x07" ::"r"(ptr));
+  return Val_unit;
+}
+
 #else
-static inline void prefetch_write_high(__attribute__ ((unused)) void *ptr) {}
-static inline void prefetch_write_moderate(__attribute__ ((unused)) void *ptr) {}
-static inline void prefetch_write_low(__attribute__ ((unused)) void *ptr) {}
-static inline void prefetch_write_none(__attribute__ ((unused)) void *ptr) {}
-static inline void prefetch_read_high(__attribute__ ((unused)) void *ptr) {}
-static inline void prefetch_read_moderate(__attribute__ ((unused)) void *ptr) {}
-static inline void prefetch_read_low(__attribute__ ((unused)) void *ptr) {}
-static inline void prefetch_read_none(__attribute__ ((unused)) void *ptr) {}
+
+static void prefetch_write_high(__attribute__((unused)) void *ptr) {}
+static void prefetch_write_moderate(__attribute__((unused)) void *ptr) {}
+static void prefetch_write_low(__attribute__((unused)) void *ptr) {}
+static void prefetch_write_none(__attribute__((unused)) void *ptr) {}
+static void prefetch_read_high(__attribute__((unused)) void *ptr) {}
+static void prefetch_read_moderate(__attribute__((unused)) void *ptr) {}
+static void prefetch_read_low(__attribute__((unused)) void *ptr) {}
+static void prefetch_read_none(__attribute__((unused)) void *ptr) {}
+
+value caml_pause_hint(__attribute__((unused)) value unit) { return Val_unit; }
+value caml_cldemote(__attribute__((unused)) void *p) { return Val_unit; }
+
 #endif
 
 /* Used for both raw OCaml values and unboxed native pointers */
 
-value caml_prefetch_write_high(intnat ptr)
-{
+value caml_prefetch_write_high(intnat ptr) {
   prefetch_write_high((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_write_moderate(intnat ptr)
-{
+value caml_prefetch_write_moderate(intnat ptr) {
   prefetch_write_moderate((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_write_low(intnat ptr)
-{
+value caml_prefetch_write_low(intnat ptr) {
   prefetch_write_low((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_write_none(intnat ptr)
-{
+value caml_prefetch_write_none(intnat ptr) {
   prefetch_write_none((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_read_high(intnat ptr)
-{
+value caml_prefetch_read_high(intnat ptr) {
   prefetch_read_high((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_read_moderate(intnat ptr)
-{
+value caml_prefetch_read_moderate(intnat ptr) {
   prefetch_read_moderate((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_read_low(intnat ptr)
-{
+value caml_prefetch_read_low(intnat ptr) {
   prefetch_read_low((void *)ptr);
   return Val_unit;
 }
 
-value caml_prefetch_read_none(intnat ptr)
-{
+value caml_prefetch_read_none(intnat ptr) {
   prefetch_read_none((void *)ptr);
   return Val_unit;
 }
 
 /* Byte offset from OCaml value */
 
-value caml_prefetch_write_high_val_offset_untagged(value ptr,
-                                                   intnat byte_offset)
-{
+value caml_prefetch_write_high_val_offset_untagged(value ptr, intnat byte_offset) {
   prefetch_write_high((char *)ptr + byte_offset);
   return Val_unit;
 }
 
-value caml_prefetch_write_moderate_val_offset_untagged(value ptr,
-                                                       intnat byte_offset)
-{
+value caml_prefetch_write_moderate_val_offset_untagged(value ptr, intnat byte_offset) {
   prefetch_write_moderate((char *)ptr + byte_offset);
   return Val_unit;
 }
 
-value caml_prefetch_write_low_val_offset_untagged(value ptr,
-                                                  intnat byte_offset)
-{
+value caml_prefetch_write_low_val_offset_untagged(value ptr, intnat byte_offset) {
   prefetch_write_low((char *)ptr + byte_offset);
   return Val_unit;
 }
 
-value caml_prefetch_write_none_val_offset_untagged(value ptr,
-                                                   intnat byte_offset)
-{
+value caml_prefetch_write_none_val_offset_untagged(value ptr, intnat byte_offset) {
   prefetch_write_none((char *)ptr + byte_offset);
   return Val_unit;
 }
 
-value caml_prefetch_read_high_val_offset_untagged(value ptr,
-                                                  intnat byte_offset)
-{
+value caml_prefetch_read_high_val_offset_untagged(value ptr, intnat byte_offset) {
   prefetch_read_high((char *)ptr + byte_offset);
   return Val_unit;
 }
 
-value caml_prefetch_read_moderate_val_offset_untagged(value ptr,
-                                                      intnat byte_offset)
-{
+value caml_prefetch_read_moderate_val_offset_untagged(value ptr, intnat byte_offset) {
   prefetch_read_moderate((char *)ptr + byte_offset);
   return Val_unit;
 }
 
-value caml_prefetch_read_low_val_offset_untagged(value ptr,
-                                                 intnat byte_offset)
-{
+value caml_prefetch_read_low_val_offset_untagged(value ptr, intnat byte_offset) {
   prefetch_read_low((char *)ptr + byte_offset);
   return Val_unit;
 }
 
-value caml_prefetch_read_none_val_offset_untagged(value ptr,
-                                                  intnat byte_offset)
-{
+value caml_prefetch_read_none_val_offset_untagged(value ptr, intnat byte_offset) {
   prefetch_read_none((char *)ptr + byte_offset);
   return Val_unit;
 }
 
 /* Ext_pointer */
 
-value caml_prefetch_write_high_ext_pointer(value ptr)
-{
+value caml_prefetch_write_high_ext_pointer(value ptr) {
   prefetch_write_high(caml_ext_pointer_decode(ptr));
   return Val_unit;
 }
 
-value caml_prefetch_write_moderate_ext_pointer(value ptr)
-{
+value caml_prefetch_write_moderate_ext_pointer(value ptr) {
   prefetch_write_moderate(caml_ext_pointer_decode(ptr));
   return Val_unit;
 }
 
-value caml_prefetch_write_low_ext_pointer(value ptr)
-{
+value caml_prefetch_write_low_ext_pointer(value ptr) {
   prefetch_write_low(caml_ext_pointer_decode(ptr));
   return Val_unit;
 }
 
-value caml_prefetch_write_none_ext_pointer(value ptr)
-{
+value caml_prefetch_write_none_ext_pointer(value ptr) {
   prefetch_write_none(caml_ext_pointer_decode(ptr));
   return Val_unit;
 }
 
-value caml_prefetch_read_high_ext_pointer(value ptr)
-{
+value caml_prefetch_read_high_ext_pointer(value ptr) {
   prefetch_read_high(caml_ext_pointer_decode(ptr));
   return Val_unit;
 }
 
-value caml_prefetch_read_moderate_ext_pointer(value ptr)
-{
+value caml_prefetch_read_moderate_ext_pointer(value ptr) {
   prefetch_read_moderate(caml_ext_pointer_decode(ptr));
   return Val_unit;
 }
 
-value caml_prefetch_read_low_ext_pointer(value ptr)
-{
+value caml_prefetch_read_low_ext_pointer(value ptr) {
   prefetch_read_low(caml_ext_pointer_decode(ptr));
   return Val_unit;
 }
 
-value caml_prefetch_read_none_ext_pointer(value ptr)
-{
+value caml_prefetch_read_none_ext_pointer(value ptr) {
   prefetch_read_none(caml_ext_pointer_decode(ptr));
   return Val_unit;
 }
 
 /* Bigstring */
 
-static char *bigstring_element_at_pos(value v_bstr, intnat pos)
-{
+static char *bigstring_element_at_pos(value v_bstr, intnat pos) {
   return ((char *)Caml_ba_data_val(v_bstr)) + pos;
 }
 
-value caml_prefetch_write_high_bigstring_untagged(value v_bstr, intnat pos)
-{
+value caml_prefetch_write_high_bigstring_untagged(value v_bstr, intnat pos) {
   prefetch_write_high(bigstring_element_at_pos(v_bstr, pos));
   return Val_unit;
 }
 
-value caml_prefetch_write_moderate_bigstring_untagged(value v_bstr, intnat pos)
-{
+value caml_prefetch_write_moderate_bigstring_untagged(value v_bstr, intnat pos) {
   prefetch_write_moderate(bigstring_element_at_pos(v_bstr, pos));
   return Val_unit;
 }
 
-value caml_prefetch_write_low_bigstring_untagged(value v_bstr, intnat pos)
-{
+value caml_prefetch_write_low_bigstring_untagged(value v_bstr, intnat pos) {
   prefetch_write_low(bigstring_element_at_pos(v_bstr, pos));
   return Val_unit;
 }
 
-value caml_prefetch_write_none_bigstring_untagged(value v_bstr, intnat pos)
-{
+value caml_prefetch_write_none_bigstring_untagged(value v_bstr, intnat pos) {
   prefetch_write_none(bigstring_element_at_pos(v_bstr, pos));
   return Val_unit;
 }
 
-value caml_prefetch_read_high_bigstring_untagged(value v_bstr, intnat pos)
-{
+value caml_prefetch_read_high_bigstring_untagged(value v_bstr, intnat pos) {
   prefetch_read_high(bigstring_element_at_pos(v_bstr, pos));
   return Val_unit;
 }
 
-value caml_prefetch_read_moderate_bigstring_untagged(value v_bstr, intnat pos)
-{
+value caml_prefetch_read_moderate_bigstring_untagged(value v_bstr, intnat pos) {
   prefetch_read_moderate(bigstring_element_at_pos(v_bstr, pos));
   return Val_unit;
 }
 
-value caml_prefetch_read_low_bigstring_untagged(value v_bstr, intnat pos)
-{
+value caml_prefetch_read_low_bigstring_untagged(value v_bstr, intnat pos) {
   prefetch_read_low(bigstring_element_at_pos(v_bstr, pos));
   return Val_unit;
 }
 
-value caml_prefetch_read_none_bigstring_untagged(value v_bstr, intnat pos)
-{
+value caml_prefetch_read_none_bigstring_untagged(value v_bstr, intnat pos) {
   prefetch_read_none(bigstring_element_at_pos(v_bstr, pos));
   return Val_unit;
 }
 
 /* Ignore in bytecode */
 
-CAMLprim value caml_prefetch_ignore (__attribute__ ((unused)) value v)
-{
+value caml_prefetch_ignore(__attribute__((unused)) value v) { return Val_unit; }
+
+value caml_prefetch_ignore2(__attribute__((unused)) value v_bstr,
+                            __attribute__((unused)) value v_pos) {
   return Val_unit;
 }
 
-CAMLprim value caml_prefetch_ignore2 (__attribute__ ((unused)) value v_bstr,
-                                      __attribute__ ((unused)) value v_pos)
-{
-  return Val_unit;
-}
-
-#if defined(_MSC_VER)
-#warning "Functionality on Windows has not been tested"
-#include <intrin.h>
-#pragma intrinsic(_mm_pause)
-#endif
-
-CAMLprim value caml_pause_hint (__attribute__ ((unused)) value unit)
-{
-#if ((defined(__i386__) || defined(__x86_64__)) && defined(__GNUC__))
-  __builtin_ia32_pause();
-#elif ((defined(__i386__) || defined(__x86_64__)) && defined(_MSC_VER))
-  _mm_pause();
-#else
-#warning "This target does not support PAUSE hints, emit NOP instead."
-    /* do nothing */
-#endif
-  return Val_unit;
-}
-
-CAMLprim value caml_cldemote_ignore(__attribute__ ((unused)) value v)
-{
-  return Val_unit;
-}
-
-CAMLprim value caml_cldemote(const volatile void *p)
-{
-#if (defined(__i386__) || defined(__x86_64__))
-  asm volatile(".byte 0x0f, 0x1c, 0x07" :: "r" (p));
-#else
-#warning "This target does not support CLDEMOTE, emitting NOP instead."
-  /* do nothing */
-#endif
-  return Val_unit;
-}
+value caml_cldemote_ignore(__attribute__((unused)) value v) { return Val_unit; }

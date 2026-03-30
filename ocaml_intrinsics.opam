@@ -6,14 +6,16 @@ bug-reports: "https://github.com/janestreet/ocaml_intrinsics/issues"
 dev-repo: "git+https://github.com/janestreet/ocaml_intrinsics.git"
 doc: "https://ocaml.janestreet.com/ocaml-core/latest/doc/ocaml_intrinsics/index.html"
 license: "MIT"
+x-maintenance-intent: ["(latest)"]
 build: [
   ["dune" "build" "-p" name "-j" jobs]
 ]
 depends: [
   "ocaml" {>= "5.1.0"}
   "ocaml_intrinsics_kernel"
+  "ppx_builtin"
   "dune"                    {>= "3.17.0"}
-  "dune-configurator"
+  "ocaml-compiler-libs"     {>= "v0.11.0"}
 ]
 synopsis: "Intrinsics"
 description: "

@@ -1,5 +1,5 @@
 (executables
  (modes byte exe)
- (names discover)
- (libraries dune-configurator)
+ (names ocaml_intrinsics_discover)
+ (libraries ocaml-compiler-libs.common)
  (preprocess no_preprocessing))

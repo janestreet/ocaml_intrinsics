@@ -1,7 +1,5 @@
 (** Atomic arithmetic operations *)
 
-module Expert = Atomic_expert
-
 module Native_pointer : sig
   (** [fetch_and_$op_$type ptr val] atomically runs [*( *$type )ptr $op val], stores the
       result at [ptr], and returns the original value at [ptr]. *)

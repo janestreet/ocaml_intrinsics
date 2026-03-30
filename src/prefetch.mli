@@ -78,18 +78,7 @@ val bigstring
   -> unit
 
 (** Processor hint that improves performance of spin-wait loops. *)
-external pause : unit -> unit = "caml_pause_hint"
-[@@noalloc]
+val pause : unit -> unit
 
-(** Processor hint to demote a cacheline from L1/L2 to L3. *)
-external cldemote
-  :  (Native_pointer.t[@unboxed])
-  -> unit
-  = "caml_cldemote_ignore" "caml_cldemote"
-[@@noalloc]
-
-(** The prefetch functions above rely on inlining heuristics to eliminate selection logic
-    and emit a single call to an external function. It usually works well with Flambda,
-    but might not be reliable in other contexts. [Expert] module exposes the underlying
-    external declarations for all prefetch intrinsics. *)
-module Expert = Prefetch_expert
+(** Processor hint to demote a cache line from L1/L2 to L3. *)
+val cldemote : Native_pointer.t -> unit

@@ -1,6 +1,3 @@
-[%%import "config.h"]
-[%%ifdef JSC_ARCH_SIXTYFOUR]
-
 open Core
 open Expect_test_helpers_core
 module P = Ocaml_intrinsics.Crc
@@ -180,5 +177,3 @@ let%expect_test "iterated_crc_exn" =
    | Invalid_argument s -> print_endline s);
   [%expect {| iterated_crc: iterations=-1 is invalid, must be non-negative value |}]
 ;;
-
-[%%endif]

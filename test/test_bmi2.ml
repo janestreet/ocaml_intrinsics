@@ -1,5 +1,3 @@
-[%%import "config.h"]
-
 open Base
 open Stdio
 

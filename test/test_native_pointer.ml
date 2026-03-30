@@ -249,16 +249,7 @@ module BF = struct
 end
 
 module _ = struct
-  [%%import "config.h"]
-  [%%ifdef JSC_ARCH_BIG_ENDIAN]
-
-  let bigstring_store_int64 = Base_bigstring.set_int64_be
-
-  [%%else]
-
   let bigstring_store_int64 = Base_bigstring.set_int64_le
-
-  [%%endif]
 
   let test_unsafe_of_bigstring n ~offset =
     let bstr = Base_bigstring.create (8 + offset) in
@@ -278,7 +269,7 @@ module _ = struct
   type t = int [@@deriving quickcheck]
 end
 
-module _ = struct
+module%test QI = struct
   let%test_unit "native_pointer int quickcheck" =
     Base_quickcheck.Test.run_exn (module BI) ~f:(fun n ->
       let expect = n, n + 1 in
@@ -300,7 +291,7 @@ module _ = struct
   type t = int [@@deriving quickcheck]
 end
 
-module _ = struct
+module%test QF = struct
   let%test_unit "native_pointer float quickcheck" =
     Base_quickcheck.Test.run_exn (module BF) ~f:(fun n ->
       let expect = n, n *. 13.0 in
@@ -311,7 +302,7 @@ module _ = struct
   type t = int [@@deriving quickcheck]
 end
 
-module _ = struct
+module%test Q_immediate = struct
   external create_immediate
     :  int
     -> (NP.t[@unboxed])
@@ -323,7 +314,7 @@ module _ = struct
     let n' = NP.Int.unsafe_load_immediate ir in
     printf "native_pointer int: read %d = %d\n" n n';
     let k = n + 1 in
-    NP.Int.store_immediate ir k;
+    NP.Int.unsafe_store_immediate ir k;
     let k' = NP.Int.unsafe_load_immediate ir in
     printf "native_pointer int: read %d = %d\n" k k';
     n', k'
@@ -369,7 +360,7 @@ module _ = struct
   type t = char [@@deriving quickcheck]
 end
 
-module _ = struct
+module%test Q_untagged_int = struct
   external create_untagged_int
     :  int
     -> (NP.t[@unboxed])
@@ -415,7 +406,7 @@ module _ = struct
   type t = int [@@deriving quickcheck]
 end
 
-module _ = struct
+module%test Q_float = struct
   external create_unboxed_float
     :  float
     -> (NP.t[@unboxed])
@@ -443,7 +434,7 @@ module _ = struct
   type t = int [@@deriving quickcheck]
 end
 
-module _ = struct
+module%test Q_int64 = struct
   external create_unboxed_int64
     :  int64
     -> (NP.t[@unboxed])
@@ -471,7 +462,7 @@ module _ = struct
   type t = int [@@deriving quickcheck]
 end
 
-module _ = struct
+module%test Q_int32 = struct
   external create_unboxed_int32
     :  int32
     -> (NP.t[@unboxed])
@@ -499,7 +490,7 @@ module _ = struct
   type t = int [@@deriving quickcheck]
 end
 
-module _ = struct
+module%test Q_nativeint = struct
   external create_unboxed_nativeint
     :  nativeint
     -> (NP.t[@unboxed])

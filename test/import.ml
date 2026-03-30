@@ -1,5 +1,3 @@
-include Ocaml_intrinsics_kernel_test.Import
-
 module type String_any = sig
   type t
 
