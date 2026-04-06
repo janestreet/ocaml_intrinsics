@@ -1,1 +1,1 @@
-(* blank *)
+(*_ This signature is deliberately empty. *)

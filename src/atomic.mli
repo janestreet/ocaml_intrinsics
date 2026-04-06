@@ -1,6 +1,6 @@
-(** Atomic arithmetic operations *)
+@@ portable
 
-module Expert = Atomic_expert
+(** Atomic arithmetic operations *)
 
 module Native_pointer : sig
   (** [fetch_and_$op_$type ptr val] atomically runs [*( *$type )ptr $op val], stores the

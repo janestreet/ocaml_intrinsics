@@ -1,23 +1,13 @@
-external int_crc
-  :  initial:int
-  -> data:int
-  -> int
-  = "caml_sse42_int_untagged_crc_bytecode" "caml_sse42_int_untagged_crc"
-[@@noalloc] [@@untagged] [@@no_effects] [@@no_coeffects]
+@@ portable
 
-external int64_crc
-  :  initial:(int[@untagged])
-  -> data:(int64[@unboxed])
-  -> (int[@untagged])
-  = "caml_sse42_int64_crc_bytecode" "caml_sse42_int64_crc"
-[@@noalloc] [@@no_effects] [@@no_coeffects]
+(** On amd64, generates the CRC32Q machine instruction, which requires SSE4.2. *)
+val int_crc : initial:int -> data:int -> int
 
-external unboxed_int64_crc
-  :  initial:int64#
-  -> data:int64#
-  -> int64#
-  = "caml_sse42_unboxed_int64_crc_bytecode" "caml_sse42_int64_crc"
-[@@noalloc] [@@unboxed] [@@no_effects] [@@no_coeffects]
+(** On amd64, generates the CRC32Q machine instruction, which requires SSE4.2. *)
+val int64_crc : initial:int -> data:int64 -> int
+
+(** On amd64, generates the CRC32Q machine instruction, which requires SSE4.2. *)
+val unboxed_int64_crc : initial:int64# -> data:int64# -> int64#
 
 (** Accumulates [iterations] of [int_crc]. If [iterations] < 0, raises Invalid_argument. *)
 val iterated_crc_exn : initial:int -> iterations:int -> data:int -> int

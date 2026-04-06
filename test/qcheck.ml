@@ -119,19 +119,20 @@ include
       let count_set_bits = Ocaml_intrinsics.Int.count_set_bits2
     end)
 
-(* (** Test Base.Int implementation of clz,popcount,ctz against the naive implementation.  *)
- * include
- *   Make
- *     (BI)
- *     (struct
- *       type t = Base.Int.t
- *
- *       let count_leading_zeros x = Base.Int.(if x = 0 then num_bits else clz x)
- *       let count_set_bits = Base.Int.popcount
- *
- *       (* Base.Int.ctz is undefined on 0, so just define it here to make the test pass. *)
- *       let count_trailing_zeros x = Base.Int.(if x = 0 then num_bits else ctz x)
- *     end) *)
+(** Test Base.Int implementation of clz,popcount,ctz against the naive implementation. *)
+include
+  Make
+    (BI)
+    (struct
+      type t = Base.Int.t
+
+      (* Base.Int.ctz is undefined on 0, so just define it here to make the test pass. *)
+      let count_trailing_zeros x = Base.Int.(if x = 0 then num_bits else ctz x)
+      let count_leading_zeros x = Base.Int.(if x = 0 then num_bits else clz x)
+      let count_trailing_zeros_nonzero_arg = count_trailing_zeros
+      let count_leading_zeros_nonzero_arg = count_leading_zeros
+      let count_set_bits = Base.Int.popcount
+    end)
 
 (** Test Ocaml_intrinsics.Int64 implementation against the naive implementation. *)
 include

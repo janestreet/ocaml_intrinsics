@@ -1,1 +1,1 @@
-module Bench = Bench
+(* Intentionally blank. *)

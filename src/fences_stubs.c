@@ -1,55 +1,47 @@
-#include "caml/config.h"
-#include "caml/mlvalues.h"
+#include <caml/mlvalues.h>
 
-#if defined(_MSC_VER)
-#warning "Functionality on Windows has not been tested"
-#include <intrin.h>
-#pragma intrinsic(_mm_lfence)
-#pragma intrinsic(_mm_sfence)
-#pragma intrinsic(_mm_mfence)
-#endif
+#ifdef __SSE2__
+#include <immintrin.h>
 
-// SFENCE requires SSE and LFENCE/MFENCE require SSE2
-// (defined(_MSC_VER) && defined(_M_X64)) implies at least SSE2
-
-CAMLprim value caml_load_fence (__attribute__ ((unused)) value unit)
-{
-#if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && defined(__SSE2__))
-  __builtin_ia32_lfence();
-#elif (defined(_MSC_VER) && defined(_M_X64))
+value caml_load_fence(__attribute__((unused)) value unit) {
   _mm_lfence();
-#else
-  /* Platform not supported, but we don't want to prevent the rest of the library from
-     building on it. This is a temporary solution. */
-  abort();
-#endif
   return Val_unit;
 }
 
-CAMLprim value caml_store_fence (__attribute__ ((unused)) value unit)
-{
-#if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && defined(__SSE__))
-  __builtin_ia32_sfence();
-#elif (defined(_MSC_VER) && defined(_M_X64))
+value caml_store_fence(__attribute__((unused)) value unit) {
   _mm_sfence();
-#else
-  /* Platform not supported, but we don't want to prevent the rest of the library from
-     building on it. This is a temporary solution. */
-  abort();
-#endif
   return Val_unit;
 }
 
-CAMLprim value caml_memory_fence (__attribute__ ((unused)) value unit)
-{
-#if ((defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && defined(__SSE2__))
-  __builtin_ia32_mfence();
-#elif (defined(_MSC_VER) && defined(_M_X64))
+value caml_memory_fence(__attribute__((unused)) value unit) {
   _mm_mfence();
-#else
-  /* Platform not supported, but we don't want to prevent the rest of the library from
-     building on it. This is a temporary solution. */
-  abort();
-#endif
   return Val_unit;
 }
+
+#elif __aarch64__
+
+value caml_load_fence(__attribute__((unused)) value unit) {
+  /* ARM load fence (acquire barrier) - ensures loads before this fence complete
+     before any loads after it. Uses inner shareable domain for multi-core sync. */
+  __asm__ __volatile__("dmb ishld" ::: "memory");
+  return Val_unit;
+}
+
+value caml_store_fence(__attribute__((unused)) value unit) {
+  /* ARM store fence (release barrier) - ensures stores before this fence complete
+     before any stores after it. Uses inner shareable domain for multi-core sync. */
+  __asm__ __volatile__("dmb ishst" ::: "memory");
+  return Val_unit;
+}
+
+value caml_memory_fence(__attribute__((unused)) value unit) {
+  /* ARM full memory fence - ensures all memory accesses before this fence complete
+     before any memory accesses after it. Uses inner shareable domain for multi-core sync.
+   */
+  __asm__ __volatile__("dmb ish" ::: "memory");
+  return Val_unit;
+}
+
+#else
+#error "Target not supported"
+#endif

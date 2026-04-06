@@ -1,27 +1,26 @@
-(** Generates the crc32q machine instruction, a 64bit accumulate CRC32 (polynomial
-    0x11EDC6F41) value.
-
-    requires sse4.2 support. (-msse4.2) *)
 external int_crc
   :  initial:int
   -> data:int
   -> int
+  @@ portable
   = "caml_sse42_int_untagged_crc_bytecode" "caml_sse42_int_untagged_crc"
-[@@noalloc] [@@untagged] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@builtin amd64] [@@untagged] [@@no_effects] [@@no_coeffects]
 
 external int64_crc
   :  initial:(int[@untagged])
   -> data:(int64[@unboxed])
   -> (int[@untagged])
+  @@ portable
   = "caml_sse42_int64_crc_bytecode" "caml_sse42_int64_crc"
-[@@noalloc] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@builtin amd64] [@@no_effects] [@@no_coeffects]
 
 external unboxed_int64_crc
   :  initial:int64#
   -> data:int64#
   -> int64#
+  @@ portable
   = "caml_sse42_unboxed_int64_crc_bytecode" "caml_sse42_int64_crc"
-[@@noalloc] [@@unboxed] [@@no_effects] [@@no_coeffects]
+[@@noalloc] [@@builtin amd64] [@@unboxed] [@@no_effects] [@@no_coeffects]
 
 let iterated_crc_exn ~initial ~iterations ~data =
   if iterations < 0
