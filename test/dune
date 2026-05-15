@@ -3,9 +3,8 @@
   (language c)
   (names test_stubs))
  (name ocaml_intrinsics_test)
- (libraries base_bigstring core
-   expect_test_helpers_core.expect_test_helpers_base expect_test_helpers_core
-   unboxed.float_u unboxed.int32_u unboxed.int64_u int_repr
-   unboxed.nativeint_u ocaml_intrinsics stdio)
+ (libraries base_bigstring core expect_test_helpers_base
+   expect_test_helpers_core unboxed.float_u unboxed.int32_u unboxed.int64_u
+   int_repr unboxed.nativeint_u ocaml_intrinsics stdio)
  (preprocess
   (pps ppx_jane)))
