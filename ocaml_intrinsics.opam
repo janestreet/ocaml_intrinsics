@@ -15,7 +15,10 @@ depends: [
   "ocaml_intrinsics_kernel"
   "ppx_builtin"
   "dune"                    {>= "3.17.0"}
-  "ocaml-compiler-libs"     {= "v0.17.0+ox"}
+  "ocaml-compiler-libs"     {>= "v0.11.0"}
+]
+conflicts: [
+  "oxcaml-compiler" {< "5.2.0minus39"}
 ]
 synopsis: "Intrinsics"
 description: "
