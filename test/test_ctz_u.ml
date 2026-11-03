@@ -8,7 +8,7 @@ let%expect_test "ctz int64" =
   let open Int64 in
   let numbers = List.map numbers ~f:of_int in
   let f =
-    [%template test_op [@kind bits64]]
+    test_op
       (module Int64_u)
       ~op:I.Int64.Unboxed.count_trailing_zeros
       ~op_name:"ctz"
@@ -34,7 +34,7 @@ let%expect_test "ctz int32" =
   let open Int32 in
   let numbers = List.map numbers ~f:of_int_trunc in
   let f =
-    [%template test_op [@kind bits32]]
+    test_op
       (module Int32_u)
       ~op:I.Int32.Unboxed.count_trailing_zeros
       ~op_name:"ctz"
@@ -60,7 +60,7 @@ let%expect_test "ctz nativeint" =
   let open Nativeint in
   let numbers = List.map numbers ~f:of_int in
   let f =
-    [%template test_op [@kind word]]
+    test_op
       (module Nativeint_u)
       ~op:I.Nativeint.Unboxed.count_trailing_zeros
       ~op_name:"ctz"

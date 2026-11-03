@@ -1,6 +1,8 @@
+open Basement.Primitives
+
 (** [Native_pointer] uses Nativeint to hold a pointer to a memory block allocated outside
     the OCaml heap. The pointer is not required to be aligned. *)
-type t = private nativeint
+type t = private Nativeint_u.t
 
 (** [ext_pointer_as_native_pointer p] takes an int [p] that encodes a pointer to a memory
     block outside of the OCaml heap, decodes [p] by clearing the least significant bit of
@@ -114,7 +116,7 @@ val unsafe_memset : t -> char -> pos:int -> len:int -> unit [@@zero_alloc]
 (** Pointer arithmetic and comparisons *)
 
 (** Adds [n] bytes to a pointer, resulting in another pointer. *)
-val advance : t -> bytes:nativeint -> t
+val advance : t -> bytes:Nativeint_u.t -> t
 [@@zero_alloc]
 
 (** [difference_in_bytes start end] subtracts start from end, assuming that both point to
@@ -150,6 +152,8 @@ module Int : Immediate_intf with type V.t = Stdlib.Int.t
 module Bool : Immediate_intf with type V.t = Stdlib.Bool.t
 
 module Expert : sig
+  val of_nativeint_u : Nativeint_u.t -> t [@@zero_alloc]
+  val to_nativeint_u : t -> Nativeint_u.t [@@zero_alloc]
   external of_nativeint : nativeint -> t = "%identity"
   external to_nativeint : t -> nativeint = "%identity"
 end

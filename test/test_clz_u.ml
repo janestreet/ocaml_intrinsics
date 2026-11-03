@@ -14,7 +14,7 @@ let%expect_test "clz int64" =
     ]
   in
   let f =
-    [%template test_op [@kind bits64]]
+    test_op
       ~op:I.Int64.Unboxed.count_leading_zeros
       ~op_name:"clz"
       (module Int64_u)
@@ -44,7 +44,7 @@ let%expect_test "clz int32" =
     ]
   in
   let f =
-    [%template test_op [@kind bits32]]
+    test_op
       ~op:I.Int32.Unboxed.count_leading_zeros
       ~op_name:"clz"
       (module Int32_u)
@@ -74,7 +74,7 @@ let%expect_test "clz nativeint" =
     ]
   in
   let f =
-    [%template test_op [@kind word]]
+    test_op
       ~op:I.Nativeint.Unboxed.count_leading_zeros
       ~op_name:"clz"
       (module Nativeint_u)

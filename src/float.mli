@@ -1,3 +1,4 @@
+open Basement.Primitives
 include module type of Ocaml_intrinsics_kernel.Float
 
 (** Rounds a [float] to an integer [float] using the current rounding mode. In native
@@ -17,5 +18,5 @@ module Unboxed : sig
   include module type of Unboxed
 
   val round_half_to_even : float -> float
-  val iround_half_to_even : float -> int64
+  val iround_half_to_even : float -> Int64_u.t
 end

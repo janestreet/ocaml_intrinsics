@@ -2,4 +2,4 @@
  (name ocaml_intrinsics_bench)
  (libraries ocaml_intrinsics core_unix.time_stamp_counter)
  (preprocess
-  (pps ppx_jane)))
+  (pps ppx_jane -compare-require-explicit-locality)))

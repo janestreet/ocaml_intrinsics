@@ -7,4 +7,4 @@
    expect_test_helpers_core unboxed.float_u unboxed.int32_u unboxed.int64_u
    int_repr unboxed.nativeint_u ocaml_intrinsics stdio)
  (preprocess
-  (pps ppx_jane)))
+  (pps ppx_jane -compare-require-explicit-locality)))

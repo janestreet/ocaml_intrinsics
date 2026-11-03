@@ -1,3 +1,5 @@
+open Basement.Primitives
+
 external int_crc
   :  initial:int
   -> data:int
@@ -13,9 +15,9 @@ external int64_crc
 [@@noalloc] [@@builtin amd64] [@@no_effects] [@@no_coeffects]
 
 external unboxed_int64_crc
-  :  initial:int64
-  -> data:int64
-  -> int64
+  :  initial:Int64_u.t
+  -> data:Int64_u.t
+  -> Int64_u.t
   = "caml_sse42_unboxed_int64_crc_bytecode" "caml_sse42_int64_crc"
 [@@noalloc] [@@builtin amd64] [@@unboxed] [@@no_effects] [@@no_coeffects]
 

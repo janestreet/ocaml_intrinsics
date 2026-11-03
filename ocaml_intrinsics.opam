@@ -12,6 +12,7 @@ build: [
 ]
 depends: [
   "ocaml" {>= "5.1.0"}
+  "basement"
   "ocaml_intrinsics_kernel"
   "ppx_builtin"
   "dune"                    {>= "3.17.0"}
