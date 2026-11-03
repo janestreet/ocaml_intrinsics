@@ -1,5 +1,7 @@
 @@ portable
 
+open Basement.Primitives
+
 (** [Ext_pointer] uses values of the OCaml type "int" to represent pointers to 2-byte
     aligned memory blocks allocated outside the OCaml heap.
 
@@ -89,12 +91,12 @@ val store_unboxed_float : t -> float -> unit
 
 (** Intrinsics for unboxed types of arguments or results. *)
 module Unboxed : sig
-  val load_unboxed_nativeint : t -> nativeint#
-  val store_unboxed_nativeint : t -> nativeint# -> unit
-  val load_unboxed_int64 : t -> int64#
-  val store_unboxed_int64 : t -> int64# -> unit
-  val load_unboxed_int32 : t -> int32#
-  val store_unboxed_int32 : t -> int32# -> unit
+  val load_unboxed_nativeint : t -> Nativeint_u.t
+  val store_unboxed_nativeint : t -> Nativeint_u.t -> unit
+  val load_unboxed_int64 : t -> Int64_u.t
+  val store_unboxed_int64 : t -> Int64_u.t -> unit
+  val load_unboxed_int32 : t -> Int32_u.t
+  val store_unboxed_int32 : t -> Int32_u.t -> unit
   val load_unboxed_float : t -> float#
   val store_unboxed_float : t -> float# -> unit
 end

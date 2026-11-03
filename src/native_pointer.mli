@@ -1,8 +1,10 @@
 @@ portable
 
+open Basement.Primitives
+
 (** [Native_pointer] uses Nativeint to hold a pointer to a memory block allocated outside
     the OCaml heap. The pointer is not required to be aligned. *)
-type t = private nativeint#
+type t = private Nativeint_u.t
 
 (** [ext_pointer_as_native_pointer p] takes an int [p] that encodes a pointer to a memory
     block outside of the OCaml heap, decodes [p] by clearing the least significant bit of
@@ -21,7 +23,7 @@ val unsafe_of_value : ('a : value_or_null). 'a @ local -> t
     result will have the same bit representation as the unboxed input pointer. The result
     must be a valid OCaml value: either an immediate or a pointer to an address with a
     valid OCaml header. *)
-val unsafe_to_value : ('a : value_or_null). t -> 'a @@ portable
+val unsafe_to_value : ('a : value_or_null). t -> 'a
 [@@zero_alloc]
 
 (** Returns a [Native_pointer] to the underlying data of a [Bigstring]. *)
@@ -116,7 +118,7 @@ val unsafe_memset : t -> char -> pos:int -> len:int -> unit [@@zero_alloc]
 (** Pointer arithmetic and comparisons *)
 
 (** Adds [n] bytes to a pointer, resulting in another pointer. *)
-val advance : t -> bytes:nativeint# -> t
+val advance : t -> bytes:Nativeint_u.t -> t
 [@@zero_alloc]
 
 (** [difference_in_bytes start end] subtracts start from end, assuming that both point to
@@ -152,6 +154,9 @@ module Int : Immediate_intf with type V.t = Stdlib.Int.t
 module Bool : Immediate_intf with type V.t = Stdlib.Bool.t
 
 module Expert : sig
+  val of_nativeint_u : Nativeint_u.t -> t [@@zero_alloc]
+  val to_nativeint_u : t -> Nativeint_u.t [@@zero_alloc]
+
   external of_nativeint
     :  (nativeint[@local_opt])
     -> (t[@unboxed])

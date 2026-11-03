@@ -1,17 +1,17 @@
 include Base_quickcheck.Export
 
 module type Value = sig
-  type t [@@deriving compare, quickcheck, sexp_of]
+  type t [@@deriving compare ~localize, quickcheck, sexp_of]
 
   (* for implementing count_set_bits_naive *)
 
   val zero : t
   val one : t
   val num_bits : t
-  val ( + ) : local_ t -> local_ t -> t
-  val ( - ) : local_ t -> local_ t -> t
-  val ( lsr ) : local_ t -> int -> t
-  val ( land ) : local_ t -> local_ t -> t
+  val ( + ) : t @ local -> t @ local -> t
+  val ( - ) : t @ local -> t @ local -> t
+  val ( lsr ) : t @ local -> int -> t
+  val ( land ) : t @ local -> t @ local -> t
 end
 
 module type Test = sig

@@ -8,9 +8,10 @@
    (:include c_flags.sexp)))
  (name ocaml_intrinsics)
  (public_name ocaml_intrinsics)
- (libraries ocaml_intrinsics_kernel)
+ (libraries basement ocaml_intrinsics_kernel)
  (preprocess
-  (pps ppx_builtin)))
+  (pps ppx_builtin))
+ (ocamlopt_flags :standard -O3))
 
 (rule
  (targets c_flags.sexp)

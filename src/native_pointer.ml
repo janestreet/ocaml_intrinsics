@@ -1,4 +1,6 @@
-type t = nativeint#
+open Basement.Primitives
+
+type t = Nativeint_u.t
 
 let arch_big_endian = Stdlib.Sys.big_endian
 
@@ -258,6 +260,9 @@ module Int = Immediate (Stdlib.Int)
 module Bool = Immediate (Stdlib.Bool)
 
 module Expert = struct
+  let[@inline] [@zero_alloc] of_nativeint_u (x : Nativeint_u.t) : t = x
+  let[@inline] [@zero_alloc] to_nativeint_u (x : t) : Nativeint_u.t = x
+
   external of_nativeint
     :  (nativeint[@local_opt])
     -> (t[@unboxed])
@@ -274,7 +279,7 @@ end
 open Expert
 module NI = Stdlib.Nativeint
 
-let[@inline] [@zero_alloc] advance (t : t) ~(bytes : nativeint#) : t =
+let[@inline] [@zero_alloc] advance (t : t) ~(bytes : Nativeint_u.t) : t =
   of_nativeint (NI.add (to_nativeint t) (to_nativeint bytes))
 ;;
 

@@ -1,3 +1,5 @@
+open Basement.Primitives
+
 type t = private int
 
 external create : int -> t @@ portable = "%identity"
@@ -121,7 +123,7 @@ external store_unboxed_float
 module Unboxed = struct
   external load_unboxed_nativeint
     :  t
-    -> (nativeint#[@unboxed])
+    -> (Nativeint_u.t[@unboxed])
     @@ portable
     = "caml_ext_pointer_load_unboxed_nativeint_bytecode"
       "caml_ext_pointer_load_unboxed_nativeint"
@@ -129,7 +131,7 @@ module Unboxed = struct
 
   external store_unboxed_nativeint
     :  t
-    -> (nativeint#[@unboxed])
+    -> (Nativeint_u.t[@unboxed])
     -> unit
     @@ portable
     = "caml_ext_pointer_store_unboxed_nativeint_bytecode"
@@ -138,14 +140,14 @@ module Unboxed = struct
 
   external load_unboxed_int64
     :  t
-    -> (int64#[@unboxed])
+    -> (Int64_u.t[@unboxed])
     @@ portable
     = "caml_ext_pointer_load_unboxed_int64_bytecode" "caml_ext_pointer_load_unboxed_int64"
   [@@noalloc] [@@no_effects]
 
   external store_unboxed_int64
     :  t
-    -> (int64#[@unboxed])
+    -> (Int64_u.t[@unboxed])
     -> unit
     @@ portable
     = "caml_ext_pointer_store_unboxed_int64_bytecode"
@@ -154,14 +156,14 @@ module Unboxed = struct
 
   external load_unboxed_int32
     :  t
-    -> (int32#[@unboxed])
+    -> (Int32_u.t[@unboxed])
     @@ portable
     = "caml_ext_pointer_load_unboxed_int32_bytecode" "caml_ext_pointer_load_unboxed_int32"
   [@@noalloc] [@@no_effects]
 
   external store_unboxed_int32
     :  t
-    -> (int32#[@unboxed])
+    -> (Int32_u.t[@unboxed])
     -> unit
     @@ portable
     = "caml_ext_pointer_store_unboxed_int32_bytecode"

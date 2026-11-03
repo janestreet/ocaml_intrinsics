@@ -1,3 +1,5 @@
+@@ portable
+
 (* Load fence: does not execute until all prior instructions have completed locally, and
    no later instruction begins until lfence completes. *)
 val load_fence : unit -> unit
